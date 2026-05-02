@@ -11,23 +11,18 @@ window.requestAnimationFrame =
             if (lastTime === undefined) lastTime = 0;
             var currTime = Date.now();
             var timeToCall = Math.max(1, 33 - (currTime - lastTime));
-            var id = window.setTimeout(callback, timeToCall);
-            if(element) element.__lastTime = currTime + timeToCall;
-            return id;
+            window.setTimeout(callback, timeToCall);
+            if (element) element.__lastTime = currTime + timeToCall;
         };
     })();
 
 window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
 
 var init = function () {
-    var mobile = window.isDevice;
-    var koef = mobile ? 0.5 : 1;
     var canvas = document.getElementById('heart');
-    if (!canvas) return; // ป้องกัน Error ถ้าหา canvas ไม่เจอ
-
     var ctx = canvas.getContext('2d');
-    var width = canvas.width = koef * innerWidth;
-    var height = canvas.height = koef * innerHeight;
+    var width = canvas.width = window.innerWidth;
+    var height = canvas.height = window.innerHeight;
     var rand = Math.random;
 
     ctx.fillStyle = "rgba(0,0,0,1)";
@@ -41,15 +36,15 @@ var init = function () {
         return [dx + pos[0] * sx, dy + pos[1] * sy];
     };
 
-    window.addEventListener('resize', function () {
-        width = canvas.width = koef * innerWidth;
-        height = canvas.height = koef * innerHeight;
+    window.onresize = function () {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fillRect(0, 0, width, height);
-    });
+    };
 
     var pointsOrigin = [];
-    var dr = mobile ? 0.3 : 0.1;
+    var dr = window.isDevice ? 0.2 : 0.1;
     for (var i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13, 0, 0));
     for (var i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0));
     for (var i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, 0, 0));
@@ -69,24 +64,18 @@ var init = function () {
         var x = rand() * width;
         var y = rand() * height;
         e[i] = {
-            vx: 0,
-            vy: 0,
-            R: 2,
-            speed: rand() + 5,
+            vx: 0, vy: 0, R: 2, speed: rand() + 5,
             q: ~~(rand() * heartPointsCount),
-            D: 2 * (rand() - 0.5),
-            force: 0.2 * rand() + 0.7,
+            D: 2 * (rand() - 0.5), force: 0.2 * rand() + 0.7,
             f: "hsla(0," + ~~(40 * rand() + 60) + "%," + ~~(40 * rand() + 20) + "%,.3)",
             trace: []
         };
-        for (var k = 0; k < (mobile ? 20 : 50); k++) e[i].trace[k] = {x: x, y: y};
+        for (var k = 0; k < (window.isDevice ? 20 : 50); k++) e[i].trace[k] = { x: x, y: y };
     }
-
-    var config = { heartSize: 0.75 };
 
     var loop = function () {
         var m = Math.pow(Math.sin(Date.now() * 0.001), 2);
-        var p = 1 + 0.15 * m; // หัวใจเต้น
+        var p = 1 + 0.15 * m;
         pulse(p, p);
 
         ctx.fillStyle = "rgba(0,0,0,.1)";
@@ -117,7 +106,7 @@ var init = function () {
             u.vx *= u.force;
             u.vy *= u.force;
 
-            for (var k = 0; k < u.trace.length - 1; ) {
+            for (var k = 0; k < u.trace.length - 1;) {
                 var T = u.trace[k];
                 var N = u.trace[++k];
                 N.x -= 0.4 * (N.x - T.x);
@@ -134,9 +123,6 @@ var init = function () {
     loop();
 };
 
-// ใช้คำสั่งนี้เพื่อให้แน่ใจว่า HTML โหลดเสร็จก่อนค่อยเริ่มรัน JS
-if (document.readyState === 'complete') {
-    init();
-} else {
-    window.addEventListener('load', init);
-}
+// บรรทัดนี้สำคัญที่สุด คือการสั่งให้โค้ดเริ่มทำงาน
+if (document.readyState === 'complete') init();
+else window.addEventListener('load', init);
