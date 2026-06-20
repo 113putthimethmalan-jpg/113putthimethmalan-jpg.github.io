@@ -1,6 +1,68 @@
-body { margin: 0; background: #050508; font-family: 'Orbitron', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-#spaceCanvas { position: absolute; top: 0; left: 0; z-index: -1; }
-.terminal { background: rgba(10, 15, 25, 0.8); border: 1px solid #00f2ff; padding: 30px; width: 400px; border-radius: 15px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.2); backdrop-filter: blur(10px); color: #00f2ff; }
-.nebula-box { height: 150px; background: url('https://upload.wikimedia.org/wikipedia/commons/4/43/Hubble_Pillars_of_Creation.jpg') center/cover; margin-bottom: 20px; border-radius: 8px; }
-input, textarea { width: 100%; background: #000; color: #00f2ff; border: 1px solid #00f2ff; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
-button { width: 100%; background: #00f2ff; color: #000; border: none; padding: 12px; font-weight: bold; cursor: pointer; }
+/* การจัดวางหน้าจอหลัก */
+body {
+    margin: 0;
+    background: #050508;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* พื้นหลังดาว */
+#spaceCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* หน้าต่าง Terminal (ตัวกล่องหลัก) */
+.terminal {
+    background: rgba(10, 15, 25, 0.8);
+    border: 1px solid #00f2ff;
+    padding: 30px;
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: #00f2ff;
+}
+
+/* รูปภาพเนบิวลา */
+.nebula-box {
+    height: 150px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/4/43/Hubble_Pillars_of_Creation.jpg') center/cover;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* ช่องกรอกข้อมูล */
+input, textarea {
+    width: 100%;
+    background: #000;
+    color: #00f2ff;
+    border: 1px solid #00f2ff;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* ปุ่มกด */
+button {
+    width: 100%;
+    background: #00f2ff;
+    color: #000;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s; /* เพิ่มความสมูทเวลา hover */
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ไปชี้ */
+button:hover {
+    background: #fff;
+    box-shadow: 0 0 15px #00f2ff;
+}
