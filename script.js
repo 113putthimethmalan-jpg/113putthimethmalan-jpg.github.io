@@ -2,7 +2,7 @@
 // 🔧 ตั้งค่าข้อมูลส่วนตัว (Webhook และ ID ยศแอดมิน)
 // ===================================================
 const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW'; 
-const ADMIN_ROLE_ID = '1513916622593593578'; // เอาไอดีตัวเลขยศที่ก๊อปมาจากมือถือมาวางตรงนี้ได้เลยครับ!
+const ADMIN_ROLE_ID = '1513916622593593578'; // ไอดีตัวเลขยศจาก Discord
 
 // ดึงองค์ประกอบที่จำเป็นในระบบ
 const cosmicQuestion = document.getElementById('cosmicQuestion');
@@ -35,7 +35,7 @@ function updateDiscordTime() {
 }
 updateDiscordTime();
 
-// 🔮 ระบบ Live Preview ซิงค์ข้อความลงกรอบแบบมีสัญลักษณ์เครื่องหมายโควต (>) ตามที่คุณบรีฟมา
+// 🔮 ระบบ Live Preview ซิงค์ข้อความลงกรอบแบบมีสัญลักษณ์เครื่องหมายโควต (>)
 cosmicQuestion.addEventListener('input', (e) => {
     const text = e.target.value.trim();
     if (text) {
@@ -65,8 +65,9 @@ cosmicForm.addEventListener('submit', async function(e) {
     const questionText = cosmicQuestion.value.trim();
     if (!questionText) return;
 
-    if (WEBHOOK_URL === 'ใส่_WEBHOOK_URL_ตรงนี้' || WEBHOOK_URL.trim() === '') {
-        showModal('ระบบไม่พร้อม!', 'กรุณาใส่ลิงก์ Webhook จริงของคุณในไฟล์ script.js บรรทัดที่ 4 ก่อนใช้งาน', '⚠️');
+    // ตรวจสอบความพร้อมของ Webhook แบบกระชับ
+    if (!WEBHOOK_URL || WEBHOOK_URL.trim() === '') {
+        showModal('ระบบไม่พร้อม!', 'กรุณาตรวจสอบการใส่ลิงก์ Webhook ในไฟล์สคริปต์', '⚠️');
         return;
     }
 
@@ -84,15 +85,15 @@ cosmicForm.addEventListener('submit', async function(e) {
         timeZoneName: 'short'
     });
 
-    // 🚨 การฟอร์แมตโครงสร้างแท็กยศแอดมินสำหรับส่งเข้าเซิร์ฟเวอร์จริง (<@&ตามด้วยไอดีตัวเลขยศ>)
-    const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID !== 'ใส่_ROLE_ID_ตรงนี้' && ADMIN_ROLE_ID.trim() !== '') 
+    // 🚨 ฟอร์แมตโครงสร้างแท็กยศแอดมิน (<@&ไอดีแอดมิน>) ถ้าไม่มีให้ใส่ @everyone หรือ @here แทนได้ครับ
+    const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') 
         ? `<@&${ADMIN_ROLE_ID.trim()}>` 
-        : '@Admin';
+        : '@here';
 
     const payload = {
         username: "ศูนย์ควบคุมยาน Apollo-11",
         avatar_url: "https://i.imgur.com/E9z6fzq.png",
-        content: `🚨 ${mentionTag} มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`, // แท็กเรียกยศแอดมินให้ระบบเด้งแจ้งเตือนบนมือถือ/PC
+        content: `🚨 ${mentionTag} มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`, 
         embeds: [{
             title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
             description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
@@ -110,7 +111,7 @@ cosmicForm.addEventListener('submit', async function(e) {
                 },
                 {
                     name: "💬 เนื้อหาคำถามที่ส่งมา",
-                    value: `>>> ${questionText}`, // จัดระเบียบข้อความเข้า Block Quote ใน Discord
+                    value: `>>> ${questionText}`, 
                     inline: false
                 },
                 {
@@ -143,7 +144,7 @@ cosmicForm.addEventListener('submit', async function(e) {
             previewQuestion.textContent = '> มนุษย์ต่างดาวที่ดาวอังคารเขากินส้มตำเป็นอาหารเย็นไหมครับ?';
             updateDiscordTime();
         } else {
-            showModal('ส่งสัญญาณล้มเหลว', 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์ปลายทาง กรุณาตรวจสอบลิงก์ Webhook', '💥');
+            showModal('ส่งสัญญาณล้มเหลว', `เกิดข้อผิดพลาดจาก Discord (โค้ด: ${response.status})`, '💥');
         }
     } catch (error) {
         console.error(error);
