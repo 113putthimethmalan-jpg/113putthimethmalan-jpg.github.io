@@ -2,38 +2,56 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apollo-11 Mission Control</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Apollo-11 Command Terminal</title>
+    <style>
+        body { background: #050508; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 50px; }
+        .terminal { border: 2px solid #333; padding: 20px; width: 500px; background: #0c0c14; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); }
+        h1 { font-size: 1.2em; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .nebula-box { width: 100%; height: 200px; background: url('https://images.nasa.gov/details-PIA23624/PIA23624~orig.jpg') center/cover; border: 1px solid #ff00ff; margin: 15px 0; }
+        input, textarea { width: 100%; box-sizing: border-box; background: #000; color: #00ff41; border: 1px solid #444; padding: 10px; margin-top: 10px; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px; margin-top: 10px; width: 100%; cursor: pointer; font-weight: bold; }
+        button:hover { background: #008f11; }
+    </style>
 </head>
-<body id="mainBodyFrame">
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-    <canvas id="particleCanvas"></canvas>
+<body>
 
-    <main class="relative z-10 w-full max-w-7xl mx-auto px-4 py-8">
-        <h1 class="text-center text-4xl font-black text-cyan-400 mb-8">APOLLO-11 COMMAND</h1>
-        
-        <div class="glass-panel p-6 rounded-2xl border-t-4 border-cyan-500">
-            <button id="toggleSettingsBtn" class="text-slate-400 mb-4"><i class="fa-solid fa-gears"></i> ตั้งค่า</button>
-            <div id="quickSettingsPanel" class="hidden space-y-2 mb-4">
-                <input type="text" id="webhookInput" class="w-full bg-slate-900 p-2 text-xs" placeholder="Webhook URL">
-                <input type="text" id="roleInput" class="w-full bg-slate-900 p-2 text-xs" placeholder="Role ID">
-            </div>
-            
-            <form id="cosmicForm" class="space-y-4">
-                <textarea id="cosmicQuestion" required class="w-full bg-slate-950 p-4 text-sm" placeholder="พิมพ์ข้อความ..."></textarea>
-                <button type="submit" id="launchBtn" class="w-full py-4 bg-purple-600 rounded-xl font-bold">ยิงสัญญาณวิทยุ 🛰️</button>
-            </form>
-        </div>
-        
-        <div class="glass-panel mt-6 p-6">
-            <p id="previewQuestion" class="font-mono">> รอข้อมูล...</p>
-        </div>
-    </main>
+<div class="terminal">
+    <h1>┌── ศูนย์ควบคุมยาน Apollo-11 ──┐</h1>
+    <div class="nebula-box"></div>
+    <form id="spaceForm">
+        <input type="text" id="username" placeholder="ระบุตัวตนนักบิน (Call Sign)" required>
+        <textarea id="message" rows="3" placeholder="ข้อความถึงดาวอังคาร..." required></textarea>
+        <button type="submit">ส่งสัญญาณผ่านวิทยุ 📡</button>
+    </form>
+</div>
 
-    <script src="script.js"></script>
+<script>
+    document.getElementById('spaceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const hook = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; // เปลี่ยนตรงนี้เป็น Webhook ของคุณ
+        const payload = {
+            username: "ศูนย์ควบคุมยาน Apollo-11 BOT",
+            embeds: [{
+                title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
+                description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
+                color: 16711935,
+                fields: [
+                    { name: "🛸 ผู้ส่งสัญญาณ", value: document.getElementById('username').value, inline: true },
+                    { name: "📡 สถานะ", value: "🟢 เสถียรดี (100%)", inline: true },
+                    { name: "💬 เนื้อหาคำถาม", value: `> ${document.getElementById('message').value}` }
+                ],
+                image: { url: "https://images.nasa.gov/details-PIA23624/PIA23624~orig.jpg" },
+                footer: { text: "Deep Space Network (DSN) • " + new Date().toLocaleTimeString() }
+            }]
+        };
+
+        await fetch(hook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        alert("สัญญาณถูกยิงเข้าสู่ชั้นบรรยากาศแล้ว!");
+    });
+</script>
 </body>
 </html>
