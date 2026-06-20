@@ -1,34 +1,42 @@
-// script.js
-const DEFAULT_WEBHOOK_URL = 'วาง URL Webhook ของพี่ที่นี่'; 
-const DEFAULT_ADMIN_ROLE_ID = 'วาง ID ยศที่นี่';
-
-const form = document.getElementById('cosmicForm');
-const toggleBtn = document.getElementById('toggleSettingsBtn');
-const panel = document.getElementById('quickSettingsPanel');
-
-// แสดง/ซ่อน แผงตั้งค่า
-toggleBtn.addEventListener('click', () => panel.classList.toggle('hidden'));
-
-// เชื่อมต่อค่าเริ่มต้น
-document.getElementById('webhookInput').value = DEFAULT_WEBHOOK_URL;
-document.getElementById('roleInput').value = DEFAULT_ADMIN_ROLE_ID;
-
-form.addEventListener('submit', async (e) => {
+document.getElementById('spaceForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const text = document.getElementById('cosmicQuestion').value;
-    const url = document.getElementById('webhookInput').value;
-    const role = document.getElementById('roleInput').value;
+    
+    // ตั้งค่าตัวแปร
+    const hook = "YOUR_WEBHOOK_URL_HERE"; 
+    const adminId = "YOUR_ADMIN_ID_HERE";
+    const btn = e.target.querySelector('button');
+    
+    // เปลี่ยนสถานะปุ่มตอนกำลังส่ง
+    btn.innerText = "TRANSMITTING...";
+    btn.disabled = true;
+
+    const payload = {
+        content: `<@${adminId}> **[INCOMING QUANTUM SIGNAL]**`,
+        embeds: [{
+            title: "🛰️ DSN RECEIVER: NEW DATA PACKET",
+            description: "Deep Space Network has intercepted a transmission.",
+            color: 0x00f2ff,
+            fields: [
+                { name: "🛸 Source", value: document.getElementById('username').value, inline: true },
+                { name: "⚡ Status", value: "STABLE (100%)", inline: true },
+                { name: "💬 Content", value: `> ${document.getElementById('message').value}` }
+            ],
+            image: { url: "https://images.nasa.gov/details-PIA23624/PIA23624~orig.jpg" },
+            footer: { text: "Apollo-11 Operations" }
+        }]
+    };
 
     try {
-        await fetch(url, {
+        await fetch(hook, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: `<@&${role}> สัญญาณใหม่จาก Apollo-11: ${text}`
-            })
+            body: JSON.stringify(payload)
         });
-        alert('ส่งสัญญาณสำเร็จ!');
+        alert("Success: Message reached the Command Center!");
     } catch (err) {
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+        alert("Error: Signal failed to transmit.");
+    } finally {
+        btn.innerText = "INITIATE TRANSMISSION 📡";
+        btn.disabled = false;
     }
 });
