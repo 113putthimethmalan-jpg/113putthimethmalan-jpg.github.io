@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apollo-11 Mission Control (All-in-One)</title>
+    <title>Apollo-11 Mission Control (Ultra Sci-Fi Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
         /* ===================================================
-           🌌 CUSTOM CSS: ยกระดับ UI สไตล์ห้วงอวกาศลึก
+           🌌 ULTRA SCI-FI CSS: ยกระดับ UI ห้วงอวกาศลึก
            =================================================== */
         @keyframes move-twink-back {
             from { background-position: 0 0; }
@@ -30,112 +30,151 @@
             width: 100%; height: 100%;
             display: block;
             z-index: 1;
-            opacity: 0.18;
+            opacity: 0.12;
             animation: move-twink-back 350s linear infinite;
         }
         
-        /* แผงควบคุมกระจกโปร่งแสงสุดล้ำ (Cyber Neon Glassmorphism) */
+        /* แผงควบคุมกระจกนีออน (Cyber Neon Glassmorphism) */
         .glass-panel {
-            background: rgba(8, 10, 24, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 195, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(6, 8, 20, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.1);
+            transition: all 0.5s ease;
         }
         
+        /* แอนิเมชันสั่นสะเทือนตอนยิงสัญญาณ (Screen Shake Effect) */
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-2px, 1px); }
+            20%, 40%, 60%, 80% { transform: translate(2px, -1px); }
+        }
+        .shaking { animation: shake 0.4s ease-in-out; }
+
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
-        .float-animation { animation: float 5s ease-in-out infinite; }
+        .float-animation { animation: float 6s ease-in-out infinite; }
         
-        /* นีออนเรืองแสงรอบปุ่มและพอร์ตสัญญาณ */
+        /* ปุ่มกดดีไซน์ล้ำแสงควันตัม */
         .neon-glow {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .neon-glow:hover { 
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
-            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 30px rgba(157, 23, 77, 0.7), inset 0 0 15px rgba(0, 242, 254, 0.4);
+            border-color: rgba(236, 72, 153, 0.6);
+            transform: translateY(-3px) scale(1.02);
         }
 
-        /* ตกแต่ง Scrollbar ให้ดูไฮเทค */
+        /* เอฟเฟกต์คลื่นกระจายตอนคลิกปุ่ม (Ripple Effect) */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* เอฟเฟกต์แสง Cursor วิ่งตามเมาส์ในพื้นหลัง */
+        #particleCanvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; pointer-events: none;
+        }
+
+        /* ตกแต่งแถบพิมพ์ดีดคอมพิวเตอร์อวกาศ */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(5, 5, 15, 0.5); }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #00f2fe; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen text-slate-100 flex flex-col justify-between relative overflow-x-hidden font-sans">
+<body id="mainBodyFrame" class="min-h-screen text-slate-100 flex flex-col justify-between relative overflow-x-hidden font-sans select-none">
     
     <div class="stars"></div>
     <div class="twinkling"></div>
+    <canvas id="particleCanvas"></canvas>
 
     <main class="relative z-10 w-full max-w-7xl mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
         
         <header class="text-center mb-8">
-            <div class="inline-block float-animation text-6xl mb-3">🛸</div>
-            <h1 class="text-4xl md:text-6xl font-black tracking-widest bg-gradient-to-r from-cyan-400 via-teal-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+            <div class="inline-block float-animation text-6xl mb-4 cursor-pointer filter drop-shadow-[0_0_20px_rgba(0,242,254,0.6)]">🛸</div>
+            <h1 class="text-4xl md:text-6xl font-black tracking-widest bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,242,254,0.4)]">
                 APOLLO-11 COMMAND
             </h1>
-            <p class="text-cyan-400/70 mt-2 text-xs md:text-sm font-mono tracking-widest uppercase">
-                // SYSTEM STATUS: READY TO TRANSMIT QUANTUM SIGNALS
-            </p>
+            <p id="systemSubtitle" class="text-cyan-400/80 mt-2 text-xs md:text-sm font-mono tracking-widest uppercase typing-cursor">
+                </p>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
             <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
-                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden flex-grow flex flex-col justify-center border-t-4 border-t-cyan-500">
+                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden flex-grow flex flex-col justify-center border-t-4 border-t-cyan-500 hover:border-t-fuchsia-500 transition-all duration-500">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
                     
-                    <h2 class="text-lg font-bold mb-6 text-cyan-400 flex items-center gap-2 tracking-wide">
-                        <i class="fa-solid fa-satellite-dish animate-pulse"></i> TRANSMITTER CORE (เครื่องส่งสัญญาณ)
+                    <h2 class="text-lg font-bold mb-6 text-cyan-400 flex items-center gap-2 tracking-wide font-mono">
+                        <i class="fa-solid fa-satellite-dish animate-pulse text-fuchsia-400"></i> TRANSMITTER CORE //
                     </h2>
 
                     <form id="cosmicForm" class="space-y-5">
                         <div>
-                            <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">
-                                <i class="fa-solid fa-pen-nib mr-1 text-cyan-500"></i> ข้อความส่งสัญญาณสู่อวกาศ
+                            <label class="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 font-mono">
+                                <i class="fa-solid fa-terminal mr-1 text-cyan-400"></i> สัญญาณคลื่นความถี่ (MESSAGE)
                             </label>
                             <textarea 
                                 id="cosmicQuestion" 
                                 required
                                 rows="5"
-                                class="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all text-sm resize-none font-mono"
-                                placeholder="พิมพ์คำถามหรือข้อความที่ต้องการส่งตรงไปยัง Discord..."
+                                class="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-4 text-slate-200 placeholder:text-slate-700 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all text-sm resize-none font-mono"
+                                placeholder="ป้อนชุดคำสั่งหรือข้อความที่ต้องการยิงเข้าสู่ระเบียงแชท Discord..."
                             ></textarea>
                         </div>
 
-                        <button type="submit" id="launchBtn" class="w-full py-4 px-6 rounded-xl font-black text-sm tracking-widest uppercase bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white transition-all transform hover:-translate-y-0.5 neon-glow flex items-center justify-center gap-2">
+                        <button type="submit" id="launchBtn" class="w-full py-4 px-6 rounded-xl font-black text-sm tracking-widest uppercase bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-600 text-white neon-glow flex items-center justify-center gap-2">
                             <span id="btnText">ยิงสัญญาณวิทยุ 🛰️</span>
                             <i id="btnIcon" class="fa-solid fa-paper-plane"></i>
                         </button>
                     </form>
                 </div>
 
-                <div class="glass-panel p-4 rounded-xl text-xs text-slate-400 flex items-center justify-between border-l-2 border-l-emerald-500">
+                <div class="glass-panel p-4 rounded-xl text-xs text-slate-400 flex items-center justify-between border-l-2 border-l-emerald-400">
                     <div class="flex items-center gap-2">
                         <span class="relative flex h-2.5 w-2.5">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                         </span>
-                        <span class="font-mono text-slate-300">MAINNET: CONNECTED</span>
+                        <span class="font-mono text-slate-300">QUANTUM LINK: SECURE</span>
                     </div>
-                    <span class="text-cyan-400 font-mono text-[10px] tracking-wider">APOLLO CORE v3.0</span>
+                    <span class="text-fuchsia-400 font-mono text-[10px] tracking-wider animate-pulse">MATRIX ENGAGED</span>
                 </div>
             </div>
 
             <div class="lg:col-span-7">
-                <div class="glass-panel rounded-2xl p-6 h-full flex flex-col justify-between border-t-4 border-t-indigo-500">
+                <div class="glass-panel rounded-2xl p-6 h-full flex flex-col justify-between border-t-4 border-t-purple-500">
                     <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
                         <h3 class="text-xs font-bold text-slate-400 flex items-center gap-2 tracking-widest font-mono">
-                            <i class="fa-brands fa-discord text-indigo-400 text-sm"></i> DISCORD INTERFACE LIVE PREVIEW
+                            <i class="fa-brands fa-discord text-indigo-400 text-sm"></i> DISCORD INTERFACE MONITOR
                         </h3>
-                        <span class="px-2 py-0.5 bg-indigo-950/80 border border-indigo-500/30 text-indigo-300 rounded text-[9px] font-mono tracking-widest uppercase">MONITOR</span>
+                        <span class="px-2 py-0.5 bg-purple-950/50 border border-purple-500/30 text-purple-300 rounded text-[9px] font-mono tracking-widest uppercase">LIVE PREVIEW</span>
                     </div>
 
-                    <div class="bg-[#313338] border-l-2 border-[#f0b232] text-[#dbdee1] p-4 rounded-xl font-sans text-sm shadow-inner overflow-hidden select-none flex-grow relative" style="background-color: rgba(240, 178, 50, 0.04);">
+                    <div class="bg-[#313338] border-l-2 border-[#f0b232] text-[#dbdee1] p-4 rounded-xl font-sans text-sm shadow-inner overflow-hidden flex-grow relative" style="background-color: rgba(240, 178, 50, 0.03);">
                         <div class="flex gap-3.5">
-                            <img src="https://i.imgur.com/E9z6fzq.png" alt="Bot Avatar" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                            <img src="https://i.imgur.com/E9z6fzq.png" alt="Bot Avatar" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-slate-700">
                             
                             <div class="flex-grow space-y-2 min-w-0">
                                 <div class="flex items-center gap-2 flex-wrap">
@@ -148,30 +187,30 @@
                                     🚨 <span class="text-[#f0b43a] bg-[#f0b43a]/15 px-1 rounded font-medium text-[13px] hover:bg-[#f0b43a]/25 cursor-pointer">@Admin</span> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!
                                 </p>
 
-                                <div class="border-l-4 border-[#06b6d4] bg-[#2b2d31] rounded-r p-4 max-w-[520px] space-y-3.5 shadow-md mt-1.5">
+                                <div class="border-l-4 border-[#00f2fe] bg-[#2b2d31] rounded-r p-4 max-w-[520px] space-y-3.5 shadow-md mt-1.5 transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,242,254,0.15)]">
                                     <div>
                                         <h4 class="font-bold text-white text-[15px] tracking-wide">⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!</h4>
-                                        <p class="text-[#dbdee1] text-xs mt-1 opacity-80">ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ</p>
+                                        <p class="text-[#dbdee1] text-xs mt-1 opacity-75">ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ</p>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <span class="block text-xs font-bold text-white">🛸 ผู้ส่งสัญญาณ</span>
-                                            <div class="bg-[#1e1f22] p-2 rounded mt-1 font-mono text-[11px] text-[#f1c40f] border border-slate-800">
+                                            <div class="bg-[#1e1f22] p-2 rounded mt-1 font-mono text-[11px] text-[#f1c40f] border border-slate-800/80">
                                                 Anonymous Astronaut
                                             </div>
                                         </div>
                                         <div>
-                                            <span class="block text-xs font-bold text-white">📡 สถานะการเชื่อมต่อ</span>
-                                            <div class="mt-2 text-xs text-[#e3e5e8] flex items-center gap-1">
-                                                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> เสถียรดี (100%)
+                                            <span class="block text-xs font-bold text-white">📡 สถานะสัญญาณ</span>
+                                            <div class="mt-2 text-xs text-[#e3e5e8] flex items-center gap-1 font-mono">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-ping"></span> เสถียรดี (100%)
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="border-l-4 border-cyan-500/50 bg-[#1e1f22] pl-3 py-2 pr-2 my-2 rounded-r">
-                                        <span class="block text-[11px] font-bold text-cyan-400 mb-1 uppercase tracking-wider">💬 เนื้อหาคำถามที่ส่งมา</span>
-                                        <p class="text-slate-200 italic text-xs break-words font-mono whitespace-pre-line" id="previewQuestion">> รอการป้อนสัญญาณวิทยุจากเครื่องส่ง...</p>
+                                    <div class="border-l-4 border-cyan-500 bg-[#1e1f22] pl-3 py-2 pr-2 my-2 rounded-r">
+                                        <span class="block text-[11px] font-bold text-cyan-400 mb-1 uppercase tracking-wider font-mono">💬 เนื้อหาคำถามที่ส่งมา</span>
+                                        <p class="text-slate-200 italic text-xs break-words font-mono whitespace-pre-line" id="previewQuestion">> รอชุดข้อมูลสัญญาณจาก Core...</p>
                                     </div>
 
                                     <div class="rounded-lg overflow-hidden mt-2 border border-slate-700/40 shadow-inner">
@@ -192,42 +231,118 @@
         </div>
     </main>
 
-    <div id="notificationModal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel p-6 rounded-2xl max-w-xs w-full mx-4 text-center space-y-4 border border-cyan-500/40 shadow-2xl">
-            <div id="modalIcon" class="text-5xl animate-bounce">✨</div>
-            <h3 id="modalTitle" class="text-xl font-black text-cyan-400 tracking-wide">สำเร็จ!</h3>
+    <div id="notificationModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel p-6 rounded-2xl max-w-xs w-full mx-4 text-center space-y-4 border border-fuchsia-500/40 shadow-[0_0_30px_rgba(240,70,150,0.2)]">
+            <div id="modalIcon" class="text-5xl">✨</div>
+            <h3 id="modalTitle" class="text-xl font-black text-fuchsia-400 tracking-wide font-mono">SUCCESS</h3>
             <p id="modalBody" class="text-slate-300 text-xs leading-relaxed font-mono"></p>
-            <button onclick="closeModal()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-white transition-all text-xs font-bold uppercase tracking-widest font-mono">CLOSE</button>
+            <button onclick="closeModal()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-700 hover:border-fuchsia-400 text-slate-300 hover:text-white transition-all text-xs font-bold uppercase tracking-widest font-mono">ACKNOWLEDGE</button>
         </div>
     </div>
 
     <footer class="relative z-10 text-center py-5 text-[10px] font-mono text-slate-600 border-t border-slate-950/80 bg-slate-950/40 tracking-wider">
-        <p>© 2026 APOLLO-11 COMMAND MODULE. MISSION CONTROL PRODUCTION ENVIRONMENT.</p>
+        <p>© 2026 APOLLO-11 MISSION LABS. SYSTEM STATUS: PLATFORM SECURED.</p>
     </footer>
 
 
     <script>
-        // 📥 [ตั้งค่าพิกัดความปลอดภัย] ใส่ค่าลิงก์ Webhook และ ID ยศตรงนี้ได้เลยครับพี่!
+        // 📥 [จุดตั้งค่า] ลิงก์ Webhook และ ID ยศแอดมินของพี่ครับ
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW'; 
         const ADMIN_ROLE_ID = '1513916622593593578'; 
 
-        // เรียกผูกองค์ประกอบ HTML DOM เข้ามาในตัวแปรสคริปต์
+        // ดึง DOM Elements
         const cosmicQuestion = document.getElementById('cosmicQuestion');
         const previewQuestion = document.getElementById('previewQuestion');
         const discordTime = document.getElementById('discordTime');
         const discordFooterTime = document.getElementById('discordFooterTime');
-        
         const cosmicForm = document.getElementById('cosmicForm');
         const launchBtn = document.getElementById('launchBtn');
         const btnText = document.getElementById('btnText');
         const btnIcon = document.getElementById('btnIcon');
-        
         const notificationModal = document.getElementById('notificationModal');
         const modalIcon = document.getElementById('modalIcon');
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
+        const mainBodyFrame = document.getElementById('mainBodyFrame');
 
-        // ฟังก์ชันอัปเดตเวลากล่อง Live Preview บนหน้าเว็บให้เป็นปัจจุบันเสมือนจริง
+        // 1. ⚡ EFFECT: Hologram Typing ดีไซน์ข้อความเปิดระบบคอมพิวเตอร์อวกาศ ค่อยๆ พิมพ์เอง
+        const subtitleElement = document.getElementById('systemSubtitle');
+        const textToType = "// SYSTEM STATUS: READY TO TRANSMIT QUANTUM SIGNALS_";
+        let index = 0;
+        function typeWriter() {
+            if (index < textToType.length) {
+                subtitleElement.textContent = textToType.substring(0, index + 1);
+                index++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        window.addEventListener('load', typeWriter);
+
+        // 2. 🌌 EFFECT: Interactive Matrix Particle (ละอองดาววิ่งตามการขยับเมาส์)
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            // ทุกครั้งที่ขยับเมาส์ ให้สร้างจุดแสงขนาดเล็กออกมา
+            for (let i = 0; i < 2; i++) {
+                particles.push(new Particle(mouse.x, mouse.y));
+            }
+        });
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * -2 - 0.5; // ลอยขึ้นด้านบน
+                this.color = Math.random() > 0.5 ? 'rgba(0, 242, 254, 0.7)' : 'rgba(236, 72, 153, 0.6)';
+                this.alpha = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= 0.015;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function handleParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(handleParticles);
+        }
+        handleParticles();
+
+        // 3. ⏰ SYSTEM: ซิงค์นาฬิกากล่องแชท Discord ให้ตรงเวลาโลกจริง
         function syncClock() {
             const now = new Date();
             let hours = String(now.getHours()).padStart(2, '0');
@@ -242,15 +357,26 @@
                 `;
             }
         }
-        syncClock(); // สั่งให้ทำงานทันทีเมื่อหน้าเว็บโหลด
+        syncClock();
 
-        // ระบบ Real-time Live Preview พิมพ์อะไรไป จะไปโผล่ในการ์ดจำลอง Discord ทันที
+        // Real-time Preview ข้อความในกล่องดิสคอร์ดจำลอง
         cosmicQuestion.addEventListener('input', (e) => {
             const text = e.target.value;
-            previewQuestion.textContent = text.trim() ? text : '> รอการป้อนสัญญาณวิทยุจากเครื่องส่ง...';
+            previewQuestion.textContent = text.trim() ? text : '> รอชุดข้อมูลสัญญาณจาก Core...';
         });
 
-        // ฟังก์ชันระบบควบคุมหน้าต่างแจ้งเตือน (Modal Dialog Control)
+        // 4. 🎇 EFFECT: Ripple On Click (สร้างคลื่นพลังงานเมื่อกดคลิกปุ่มยิงสัญญาณ)
+        launchBtn.addEventListener('click', function(e) {
+            let x = e.clientX - e.target.getBoundingClientRect().left;
+            let y = e.clientY - e.target.getBoundingClientRect().top;
+            let ripples = document.createElement('span');
+            ripples.className = 'ripple';
+            ripples.style.left = x + 'px';
+            ripples.style.top = y + 'px';
+            this.appendChild(ripples);
+            setTimeout(() => { ripples.remove(); }, 600);
+        });
+
         function showModal(title, body, icon = '✨') {
             modalIcon.textContent = icon;
             modalTitle.textContent = title;
@@ -264,30 +390,28 @@
             setTimeout(() => { notificationModal.classList.add('hidden'); }, 300);
         }
 
-        // ระบบตรวจจับฟอร์มและจัดการการยิง Fetch API ไปที่ Discord Webhook โดยตรง
+        // 🚀 TRANSMISSION PROCESS: ระบบประมวลผลการส่งข้อมูลเข้า Discord Webhook
         cosmicForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const questionText = cosmicQuestion.value;
-
             if (!questionText.trim()) return;
 
-            // ล็อคปุ่มกด ป้องกันการรัวปุ่มและเปลี่ยนไอคอนเป็นแอนิเมชันกำลังส่งคลื่นสัญญาณ
-            launchBtn.disabled = true;
-            btnText.textContent = 'กำลังยิงสัญญาณควันตัม...';
-            btnIcon.className = 'fa-solid fa-satellite animate-spin text-cyan-400';
+            // 5. 🎬 EFFECT: Screen Shake (สั่งสั่นสะเทือนหน้าจอศูนย์ควบคุมให้ได้ฟีลสมจริง)
+            mainBodyFrame.classList.add('shaking');
+            setTimeout(() => { mainBodyFrame.classList.remove('shaking'); }, 400);
 
-            // ฟอร์แมตวันเวลาจริงของไทยเพื่อใช้อ้างอิงในตาราง Embed ด้านใน Discord
+            // บล็อกปุ่มชั่วคราวและหมุนไอคอนจรวด
+            launchBtn.disabled = true;
+            btnText.textContent = 'LAUNCHING SIGNAL...';
+            btnIcon.className = 'fa-solid fa-satellite-dish animate-spin text-cyan-300';
+
             const localTimestamp = new Date().toLocaleString('th-TH', {
                 year: 'numeric', month: 'long', day: 'numeric',
                 hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
             });
 
-            // ตรวจสอบรูปแบบโครงสร้างไอดี Role แอดมินสำหรับแท็กเรียกความสนใจ
-            const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') 
-                ? `<@&${ADMIN_ROLE_ID.trim()}>` 
-                : '@here';
+            const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') ? `<@&${ADMIN_ROLE_ID.trim()}>` : '@here';
 
-            // จัดเตรียมแพ็กเกจโครงสร้างข้อมูล (JSON Payload) ที่สมบูรณ์แบบเรียบร้อยครับ
             const payload = {
                 username: "ศูนย์ควบคุมยาน Apollo-11",
                 avatar_url: "https://i.imgur.com/E9z6fzq.png",
@@ -295,66 +419,8 @@
                 embeds: [{
                     title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
                     description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
-                    color: 39116, /* โทนสี Cyan-Cyan ไฮเทค */
+                    color: 62258, /* รหัสสีเขียวนีออนสว่างไสวบน Discord */
                     fields: [
-                        {
-                            name: "🛸 ผู้ส่งสัญญาณ",
-                            value: "```yaml\nAnonymous Astronaut\n```",
-                            inline: true
-                        },
-                        {
-                            name: "📡 สถานะสัญญาณ",
-                            value: "🟢 เสถียรดี (100%)",
-                            inline: true
-                        },
-                        {
-                            name: "💬 เนื้อหาคำถามที่ส่งมา",
-                            value: `>>> ${questionText}`,
-                            inline: false
-                        },
-                        {
-                            name: "⏰ เวลารับสัญญาณจริงภาคพื้นดิน",
-                            value: `📅 ${localTimestamp}`,
-                            inline: false
-                        }
-                    ],
-                    image: {
-                        url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop"
-                    },
-                    footer: {
-                        text: "Deep Space Network (DSN) • สถานีรับสัญญาณควบคุมหลัก",
-                        icon_url: "https://i.imgur.com/E9z6fzq.png"
-                    },
-                    timestamp: new Date().toISOString()
-                }]
-            };
+                        { name: "🛸 ผู้ส่งสัญญาณ", value: "
+http://googleusercontent.com/immersive_entry_chip/0
 
-            try {
-                // ยิงคำสั่งส่งผ่าน HTTP POST ไปยัง Discord Webhook ปลายทางโดยตรงโดยไม่ต้องมี API คั่นกลาง
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    showModal('TRANSMITTED!', 'สัญญาณคลื่นวิทยุถูกยิงส่งตรงถึงแอดมินบน Discord เรียบร้อยแล้ว', '🛰️');
-                    cosmicQuestion.value = '';
-                    previewQuestion.textContent = '> รอการป้อนสัญญาณวิทยุจากเครื่องส่ง...';
-                    syncClock();
-                } else {
-                    showModal('ERROR!', `Discord ปฏิเสธสัญญาณ (โค้ดสถานะ: ${response.status})`, '💥');
-                }
-            } catch (error) {
-                console.error(error);
-                showModal('SIGNAL LOST!', 'สัญญาณขาดหาย ไม่สามารถเชื่อมโยงอินเทอร์เน็ตเพื่อส่งข้อมูลได้', '☄️');
-            } finally {
-                // คืนสถานะปุ่มยิงสัญญาณให้กลับมาพร้อมรบอีกครั้ง
-                launchBtn.disabled = false;
-                btnText.textContent = 'ยิงสัญญาณวิทยุ 🛰️';
-                btnIcon.className = 'fa-solid fa-paper-plane';
-            }
-        });
-    </script>
-</body>
-</html>
