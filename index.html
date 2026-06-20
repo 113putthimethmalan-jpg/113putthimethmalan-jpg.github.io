@@ -2,29 +2,20 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apollo-11 Command</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>Apollo-11 Terminal</title>
 </head>
 <body>
-
+    <canvas id="spaceCanvas"></canvas>
     <div class="terminal">
-        <div class="image-box"></div>
-        
         <h1>APOLLO-11 COMMAND</h1>
-        
+        <div class="nebula-box"></div>
         <form id="spaceForm">
-            <input type="hidden" id="webhookUrl" value="https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbWนี่">
-            <input type="hidden" id="adminId" value="1513916622593593578นี่">
-
-            <input type="text" id="username" placeholder="CALL SIGN" required>
-            <textarea id="message" rows="2" placeholder="TRANSMISSION" required></textarea>
-            
+            <input type="text" id="username" placeholder="CALL SIGN..." required>
+            <textarea id="message" rows="3" placeholder="TRANSMISSION..." required></textarea>
             <button type="submit" id="sendBtn">INITIATE TRANSMISSION 📡</button>
         </form>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
