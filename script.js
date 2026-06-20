@@ -25,7 +25,7 @@
                     { name: "💬 เนื้อหาคำถามที่ส่งมา", value: document.getElementById('message').value },
                     { name: "⏰ เวลาส่งสัญญาณจริงจากโลก", value: `📅 ${dateString}` }
                 ],
-                image: { url: "https://upload.wikimedia.org/wikipedia/commons/b/b4/The_Bubble_Nebula.jpg" },
+                image: { url: "https://cdn.discordapp.com/attachments/1511368039671533598/1517928557974781962/photo-1462331940025-496dfbfc7564.webp?ex=6a3810a1&is=6a36bf21&hm=e27ffbc11104a67ff56522a45f9bb86143c10d59ece16b246efa096ba69d23f2&" },
                 footer: { 
                     text: "Deep Space Network (DSN) • สถานีรับสัญญาณภาคพื้นดิน | วันนี้ เวลา " + now.getHours() + ":" + now.getMinutes()
                 }
