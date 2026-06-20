@@ -1,18 +1,136 @@
-<div class="game-container">
-    <div class="status-bar">
-        <div class="player-stat">HP: <span id="p-hp">100</span> | Level: 1</div>
-        <div class="enemy-stat">Enemy HP: <span id="e-hp">100</span></div>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Mission: Ask the Universe</title>
+    <style>
+        /* --- โค้ดส่วนนี้คือ style.css ที่รวมเข้ามาเพื่อให้รันง่ายขึ้น --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #020208; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+        
+        .stars { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000 url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=1000') repeat; 
+            z-index: -1; opacity: 0.4; 
+        }
+        
+        .container { z-index: 1; width: 100%; max-width: 480px; padding: 20px; }
+        
+        .cosmic-card { 
+            background: rgba(15, 15, 35, 0.75); backdrop-filter: blur(10px); 
+            border: 1px solid rgba(80, 150, 255, 0.2); padding: 40px 30px; 
+            border-radius: 20px; box-shadow: 0 0 30px rgba(0, 150, 255, 0.2); text-align: center; 
+        }
+        
+        .rocket-icon { font-size: 3rem; margin-bottom: 15px; animation: float 3s ease-in-out infinite; }
+        h1 { font-size: 1.8rem; color: #4da6ff; margin-bottom: 10px; text-shadow: 0 0 10px rgba(77, 166, 255, 0.5); }
+        .subtitle { color: #8fa0dd; font-size: 0.9rem; margin-bottom: 25px; }
+        
+        textarea { 
+            width: 100%; height: 120px; background: rgba(5, 5, 15, 0.6); 
+            border: 1px solid #334e68; border-radius: 12px; padding: 15px; 
+            color: white; font-size: 1rem; resize: none; outline: none; transition: all 0.3s ease; 
+        }
+        textarea:focus { border-color: #00bcd4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.4); }
+        
+        button { 
+            margin-top: 20px; width: 100%; padding: 14px; 
+            background: linear-gradient(45deg, #0052d4, #4364f7, #6fb1fc); 
+            border: none; border-radius: 12px; color: white; font-size: 1rem; 
+            font-weight: bold; cursor: pointer; transition: all 0.3s ease; 
+            box-shadow: 0 4px 15px rgba(67, 100, 247, 0.4); 
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(67, 100, 247, 0.6); }
+        button:disabled { background: #222533; color: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        #statusMessage { margin-top: 20px; font-size: 0.9rem; padding: 10px; border-radius: 8px; font-weight: 500; }
+        .success { color: #26d0ce; text-shadow: 0 0 8px rgba(38, 208, 206, 0.4); }
+        .error { color: #ff4b5c; }
+        .hidden { display: none; }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <div class="container">
+        <div class="cosmic-card">
+            <div class="rocket-icon">🚀</div>
+            <h1>ศูนย์ควบคุมภารกิจ</h1>
+            <p class="subtitle">ส่งคำถามของคุณออกไปยังจักรวาลอันไกลโพ้น</p>
+            
+            <form id="spaceForm">
+                <textarea id="questionInput" placeholder="พิมพ์คำถามที่ต้องการถามดวงดาว..." required></textarea>
+                <button type="submit" id="submitBtn">ส่งสัญญาณ 🛰️</button>
+            </form>
+            
+            <div id="statusMessage" class="hidden"></div>
+        </div>
     </div>
 
-    <div class="battle-arena">
-        <div id="enemy-sprite" class="enemy">🤡</div>
-    </div>
+    <script>
+        // --- โค้ดส่วนนี้คือ script.js ---
+        // ใช้ Webhook จำลองสำหรับทดสอบ (คุณสามารถนำ URL จริงมาเปลี่ยนตรงนี้ได้เลย)
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1517881955096596510/ZWe-1ruecPqVwnjz7V0XQzyfsby7hjsuzvgsT93SQI7Fu9TO6YtIw06r26XEPohUqv5m'; 
 
-    <div id="log" class="battle-log">เตรียมตัวบวก!</div>
+        document.getElementById('spaceForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    <div class="controls">
-        <button onclick="attack()">โจมตีด้วยนิ้วชี้</button>
-        <button onclick="skill()">ใช้สกิล "ด่าแม่"</button>
-        <button onclick="heal()">กินมาม่า (Heal)</button>
-    </div>
-</div>
+            const questionInput = document.getElementById('questionInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            const questionText = questionInput.value.trim();
+
+            if (!questionText) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'กำลังยิงสัญญาณ... 📡';
+            statusMessage.className = 'hidden';
+
+            // โครงสร้างข้อมูลที่จะส่งไป Webhook
+            const payload = {
+                username: "Space Station Bot",
+                avatar_url: "https://i.imgur.com/E9z6fzq.png",
+                content: `🌌 **มีสัญญาณคำถามใหม่จากอวกาศ!**\n> ${questionText}`,
+                embeds: [{
+                    title: "🛸 ข้อมูลการติดต่อ",
+                    color: 4415487,
+                    fields: [
+                        { name: "คำถาม", value: questionText },
+                        { name: "เวลาส่งโลก", value: new Date().toLocaleString('th-TH') }
+                    ]
+                }]
+            };
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    statusMessage.textContent = 'ส่งสัญญาณสำเร็จ! คำถามเดินทางสู่ความมืดมิดแล้ว ✨';
+                    statusMessage.className = 'success';
+                    questionInput.value = ''; 
+                } else {
+                    statusMessage.textContent = 'สัญญาณขาดหาย! กรุณาลองใหม่อีกครั้ง ☄️';
+                    statusMessage.className = 'error';
+                }
+            } catch (error) {
+                statusMessage.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับสถานีอวกาศ 🛸';
+                statusMessage.className = 'error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'ส่งสัญญาณ 🛰️';
+            }
+        });
+    </script>
+</body>
+</html>
