@@ -2,106 +2,20 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
     <title>Apollo-11 Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- CSS: ส่วนการตกแต่ง (UI) --- */
-        body {
-            background: #050508;
-            background-image: radial-gradient(circle at 2px 2px, #1a1a2e 1px, transparent 0);
-            background-size: 40px 40px;
-            color: #00f2ff;
-            font-family: 'Orbitron', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0;
-        }
-
-        .terminal {
-            background: rgba(12, 12, 20, 0.9);
-            border: 2px solid #00f2ff;
-            padding: 40px;
-            width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.3);
-            text-align: center;
-        }
-
-        .nebula-img {
-            width: 100%; height: 150px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/4/43/Hubble_Pillars_of_Creation.jpg') center/cover;
-            border-radius: 10px; border: 1px solid #ff00ff;
-            margin-bottom: 20px;
-        }
-
-        input, textarea {
-            width: 100%; background: #000; color: #00f2ff;
-            border: 1px solid #00f2ff; padding: 15px; margin-bottom: 15px;
-            border-radius: 8px; box-sizing: border-box; outline: none;
-        }
-
-        button {
-            width: 100%; background: #00f2ff; color: #000;
-            border: none; padding: 15px; cursor: pointer;
-            font-weight: bold; text-transform: uppercase;
-            border-radius: 8px; transition: 0.4s;
-        }
-
-        button:hover { background: #fff; box-shadow: 0 0 20px #00f2ff; }
-    </style>
 </head>
 <body>
-
-<div class="terminal">
-    <h1>APOLLO-11</h1>
-    <div class="nebula-img"></div>
-    <form id="spaceForm">
-        <input type="text" id="username" placeholder="Call Sign..." required>
-        <textarea id="message" rows="3" placeholder="Transmission text..." required></textarea>
-        <button type="submit" id="sendBtn">Initiate Transmission 📡</button>
-    </form>
-</div>
-
-<script>
-    /* --- JS: ส่วนการทำงาน (Logic) --- */
-    document.getElementById('spaceForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // ใส่ข้อมูลของคุณที่นี่
-        const webhookUrl = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
-        const adminId = "1513916622593593578"; 
-
-        const btn = document.getElementById('sendBtn');
-        btn.innerText = "Transmitting...";
-        
-        const payload = {
-            content: `<@${adminId}> ⚠️ ระบบตรวจพบสัญญาณเข้า`,
-            embeds: [{
-                title: "🛰️ DSN DATA PACKET",
-                color: 0x00f2ff,
-                fields: [
-                    { name: "🛸 อัตลักษณ์", value: document.getElementById('username').value, inline: true },
-                    { name: "⚡ สถานะ", value: "เสถียร (100%)", inline: true },
-                    { name: "💬 ข้อความ", value: document.getElementById('message').value }
-                ],
-                image: { url: "https://upload.wikimedia.org/wikipedia/commons/4/43/Hubble_Pillars_of_Creation.jpg" },
-                footer: { text: "Apollo-11 Mission Control" }
-            }]
-        };
-
-        try {
-            await fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            alert("สัญญาณถูกส่งออกสู่อวกาศเรียบร้อย!");
-        } catch (error) {
-            alert("ความล้มเหลวในการเชื่อมต่อ!");
-        } finally {
-            btn.innerText = "Initiate Transmission 📡";
-        }
-    });
-</script>
+    <canvas id="spaceCanvas"></canvas>
+    <div class="terminal">
+        <h1>APOLLO-11 COMMAND</h1>
+        <div class="nebula-box"></div>
+        <form id="spaceForm">
+            <input type="text" id="username" placeholder="CALL SIGN..." required>
+            <textarea id="message" rows="3" placeholder="TRANSMISSION..." required></textarea>
+            <button type="submit" id="sendBtn">INITIATE TRANSMISSION 📡</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
