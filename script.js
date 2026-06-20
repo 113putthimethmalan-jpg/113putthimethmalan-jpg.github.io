@@ -2,7 +2,7 @@
     document.getElementById('spaceForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const webhookUrl = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
+        const webhookUrl = "YOUR_WEBHOOK_URL_HERE"; 
         const adminId = "1513916622593593578"; // ID ของแอดมินที่ต้องการแท็ก
 
         const btn = document.getElementById('sendBtn');
