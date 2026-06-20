@@ -2,8 +2,8 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // ตั้งค่าตัวแปร
-    const hook = "YOUR_WEBHOOK_URL_HERE"; 
-    const adminId = "YOUR_ADMIN_ID_HERE";
+    const hook = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
+    const adminId = "1513916622593593578";
     const btn = e.target.querySelector('button');
     
     // เปลี่ยนสถานะปุ่มตอนกำลังส่ง
