@@ -1,3 +1,4 @@
+
 // เอา URL เว็บฮุกจริงของคุณมาแปะแทนที่ลิงก์ทดสอบตรงนี้ได้เลยครับ 🚀
 const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW'; 
 
@@ -15,18 +16,40 @@ document.getElementById('spaceForm').addEventListener('submit', async function(e
     submitBtn.innerHTML = 'กำลังยิงสัญญาณ... 📡';
     statusMessage.className = 'hidden';
 
-    // จัดฟอร์แมตแบบ Embed สวยๆ สำหรับส่งเข้า Discord
+    // จัดฟอร์แมตแบบ Rich Embed ระดับพรีเมียมสำหรับ Discord
     const payload = {
-        username: "Space Station Bot",
-        avatar_url: "https://i.imgur.com/E9z6fzq.png",
-        content: `🌌 **มีสัญญาณคำถามใหม่จากอวกาศ!**`,
+        username: "ศูนย์ควบคุมยาน Apollo-11",
+        avatar_url: "https://i.imgur.com/E9z6fzq.png", // รูปโปรไฟล์นักบินอวกาศ
         embeds: [{
-            title: "🛸 ข้อมูลการติดต่อ",
-            color: 4415487,
+            title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
+            description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
+            color: 1942527, // สีน้ำเงินนีออน (Electric Blue)
             fields: [
-                { name: "คำถาม", value: questionText },
-                { name: "เวลาส่งจากโลก", value: new Date().toLocaleString('th-TH') }
-            ]
+                {
+                    name: "🛸 ผู้ส่งสัญญาณ",
+                    value: "```yaml\nAnonymous Astronaut\n```",
+                    inline: true
+                },
+                {
+                    name: "📡 สถานะการเชื่อมต่อ",
+                    value: "🟢 เสถียรดี (100%)",
+                    inline: true
+                },
+                {
+                    name: "💬 เนื้อหาคำถามที่ส่งมา",
+                    value: `>>> ${questionText}`,
+                    inline: false
+                }
+            ],
+            // รูปแบนเนอร์อวกาศเนบิวลาขนาดใหญ่สุดสวยใต้โพสต์
+            image: {
+                url: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop"
+            },
+            footer: {
+                text: "Deep Space Network (DSN) • สถานีรับสัญญาณภาคพื้นดิน",
+                icon_url: "https://i.imgur.com/E9z6fzq.png"
+            },
+            timestamp: new Date().toISOString()
         }]
     };
 
@@ -53,3 +76,5 @@ document.getElementById('spaceForm').addEventListener('submit', async function(e
         submitBtn.innerHTML = 'ส่งสัญญาณ 🛰️';
     }
 });
+
+```
