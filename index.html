@@ -28,9 +28,15 @@
 <script>
     document.getElementById('spaceForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const hook = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; // เปลี่ยนตรงนี้เป็น Webhook ของคุณ
+        
+        // --- ตั้งค่าส่วนตัวของคุณตรงนี้ ---
+        const webhookUrl = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
+        const adminId = "1513916622593593578"; // ใส่เลข ID ของแอดมินที่นี่
+        // ------------------------------
+
         const payload = {
             username: "ศูนย์ควบคุมยาน Apollo-11 BOT",
+            content: `<@${adminId}> มีสัญญาณวิทยุด่วนจากพิกัดนิรนามครับ!`, 
             embeds: [{
                 title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
                 description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
@@ -45,12 +51,12 @@
             }]
         };
 
-        await fetch(hook, {
+        await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        alert("สัญญาณถูกยิงเข้าสู่ชั้นบรรยากาศแล้ว!");
+        alert("สัญญาณถูกยิงเข้าสู่ชั้นบรรยากาศและแจ้งเตือนแอดมินแล้ว!");
     });
 </script>
 </body>
