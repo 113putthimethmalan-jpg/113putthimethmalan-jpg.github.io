@@ -1,36 +1,34 @@
-/* จัดทุกอย่างให้อยู่กลางหน้าจอแบบเป๊ะๆ */
 body {
     margin: 0;
-    padding: 0;
-    background-color: #050505; /* ดำสนิทแบบอวกาศ */
-    background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-    font-family: 'Inter', 'Segoe UI', sans-serif; /* เปลี่ยนมาใช้ฟอนต์ทันสมัย */
+    background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: #fff;
+    font-family: 'Inter', sans-serif;
 }
 
 .terminal {
-    width: 320px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.03); /* โปร่งแสงนิดๆ */
+    width: 340px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    backdrop-filter: blur(20px); /* เอฟเฟกต์เบลอแบบกระจก */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
     text-align: center;
 }
 
-h1 {
-    font-size: 0.8rem;
-    font-weight: 300;
-    letter-spacing: 0.2rem;
-    color: #888;
-    margin-bottom: 40px;
-    text-transform: uppercase;
+/* ส่วนรูปภาพ - สไตล์มินิมอล */
+.image-box {
+    width: 100%;
+    height: 140px;
+    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600') center/cover;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    opacity: 0.8;
 }
+
+h1 { font-size: 0.7rem; letter-spacing: 4px; color: #fff; margin-bottom: 30px; opacity: 0.6; }
 
 input, textarea {
     width: 100%;
@@ -39,28 +37,23 @@ input, textarea {
     border-bottom: 1px solid #333;
     color: #fff;
     padding: 10px 0;
-    margin-bottom: 25px;
-    font-size: 1rem;
-    transition: 0.3s;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-input:focus, textarea:focus {
-    border-bottom: 1px solid #fff;
-    outline: none;
-}
+input:focus, textarea:focus { border-bottom: 1px solid #fff; outline: none; }
 
 button {
     width: 100%;
     padding: 12px;
-    background: #fff;
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    font-weight: 600;
+    background: transparent;
+    color: #fff;
+    border: 1px solid #333;
     cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
     transition: 0.3s;
 }
 
-button:hover {
-    background: #ccc;
-}
+button:hover { background: #fff; color: #000; }
