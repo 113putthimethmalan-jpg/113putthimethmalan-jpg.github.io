@@ -1,42 +1,48 @@
-document.getElementById('spaceForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
+<script>
+    document.getElementById('spaceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const webhookUrl = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
+        const adminId = "1513916622593593578"; // ID ของแอดมินที่ต้องการแท็ก
 
-    const btn = document.getElementById('sendBtn');
-    btn.innerText = "TRANSMITTING...";
+        const btn = document.getElementById('sendBtn');
+        btn.innerText = "กำลังส่งสัญญาณ...";
 
-    // ดึงค่าจาก HTML ให้ตรงกับ ID ที่กำหนดไว้
-    const username = document.getElementById('username').value;
-    const message = document.getElementById('message').value;
+        // สร้างข้อความเวลาปัจจุบัน
+        const now = new Date();
+        const dateString = `${now.getDate()} มิถุนายน ${now.getFullYear() + 543} เวลา ${now.getHours()} นาฬิกา ${now.getMinutes()} นาที ${now.getSeconds()} วินาที GMT+7`;
 
-    const payload = {
-        content: `<@!1513916622593593578>`, // ใส่เลข ID ของคุณ
-        embeds: [{
-            title: "📡 สัญญาณคำถามใหม่",
-            color: 0xffffff,
-            fields: [
-                { name: "🛸 ผู้ส่ง", value: username },
-                { name: "💬 ข้อความ", value: message },
-                { name: "⏰ เวลา", value: new Date().toLocaleString('th-TH') }
-            ]
-        }]
-    };
+        const payload = {
+            // ส่วนแท็กแอดมินด้านบน Embed
+            content: `🚨 <@${adminId}> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
+            embeds: [{
+                title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
+                description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
+                color: 0x424549, // สีเทาเข้มแบบในภาพ
+                fields: [
+                    { name: "🛸 ผู้ส่งสัญญาณ", value: document.getElementById('username').value || "Anonymous Astronaut" },
+                    { name: "📡 สถานะการเชื่อมต่อ", value: "🟢 เสถียรดี (100%)" },
+                    { name: "💬 เนื้อหาคำถามที่ส่งมา", value: document.getElementById('message').value },
+                    { name: "⏰ เวลาส่งสัญญาณจริงจากโลก", value: `📅 ${dateString}` }
+                ],
+                image: { url: "https://upload.wikimedia.org/wikipedia/commons/b/b4/The_Bubble_Nebula.jpg" },
+                footer: { 
+                    text: "Deep Space Network (DSN) • สถานีรับสัญญาณภาคพื้นดิน | วันนี้ เวลา " + now.getHours() + ":" + now.getMinutes()
+                }
+            }]
+        };
 
-    try {
-        const response = await fetch("https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            alert("ส่งข้อความไปที่โลกสำเร็จ!");
-            document.getElementById('spaceForm').reset();
-        } else {
-            alert("ส่งไม่สำเร็จ กรุณาเช็ค Webhook URL");
+        try {
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            alert("ส่งสัญญาณเรียบร้อย!");
+        } catch (error) {
+            alert("ส่งสัญญาณล้มเหลว!");
+        } finally {
+            btn.innerText = "Initiate Transmission 📡";
         }
-    } catch (error) {
-        alert("เกิดข้อผิดพลาด: " + error.message);
-    } finally {
-        btn.innerText = "TRANSMIT SIGNAL";
-    }
-});
+    });
+</script>
