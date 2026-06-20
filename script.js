@@ -1,48 +1,51 @@
-<script>
-    document.getElementById('spaceForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+document.getElementById('spaceForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
+
+    const btn = document.getElementById('sendBtn');
+    btn.innerText = "TRANSMITTING...";
+
+    // 1. ดึงค่าจากช่อง Input ของคุณ (ตรวจสอบให้ตรงกับ ID ใน HTML)
+    const username = document.getElementById('username').value;
+    const message = document.getElementById('message').value;
+    
+    // 2. ใส่ข้อมูล Webhook และ ID ตรงนี้ (หรือดึงจาก Hidden Input)
+    const webhookUrl = "ใส่_WEBHOOK_URL_ของคุณที่นี่";
+    const adminId = "ใส่_USER_ID_ของคุณที่นี่";
+
+    const payload = {
+        content: `<@!${adminId}> มีสัญญาณใหม่เข้ามา!`,
+        embeds: [{
+            title: "📡 สัญญาณคำถามใหม่จากระบบ",
+            color: 0x00f2ff, // สีฟ้าเท่ๆ
+            fields: [
+                { name: "🛸 ผู้ส่งสัญญาณ", value: username || "Anonymous", inline: true },
+                { name: "💬 ข้อความ", value: message },
+                { name: "⏰ เวลา", value: new Date().toLocaleString('th-TH') }
+            ],
+            image: { url: "https://cdn.discordapp.com/attachments/1511368039671533598/1517928557974781962/photo-1462331940025-496dfbfc7564.webp?ex=6a3810a1&is=6a36bf21&hm=e27ffbc11104a67ff56522a45f9bb86143c10d59ece16b246efa096ba69d23f2&" }
+        }]
+    };
+
+    try {
+        // 3. ใช้ Proxy เพื่อข้ามการบล็อกของ Discord
+        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(webhookUrl);
         
-        const webhookUrl = "https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW"; 
-        const adminId = "1513916622593593578"; // ID ของแอดมินที่ต้องการแท็ก
+        const response = await fetch(proxyUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-        const btn = document.getElementById('sendBtn');
-        btn.innerText = "กำลังส่งสัญญาณ...";
-
-        // สร้างข้อความเวลาปัจจุบัน
-        const now = new Date();
-        const dateString = `${now.getDate()} มิถุนายน ${now.getFullYear() + 543} เวลา ${now.getHours()} นาฬิกา ${now.getMinutes()} นาที ${now.getSeconds()} วินาที GMT+7`;
-
-        const payload = {
-            // ส่วนแท็กแอดมินด้านบน Embed
-            content: `🚨 <@${adminId}> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
-            embeds: [{
-                title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
-                description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
-                color: 0x424549, // สีเทาเข้มแบบในภาพ
-                fields: [
-                    { name: "🛸 ผู้ส่งสัญญาณ", value: document.getElementById('username').value || "Anonymous Astronaut" },
-                    { name: "📡 สถานะการเชื่อมต่อ", value: "🟢 เสถียรดี (100%)" },
-                    { name: "💬 เนื้อหาคำถามที่ส่งมา", value: document.getElementById('message').value },
-                    { name: "⏰ เวลาส่งสัญญาณจริงจากโลก", value: `📅 ${dateString}` }
-                ],
-                image: { url: "https://cdn.discordapp.com/attachments/1511368039671533598/1517928557974781962/photo-1462331940025-496dfbfc7564.webp?ex=6a3810a1&is=6a36bf21&hm=e27ffbc11104a67ff56522a45f9bb86143c10d59ece16b246efa096ba69d23f2&" },
-                footer: { 
-                    text: "Deep Space Network (DSN) • สถานีรับสัญญาณภาคพื้นดิน | วันนี้ เวลา " + now.getHours() + ":" + now.getMinutes()
-                }
-            }]
-        };
-
-        try {
-            await fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            alert("ส่งสัญญาณเรียบร้อย!");
-        } catch (error) {
-            alert("ส่งสัญญาณล้มเหลว!");
-        } finally {
-            btn.innerText = "Initiate Transmission 📡";
+        if (response.ok) {
+            alert("✅ ส่งสัญญาณสำเร็จ!");
+            document.getElementById('spaceForm').reset();
+        } else {
+            alert("❌ ส่งไม่สำเร็จ: เช็ค URL Webhook อีกครั้ง");
         }
-    });
-</script>
+    } catch (error) {
+        console.error(error);
+        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ");
+    } finally {
+        btn.innerText = "INITIATE TRANSMISSION 📡";
+    }
+});
