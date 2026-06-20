@@ -1,8 +1,8 @@
 // ===================================================
-// 🔧 ตั้งค่าข้อมูลส่วนตัว (Webhook และ ID ยศแอดมิน)
+// 📡 ดึงข้อมูล Webhook และ ID ยศแอดมินมาจากหน้า index.html อัตโนมัติ
 // ===================================================
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW'; 
-const ADMIN_ROLE_ID = '1513916622593593578'; // ไอดีตัวเลขยศจาก Discord
+const WEBHOOK_URL = window.WEBHOOK_URL || ''; 
+const ADMIN_ROLE_ID = window.ADMIN_ROLE_ID || ''; 
 
 // ดึงองค์ประกอบที่จำเป็นในระบบ
 const cosmicQuestion = document.getElementById('cosmicQuestion');
@@ -65,9 +65,9 @@ cosmicForm.addEventListener('submit', async function(e) {
     const questionText = cosmicQuestion.value.trim();
     if (!questionText) return;
 
-    // ตรวจสอบความพร้อมของ Webhook แบบกระชับ
+    // ตรวจสอบความพร้อมของ Webhook
     if (!WEBHOOK_URL || WEBHOOK_URL.trim() === '') {
-        showModal('ระบบไม่พร้อม!', 'กรุณาตรวจสอบการใส่ลิงก์ Webhook ในไฟล์สคริปต์', '⚠️');
+        showModal('ระบบไม่พร้อม!', 'ไม่พบลิงก์ Webhook กรุณาตรวจสอบการตั้งค่าในหน้าเว็บของคุณ', '⚠️');
         return;
     }
 
@@ -85,7 +85,7 @@ cosmicForm.addEventListener('submit', async function(e) {
         timeZoneName: 'short'
     });
 
-    // 🚨 ฟอร์แมตโครงสร้างแท็กยศแอดมิน (<@&ไอดีแอดมิน>) ถ้าไม่มีให้ใส่ @everyone หรือ @here แทนได้ครับ
+    // 🚨 ฟอร์แมตโครงสร้างแท็กยศแอดมินสำหรับส่งเข้าเซิร์ฟเวอร์จริง (<@&ตามด้วยไอดีตัวเลขยศ>)
     const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') 
         ? `<@&${ADMIN_ROLE_ID.trim()}>` 
         : '@here';
@@ -144,7 +144,7 @@ cosmicForm.addEventListener('submit', async function(e) {
             previewQuestion.textContent = '> มนุษย์ต่างดาวที่ดาวอังคารเขากินส้มตำเป็นอาหารเย็นไหมครับ?';
             updateDiscordTime();
         } else {
-            showModal('ส่งสัญญาณล้มเหลว', `เกิดข้อผิดพลาดจาก Discord (โค้ด: ${response.status})`, '💥');
+            showModal('ส่งสัญญาณล้มเหลว', `เกิดข้อผิดพลาดจาก Discord (โค้ดสถานะ: ${response.status})`, '💥');
         }
     } catch (error) {
         console.error(error);
