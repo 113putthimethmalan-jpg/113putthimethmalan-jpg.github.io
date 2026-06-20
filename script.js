@@ -1,51 +1,55 @@
-let playerHP = 100;
-let enemyHP = 100;
-const logEl = document.getElementById('log');
-const enemySprite = document.getElementById('enemy-sprite');
+// เอา URL เว็บฮุกจริงของคุณมาแปะแทนที่ลิงก์ทดสอบตรงนี้ได้เลยครับ 🚀
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1517881955096596510/ZWe-1ruecPqVwnjz7V0XQzyfsby7hjsuzvgsT93SQI7Fu9TO6YtIw06r26XEPohUqv5m'; 
 
-function updateUI() {
-    document.getElementById('p-hp').innerText = playerHP;
-    document.getElementById('e-hp').innerText = enemyHP;
-}
+document.getElementById('spaceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-function attack() {
-    if (enemyHP <= 0) return;
-    
-    let dmg = Math.floor(Math.random() * 15) + 5;
-    enemyHP -= dmg;
-    
-    // เอฟเฟกต์ศัตรูสั่น
-    enemySprite.classList.add('shake');
-    setTimeout(() => enemySprite.classList.remove('shake'), 500);
+    const questionInput = document.getElementById('questionInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const questionText = questionInput.value.trim();
 
-    logEl.innerText = `คุณจิ้มตามัน! ศัตรูเลือดลด ${dmg}`;
-    
-    if (enemyHP <= 0) {
-        enemyHP = 0;
-        logEl.innerText = "ศัตรูสลบคาที่! คุณชนะ!";
-    } else {
-        setTimeout(enemyTurn, 1000); // ศัตรูตีกลับ
+    if (!questionText) return;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'กำลังยิงสัญญาณ... 📡';
+    statusMessage.className = 'hidden';
+
+    // จัดฟอร์แมตแบบ Embed สวยๆ สำหรับส่งเข้า Discord
+    const payload = {
+        username: "Space Station Bot",
+        avatar_url: "https://i.imgur.com/E9z6fzq.png",
+        content: `🌌 **มีสัญญาณคำถามใหม่จากอวกาศ!**`,
+        embeds: [{
+            title: "🛸 ข้อมูลการติดต่อ",
+            color: 4415487,
+            fields: [
+                { name: "คำถาม", value: questionText },
+                { name: "เวลาส่งจากโลก", value: new Date().toLocaleString('th-TH') }
+            ]
+        }]
+    };
+
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            statusMessage.textContent = 'ส่งสัญญาณสำเร็จ! คำถามเดินทางสู่ความมืดมิดแล้ว ✨';
+            statusMessage.className = 'success';
+            questionInput.value = ''; 
+        } else {
+            statusMessage.textContent = 'สัญญาณขาดหาย! กรุณาลองใหม่อีกครั้ง ☄️';
+            statusMessage.className = 'error';
+        }
+    } catch (error) {
+        statusMessage.textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อกับสถานีอวกาศ 🛸';
+        statusMessage.className = 'error';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'ส่งสัญญาณ 🛰️';
     }
-    updateUI();
-}
-
-function enemyTurn() {
-    let dmg = Math.floor(Math.random() * 10) + 2;
-    playerHP -= dmg;
-    logEl.innerText = `ศัตรูพ่นน้ำลายใส่! คุณเลือดลด ${dmg}`;
-    
-    if (playerHP <= 0) {
-        playerHP = 0;
-        logEl.innerText = "คุณแพ้แล้ว ไปนอนไป๊!";
-    }
-    updateUI();
-}
-
-function heal() {
-    let recovery = 20;
-    playerHP += recovery;
-    if (playerHP > 100) playerHP = 100;
-    logEl.innerText = "คุณกินมาม่าเข้าไป... รู้สึกอิ่ม (HP +20)";
-    updateUI();
-    setTimeout(enemyTurn, 1000);
-}
+});
