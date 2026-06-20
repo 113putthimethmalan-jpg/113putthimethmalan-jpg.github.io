@@ -18,7 +18,7 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
     btn.innerText = "TRANSMITTING...";
     
     const payload = {
-        content: `🚨 <@YOUR_ADMIN_ID_HERE> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
+        content: `🚨 <@1513916622593593578> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
         embeds: [{
             title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
             description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
@@ -34,7 +34,7 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
         }]
     };
 
-    await fetch("YOUR_WEBHOOK_URL_HERE", {
+    await fetch("https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
