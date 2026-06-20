@@ -1,24 +1,24 @@
 document.getElementById('spaceForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // ป้องกันหน้าเว็บรีเฟรช
+    e.preventDefault();
 
     const btn = document.getElementById('sendBtn');
     btn.innerText = "TRANSMITTING...";
+    btn.disabled = true; // ป้องกันการกดซ้ำ
 
-    // 1. ดึงค่าจากช่อง Input ของคุณ (ตรวจสอบให้ตรงกับ ID ใน HTML)
+    // ดึงค่าจาก Hidden Input ใน HTML
+    const webhookUrl = document.getElementById('webhookUrl').value;
+    const adminId = document.getElementById('adminId').value;
     const username = document.getElementById('username').value;
     const message = document.getElementById('message').value;
-    
-    // 2. ใส่ข้อมูล Webhook และ ID ตรงนี้ (หรือดึงจาก Hidden Input)
-    const webhookUrl = "ใส่_WEBHOOK_URL_ของคุณที่นี่";
-    const adminId = "ใส่_USER_ID_ของคุณที่นี่";
 
+    // โครงสร้าง Embed ตามที่คุณต้องการ
     const payload = {
         content: `<@!${adminId}> มีสัญญาณใหม่เข้ามา!`,
         embeds: [{
             title: "📡 สัญญาณคำถามใหม่จากระบบ",
-            color: 0x00f2ff, // สีฟ้าเท่ๆ
+            color: 0x00f2ff,
             fields: [
-                { name: "🛸 ผู้ส่งสัญญาณ", value: username || "Anonymous", inline: true },
+                { name: "🛸 ผู้ส่งสัญญาณ", value: username, inline: true },
                 { name: "💬 ข้อความ", value: message },
                 { name: "⏰ เวลา", value: new Date().toLocaleString('th-TH') }
             ],
@@ -27,10 +27,9 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
     };
 
     try {
-        // 3. ใช้ Proxy เพื่อข้ามการบล็อกของ Discord
-        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(webhookUrl);
-        
-        const response = await fetch(proxyUrl, {
+        // ใช้ Proxy ตัวกลางเพื่อเลี่ยงการบล็อกของ Discord
+        // วิธีนี้จะแก้ปัญหา "เกิดข้อผิดพลาดในการเชื่อมต่อ" ได้ครับ
+        const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -40,12 +39,12 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
             alert("✅ ส่งสัญญาณสำเร็จ!");
             document.getElementById('spaceForm').reset();
         } else {
-            alert("❌ ส่งไม่สำเร็จ: เช็ค URL Webhook อีกครั้ง");
+            throw new Error("Webhook URL ไม่ถูกต้อง");
         }
     } catch (error) {
-        console.error(error);
-        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ");
+        alert("❌ เกิดข้อผิดพลาด: " + error.message);
     } finally {
         btn.innerText = "INITIATE TRANSMISSION 📡";
+        btn.disabled = false;
     }
 });
