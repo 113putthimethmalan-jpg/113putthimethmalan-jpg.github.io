@@ -18,7 +18,7 @@ document.getElementById('spaceForm').addEventListener('submit', async (e) => {
     btn.innerText = "TRANSMITTING...";
     
     const payload = {
-        content: `🚨 <1513916622593593578> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
+        content: `🚨 <@&1513916622593593578> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
         embeds: [{
             title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
             description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
