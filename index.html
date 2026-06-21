@@ -1,289 +1,61 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apollo-11 Mission Control</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Letter</title>
 
-    <!-- ========================================================================= -->
-    <!-- ⚙️ [จุดตั้งค่าระบบหลังบ้าน] สามารถแก้ไขข้อมูลตรงนี้ที่ด้านบนสุดของไฟล์ได้เลยครับกัปตัน! -->
-    <!-- ========================================================================= -->
-    <script>
-        const WEBHOOK_URL = `https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwd0gWvjFU1ZdhqdaWZ6IUpTf31LgLi6gSDOMJ58gdsp4CbW`;
-        const ADMIN_ROLE_ID = `1513916622593593578`;
-    </script>
-    <!-- ========================================================================= -->
-
-    <!-- โหลด Tailwind CSS และ Font Awesome สำหรับไอคอนไซไฟ -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <style>
-        /* 🎨 CSS แอนิเมชันอวกาศดาวระยิบระยับ */
-        @keyframes move-twink-back {
-            from { background-position: 0 0; }
-            to { background-position: -10000px 5000px; }
-        }
-        .stars {
-            background: #020208 url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2000') repeat;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            display: block;
-            z-index: 0;
-        }
-        .twinkling {
-            background: transparent url('https://images.unsplash.com/photo-1538370965046-79c0d6907d47?q=80&w=2000') repeat;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            display: block;
-            z-index: 1;
-            opacity: 0.15;
-            animation: move-twink-back 400s linear infinite;
-        }
-        .glass-panel {
-            background: rgba(10, 11, 30, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(80, 150, 255, 0.15);
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(2deg); }
-        }
-        .float-animation { animation: float 4s ease-in-out infinite; }
-        .neon-glow {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s ease;
-        }
-        .neon-glow:hover { box-shadow: 0 0 20px rgba(147, 51, 234, 0.6); }
-    </style>
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen text-slate-100 flex flex-col justify-between relative overflow-x-hidden">
-    <!-- ชั้นพื้นหลังอวกาศ -->
-    <div class="stars"></div>
-    <div class="twinkling"></div>
+<body>
 
-    <!-- ส่วนเนื้อหาหน้าเว็บ (HTML) -->
-    <main class="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
-        <header class="text-center mb-8">
-            <div class="inline-block float-animation text-5xl mb-4">🚀</div>
-            <h1 class="text-3xl md:text-5xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-slate-100 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                APOLLO-11 MISSION CONTROL
-            </h1>
-            <p class="text-slate-400 mt-2 text-sm md:text-base font-light">
-                ส่งสัญญาณวิทยุควันตัมตรงสู่เซิร์ฟเวอร์ Discord พร้อมระบบแท็กแจ้งเตือนแอดมินทันที
-            </p>
-        </header>
+<div class="stars"></div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            
-            <!-- 🛸 ฝั่งซ้าย: ฟอร์มกรอกคำถาม -->
-            <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
-                <div class="glass-panel p-6 rounded-2xl shadow-2xl relative overflow-hidden flex-grow flex flex-col justify-center">
-                    <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-cyan-500 to-blue-600"></div>
-                    
-                    <h2 class="text-lg font-bold mb-4 text-cyan-400 flex items-center gap-2">
-                        <i class="fa-solid fa-satellite-dish"></i> เครื่องส่งสัญญาณคลื่นความถี่สูง
-                    </h2>
+<div class="container">
 
-                    <form id="cosmicForm" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
-                                ป้อนคำถาม/ข้อความส่งสัญญาณ (ระบบจะแท็กแอดมินให้อัตโนมัติ)
-                            </label>
-                            <textarea 
-                                id="cosmicQuestion" 
-                                required
-                                rows="6"
-                                class="w-full bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm resize-none"
-                                placeholder="พิมพ์ข้อความของคุณที่นี่..."
-                            ></textarea>
-                        </div>
+    <div class="card">
 
-                        <button type="submit" id="launchBtn" class="w-full py-4 px-6 rounded-xl font-bold text-sm tracking-widest uppercase bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white transition-all transform hover:-translate-y-0.5 neon-glow flex items-center justify-center gap-2">
-                            <span id="btnText">ยิงสัญญาณวิทยุ 🛰️</span>
-                            <i id="btnIcon" class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
+        <div class="icon">📜</div>
 
-                <div class="glass-panel p-4 rounded-2xl text-xs text-slate-400 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span>สถานะระบบ: โหมดไฟล์เดี่ยวตั้งค่าด้านบนสุด (All-in-One Top Config)</span>
-                    </div>
-                    <span class="text-cyan-400 font-mono">v2.5 Fix</span>
-                </div>
-            </div>
+        <h1>Secret Letter</h1>
 
-            <!-- 🤖 ฝั่งขวา: Discord Live Preview -->
-            <div class="lg:col-span-7">
-                <div class="glass-panel rounded-2xl shadow-2xl p-6 h-full flex flex-col justify-between">
-                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-                        <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                            <i class="fa-brands fa-discord text-indigo-400"></i> ตัวอย่างการแสดงผลบน DISCORD (LIVE PREVIEW)
-                        </h3>
-                        <span class="px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded text-[10px] font-mono tracking-widest uppercase">PREVIEW</span>
-                    </div>
-
-                    <div class="bg-[#313338] border-l-2 border-[#f0b232] text-[#dbdee1] p-4 rounded-xl font-sans text-sm shadow-inner overflow-hidden select-none flex-grow relative" style="background-color: rgba(240, 178, 50, 0.05);">
-                        <div class="flex gap-4">
-                            <img src="https://i.imgur.com/E9z6fzq.png" alt="Bot Avatar" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
-                            
-                            <div class="flex-grow space-y-1.5 min-w-0">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="font-semibold text-white hover:underline cursor-pointer">ศูนย์ควบคุมยาน Apollo-11</span>
-                                    <span class="bg-[#5865f2] text-white text-[10px] px-1.2 py-0.2 rounded font-bold uppercase scale-90">Bot</span>
-                                    <span class="text-[11px] text-[#949ba4]" id="discordTime">วันนี้</span>
-                                </div>
-
-                                <p class="text-[#dbdee1] leading-relaxed text-sm break-words">
-                                    🚨 <span class="text-[#f0b43a] bg-[#f0b43a]/15 hover:bg-[#f0b43a]/30 px-1 rounded font-medium text-xs cursor-pointer transition-colors">@Admin</span> มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!
-                                </p>
-
-                                <div class="border-l-4 border-[#1d9ffe] bg-[#2b2d31] rounded-r p-4 max-w-[520px] space-y-3 shadow-md mt-1">
-                                    <div>
-                                        <h4 class="font-bold text-white text-base">⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!</h4>
-                                        <p class="text-[#dbdee1] text-xs mt-1">ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ</p>
-                                    </div>
-
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <span class="block text-xs font-semibold text-white">🛸 ผู้ส่งสัญญาณ</span>
-                                            <div class="bg-[#1e1f22] p-1.5 rounded mt-1 font-mono text-[11px] text-[#e3e5e8]">
-                                                <span class="text-[#f1c40f]">Anonymous Astronaut</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="block text-xs font-semibold text-white">📡 สถานะการเชื่อมต่อ</span>
-                                            <div class="mt-1 text-xs text-[#e3e5e8]">🟢 เสถียรดี (100%)</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="border-l-4 border-[#4f545c] pl-3 py-0.5 my-2">
-                                        <span class="block text-xs font-semibold text-white mb-1">💬 เนื้อหาคำถามที่ส่งมา</span>
-                                        <p class="text-slate-300 italic text-xs break-words font-mono" id="previewQuestion">
-                                            &gt; พิมพ์คำถามของท่านที่นี่...
-                                        </p>
-                                    </div>
-
-                                    <div class="rounded-md overflow-hidden mt-2 border border-slate-700/50">
-                                        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop" alt="Nebula" class="w-full max-h-52 object-cover">
-                                    </div>
-
-                                    <div class="flex items-center gap-1.5 text-[11px] text-[#949ba4] pt-1" id="discordFooterTime">
-                                        <img src="https://i.imgur.com/E9z6fzq.png" class="w-4 h-4 rounded-full">
-                                        <span>Deep Space Network (DSN)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div id="datetime" class="datetime">
+            Loading...
         </div>
-    </main>
 
-    <!-- ป๊อปอัปแจ้งเตือนโมดอล -->
-    <div id="notificationModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel p-6 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3 border border-cyan-500/30 shadow-2xl">
-            <div id="modalIcon" class="text-4xl">✨</div>
-            <h3 id="modalTitle" class="text-lg font-bold text-cyan-400">สำเร็จ!</h3>
-            <p id="modalBody" class="text-slate-300 text-xs leading-relaxed"></p>
-            <button onclick="closeModal()" class="w-full py-2 px-4 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-500 text-slate-300 hover:text-white transition-colors text-xs font-semibold uppercase tracking-widest">ตกลง</button>
-        </div>
+        <p class="subtitle">
+            Write your message<br>
+            to the unknown...
+        </p>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Your Name (Optional)"
+        >
+
+        <input
+            type="text"
+            id="image"
+            placeholder="Image URL (Optional)"
+        >
+
+        <textarea
+            id="message"
+            placeholder="Write your secret letter..."
+        ></textarea>
+
+        <button id="sendBtn">
+            📬 Send Letter
+        </button>
+
+        <div id="status"></div>
+
     </div>
 
-    <footer class="relative z-10 text-center py-6 text-xs text-slate-500 border-t border-slate-900/50 bg-slate-950/20">
-        <p>© 2026 Space Mission Simulator. Built with 💙 for Galactic Connection.</p>
-    </footer>
+</div>
 
-    <!-- ===================================================
-         ⚙️ ส่วนของ JavaScript ระบบควบคุมหลังบ้าน 
-         (ดึงตัวแปรคอนฟิก WEBHOOK_URL และ ADMIN_ROLE_ID จากบนสุดมาทำงานร่วมกัน)
-         =================================================== -->
-    <script>
-        const cosmicQuestion = document.getElementById('cosmicQuestion');
-        const previewQuestion = document.getElementById('previewQuestion');
-        const discordTime = document.getElementById('discordTime');
-        const discordFooterTime = document.getElementById('discordFooterTime');
-        
-        const cosmicForm = document.getElementById('cosmicForm');
-        const launchBtn = document.getElementById('launchBtn');
-        const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
-        
-        const notificationModal = document.getElementById('notificationModal');
-        const modalIcon = document.getElementById('modalIcon');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
+<script src="script.js"></script>
 
-        function updateDiscordTime() {
-            const now = new Date();
-            let hours = String(now.getHours()).padStart(2, '0');
-            let minutes = String(now.getMinutes()).padStart(2, '0');
-            
-            discordTime.textContent = `วันนี้ เวลา ${hours}:${minutes} น.`;
-            discordFooterTime.innerHTML = `
-                <img src="https://i.imgur.com/E9z6fzq.png" class="w-4 h-4 rounded-full">
-                <span>Deep Space Network (DSN) • วันนี้ เวลา ${hours}:${minutes} น.</span>
-            `;
-        }
-        updateDiscordTime();
-
-        // ระดับพรีวิวเรียลไทม์
-        cosmicQuestion.addEventListener('input', (e) => {
-            const text = e.target.value.trim();
-            previewQuestion.textContent = text ? `> ${text}` : '> พิมพ์คำถามของท่านที่นี่...';
-        });
-
-        function showModal(title, body, icon = '✨') {
-            modalIcon.textContent = icon; modalTitle.textContent = title; modalBody.textContent = body;
-            notificationModal.classList.remove('hidden');
-            setTimeout(() => { notificationModal.classList.remove('opacity-0'); }, 10);
-        }
-
-        function closeModal() {
-            notificationModal.classList.add('opacity-0');
-            setTimeout(() => { notificationModal.classList.add('hidden'); }, 300);
-        }
-
-        cosmicForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const questionText = cosmicQuestion.value.trim();
-            if (!questionText) return;
-
-            // ตรวจเช็คว่ามีการประกาศ WEBHOOK_URL ไว้ที่ด้านบนสุดของไฟล์หรือยัง
-            if (typeof WEBHOOK_URL === 'undefined' || WEBHOOK_URL.trim() === '' || WEBHOOK_URL.includes('ใส่_')) {
-                showModal('ระบบไม่พร้อม!', 'กรุณาใส่ลิงก์ Webhook จริงของคุณภายในโค้ด HTML บรรทัดแรก ๆ ด้านบนสุดก่อนใช้งานครับ', '⚠️');
-                return;
-            }
-
-            launchBtn.disabled = true;
-            btnText.textContent = 'กำลังส่งสัญญาณ...';
-            btnIcon.className = 'fa-solid fa-spinner animate-spin text-cyan-400';
-
-            const localTimeFormatted = new Date().toLocaleString('th-TH', {
-                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
-            });
-
-            const currentAdminId = (typeof ADMIN_ROLE_ID !== 'undefined') ? ADMIN_ROLE_ID.trim() : '';
-            const mentionTag = (currentAdminId !== '') ? `<@&${currentAdminId}>` : '@Admin';
-
-            const payload = {
-                username: "ศูนย์ควบคุมยาน Apollo-11",
-                avatar_url: "https://i.imgur.com/E9z6fzq.png",
-                content: `🚨 ${mentionTag} มีสัญญาณคำถามใหม่ถูกส่งเข้ามา!`,
-                embeds: [{
-                    title: "⚡ สัญญาณควันตัมเข้ารหัส: มีข้อความใหม่!",
-                    description: "ระบบตรวจพบการส่งสัญญาณวิทยุจากพิกัดนิรนามในระบบสุริยะ",
-                    color: 1942527, 
-                    fields: [
-                        { name: "🛸 ผู้ส่งสัญญาณ", value: "
+</body>
+</html>
