@@ -1,0 +1,169 @@
+@import url('https://cdn.discordapp.com/attachments/1511368039671533598/1518235986641948752/2eda364c253e67423301e4c9d1b46a36.gif?ex=6a392ef2&is=6a37dd72&hm=bd121d50a89a292a1b62de0be3b22b7091f44497b1a60b70dc80c7f4268a8269&');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+
+    background:
+    radial-gradient(circle at top,
+    #312e81,
+    #0f172a 65%);
+}
+
+.stars{
+    position:fixed;
+    inset:0;
+
+    background-image:
+    radial-gradient(white 1px,transparent 1px);
+
+    background-size:40px 40px;
+
+    opacity:.25;
+
+    animation:stars 30s linear infinite;
+}
+
+@keyframes stars{
+    from{
+        transform:translateY(0);
+    }
+    to{
+        transform:translateY(100px);
+    }
+}
+
+.container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:520px;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    backdrop-filter:
+    blur(16px);
+
+    border:
+    1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+    0 0 40px rgba(99,102,241,.4);
+
+    text-align:center;
+
+    color:white;
+
+    z-index:2;
+}
+
+.icon{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+h1{
+    margin-bottom:10px;
+}
+
+.datetime{
+    color:#94a3b8;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.subtitle{
+    color:#cbd5e1;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+input,
+textarea{
+    width:100%;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    border:none;
+    outline:none;
+
+    border-radius:15px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    color:white;
+
+    border:
+    1px solid rgba(255,255,255,.08);
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#94a3b8;
+}
+
+textarea{
+    resize:none;
+    height:180px;
+}
+
+button{
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    font-size:16px;
+    font-weight:600;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 25px rgba(139,92,246,.6);
+}
+
+#status{
+    margin-top:15px;
+    font-weight:600;
+}
