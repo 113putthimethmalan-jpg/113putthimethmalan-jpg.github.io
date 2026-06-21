@@ -1,61 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secret Letter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ส่งข้อความหาเรา — Webhook Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', sans-serif;
+        }
 
-<link rel="stylesheet" href="style.css">
+        body {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 50%, #f0f4ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,182,193,0.3) 0%, rgba(255,255,255,0) 70%);
+            top: -200px;
+            right: -100px;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 35px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 77, 77, 0.05), 0 5px 15px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 500;
+            padding-left: 4px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #2d3748;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #a0aec0;
+        }
+
+        input:focus, textarea:focus {
+            background: #ffffff;
+            border-color: #ff7675;
+            box-shadow: 0 0 0 4px rgba(255, 118, 117, 0.15);
+        }
+
+        textarea {
+            resize: none;
+            min-height: 130px;
+            line-height: 1.6;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff7675 0%, #ff5252 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 82, 82, 0.3);
+            transition: all 0.25s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 82, 82, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ebfbee;
+            border: 1px solid #c3e6cb;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(150px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast .toast-icon {
+            color: #2b8a3e;
+            font-size: 18px;
+        }
+
+        .toast .toast-text {
+            color: #2b8a3e;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .toast.error {
+            background: #fff5f5;
+            border-color: #ffe3e3;
+        }
+        
+        .toast.error .toast-icon, .toast.error .toast-text {
+            color: #c92a2a;
+        }
+    </style>
 </head>
 <body>
 
-<div class="stars"></div>
-
 <div class="container">
-
     <div class="card">
-
-        <div class="icon">📜</div>
-
-        <h1>Secret Letter</h1>
-
-        <div id="datetime" class="datetime">
-            Loading...
+        <div class="card-header">
+            <span class="icon">📩</span>
+            <h2>ส่งข้อความหาเรา</h2>
         </div>
-
-        <p class="subtitle">
-            Write your message<br>
-            to the unknown...
-        </p>
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Your Name (Optional)"
-        >
-
-        <input
-            type="text"
-            id="image"
-            placeholder="Image URL (Optional)"
-        >
-
-        <textarea
-            id="message"
-            placeholder="Write your secret letter..."
-        ></textarea>
-
-        <button id="sendBtn">
-            📬 Send Letter
-        </button>
-
-        <div id="status"></div>
-
+        
+        <form id="webhookForm">
+            <div class="form-group">
+                <label for="name">ชื่อของคุณ</label>
+                <input type="text" id="name" required placeholder="เช่น สมชาย ใจดี">
+            </div>
+            <div class="form-group">
+                <label for="message">ข้อความ</label>
+                <textarea id="message" required placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+            </div>
+            <button type="submit" id="submitBtn">ส่งข้อความ</button>
+        </form>
     </div>
-
 </div>
 
-<script src="script.js"></script>
+<div id="toastNotification" class="toast">
+    <span class="toast-icon" id="toastIcon">✨</span>
+    <span class="toast-text" id="toastText">ส่งข้อความเรียบร้อยแล้ว!</span>
+</div>
+
+<script>
+    // ⚠️ อย่าลืมเปลี่ยนตรงนี้เป็น URL Webhook ของคุณเองนะครับ
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW';
+
+    const form = document.getElementById('webhookForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const toast = document.getElementById('toastNotification');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastText = document.getElementById('toastText');
+
+    function showToast(message, isSuccess = true) {
+        toastText.innerText = message;
+        if(isSuccess) {
+            toast.classList.remove('error');
+            toastIcon.innerText = '✨';
+        } else {
+            toast.classList.add('error');
+            toastIcon.innerText = '❌';
+        }
+        
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 4000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !message) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'กำลังส่ง...';
+
+        // โครงสร้าง Webhook ที่เพิ่ม content พ่วงคำว่า @here สำหรับแท็กแจ้งเตือน
+        const payload = {
+            username: "Web Message Bot",
+            content: "@here 🔔 มีข้อความใหม่ส่งเข้ามาจากหน้าเว็บครับ!", 
+            embeds: [{
+                title: "💌 รายละเอียดข้อความ",
+                color: 16742005, 
+                fields: [
+                    { name: "👤 ผู้ส่ง", value: name, inline: false },
+                    { name: "💬 ข้อความ", value: message, inline: false }
+                ],
+                timestamp: new Date().toISOString(),
+                footer: { text: "ระบบ Webhook Form Elegant" }
+            }]
+        };
+
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                showToast('ส่งข้อความเรียบร้อยแล้ว!', true);
+                form.reset();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        } catch (error) {
+            showToast('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', false);
+            console.error('Error sending webhook:', error);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'ส่งข้อความ';
+        }
+    });
+</script>
 
 </body>
 </html>
