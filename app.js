@@ -24,7 +24,7 @@ cosmicForm.addEventListener('submit', async function(e) {
     if (!questionText) return;
 
     // ตรวจสอบเบื้องต้นว่าได้ใส่ Webhook หรือยัง
-    if (WEBHOOK_URL === 'ใส่_WEBHOOK_URL_ตรงนี้' || WEBHOOK_URL.trim() === '') {
+    if (WEBHOOK_URL === 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW' || WEBHOOK_URL.trim() === '') {
         alert('กรุณาใส่ลิงก์ Webhook จริงของคุณในไฟล์ app.js บรรทัดที่ 4 ก่อนใช้งานนะครับ!');
         return;
     }
