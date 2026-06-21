@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Webhook — Medieval Space Gate</title>
+    <title>Send Webhook — Cosmic Space Gate</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Sarabun:wght@400;500;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -17,7 +17,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #fff5f5 0%, #fff0f5 50%, #f0f4ff 100%);
+            /* เปลี่ยนพื้นหลังเป็นธีมอวกาศเนบิวลา สีน้ำเงิน-ม่วงเข้ม */
+            background: linear-gradient(135deg, #0f0c20 0%, #151030 50%, #03001e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -28,14 +29,25 @@
             font-family: 'Sarabun', sans-serif;
         }
 
+        /* เอฟเฟกต์แสงเรืองและดวงดาวทางช้างเผือกด้านหลัง */
         body::before {
             content: '';
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255,182,193,0.3) 0%, rgba(255,255,255,0) 70%);
-            top: -200px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(139, 31, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            top: -250px;
             right: -100px;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            bottom: -150px;
+            left: -100px;
             z-index: 0;
         }
 
@@ -46,13 +58,14 @@
             max-width: 460px;
         }
 
+        /* การ์ดสไตล์อวกาศล้ำๆ กระจกฝ้า Dark Glassmorphism */
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 12, 32, 0.65);
             padding: 40px 35px;
             border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(255, 77, 77, 0.05), 0 5px 15px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 31, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
             transition: all 0.4s ease;
         }
 
@@ -65,98 +78,106 @@
             font-size: 32px;
             margin-bottom: 8px;
             display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.6));
         }
 
+        /* หัวข้อใช้ฟอนต์ไซไฟอวกาศเรืองแสง */
         h2 {
-            font-family: 'UnifrakturMaguntia', serif;
-            color: #1a202c;
-            font-size: 36px;
-            font-weight: 400;
-            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(139, 31, 255, 0.5);
         }
 
         .form-group {
             margin-bottom: 22px;
         }
 
+        /* ป้ายกำกับใช้ฟอนต์อวกาศตัวบางดูโมเดิร์น */
         label {
             display: block;
             margin-bottom: 8px;
-            color: #4a5568;
-            font-size: 16px;
-            font-weight: 500;
+            color: #b0b5c0;
+            font-size: 13px;
+            font-weight: 600;
             padding-left: 4px;
-            font-family: 'MedievalSharp', cursive;
-            letter-spacing: 0.5px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
+        /* ช่องกรอกข้อมูลโทนอวกาศมืด */
         input, textarea {
             width: 100%;
             padding: 14px 16px;
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             font-size: 15px;
-            color: #2d3748;
+            color: #ffffff;
             transition: all 0.25s ease;
             outline: none;
             font-family: 'Sarabun', sans-serif;
         }
 
         input::placeholder, textarea::placeholder {
-            color: #cbd5e0;
-            font-family: 'MedievalSharp', cursive;
+            color: #555870;
+            font-family: 'Sarabun', sans-serif;
         }
 
+        /* โฟกัสช่องกรอกแล้วเรืองแสงสีม่วง/ฟ้าคอสมิก */
         input:focus, textarea:focus {
-            background: #ffffff;
-            border-color: #ff7675;
-            box-shadow: 0 0 0 4px rgba(255, 118, 117, 0.15);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: #00f2fe;
+            box-shadow: 0 0 0 4px rgba(0, 242, 254, 0.15), inset 0 0 10px rgba(0, 242, 254, 0.05);
         }
 
         textarea {
             resize: none;
-            min-height: 110px;
+            min-height: 120px;
             line-height: 1.6;
         }
 
+        /* ปุ่มกดสีม่วงนีออนเรืองแสงไล่เฉดไซไฟ */
         button {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #ff7675 0%, #ff5252 100%);
+            background: linear-gradient(135deg, #8b1fff 0%, #00f2fe 100%);
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 82, 82, 0.3);
+            box-shadow: 0 8px 25px rgba(139, 31, 255, 0.3);
             transition: all 0.25s ease;
             margin-top: 10px;
-            font-family: 'MedievalSharp', cursive;
-            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 82, 82, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.5);
         }
 
         button:disabled {
-            background: #cbd5e0;
+            background: #25233a;
+            color: #555468;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* ซ่อนส่วนของฟอร์มส่งข้อความไว้ตอนแรก */
         #mainContent {
             display: none;
         }
 
-        /* สไตล์สำหรับข้อความเตือนคีย์ผิด */
         .error-text {
-            color: #d32f2f;
+            color: #ff4a4a;
             font-size: 14px;
             margin-top: 8px;
             text-align: center;
@@ -164,15 +185,16 @@
             font-weight: 500;
         }
 
+        /* ป้ายแจ้งเตือนความสำเร็จโทนอวกาศ */
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: #ebfbee;
-            border: 1px solid #c3e6cb;
+            background: #0c1e1a;
+            border: 1px solid #14532d;
             padding: 12px 24px;
             border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -188,23 +210,23 @@
         }
 
         .toast .toast-icon {
-            color: #2b8a3e;
+            color: #4ade80;
             font-size: 18px;
         }
 
         .toast .toast-text {
-            color: #2b8a3e;
+            color: #4ade80;
             font-size: 14px;
             font-weight: 500;
         }
 
         .toast.error {
-            background: #fff5f5;
-            border-color: #ffe3e3;
+            background: #240c0c;
+            border-color: #7f1d1d;
         }
         
         .toast.error .toast-icon, .toast.error .toast-text {
-            color: #c92a2a;
+            color: #f87171;
         }
     </style>
 </head>
@@ -215,38 +237,34 @@
     <div class="card" id="keyGate">
         <div class="card-header">
             <span class="icon">🔒</span>
-            <h2>Enter Secret Key</h2>
+            <h2>SYSTEM ACCESS</h2>
         </div>
         <form id="keyForm">
             <div class="form-group">
-                <label for="secretKey">Thy Access Passcode</label>
-                <input type="password" id="secretKey" required placeholder="Enter thy secret key...">
+                <label for="secretKey">Security Code</label>
+                <input type="password" id="secretKey" required placeholder="Enter passcode...">
                 <div id="keyError" class="error-text">❌ คีย์ไม่ถูกต้อง กรุณากรอกใหม่อีกครั้ง</div>
             </div>
-            <button type="submit">Unlock Gate</button>
+            <button type="submit">Decrypt Gate</button>
         </form>
     </div>
 
     <div class="card" id="mainContent">
         <div class="card-header">
-            <span class="icon">📜</span>
-            <h2>Send Message</h2>
+            <span class="icon">🌌</span>
+            <h2>TRANSMISSION</h2>
         </div>
         
         <form id="webhookForm">
             <div class="form-group">
-                <label for="name">Thy Name</label>
-                <input type="text" id="name" required placeholder="Enter thy name...">
+                <label for="name">Explorer Name</label>
+                <input type="text" id="name" required placeholder="เช่น สมชาย ใจดี">
             </div>
             <div class="form-group">
-                <label for="imageUrl">Image Link (Optional)</label>
-                <input type="url" id="imageUrl" placeholder="https://example.com/image.png">
+                <label for="message">Signal Message</label>
+                <textarea id="message" required placeholder="พิมพ์ข้อความที่นี่..."></textarea>
             </div>
-            <div class="form-group">
-                <label for="message">Thy Message</label>
-                <textarea id="message" required placeholder="Write thy parchment here..."></textarea>
-            </div>
-            <button type="submit" id="submitBtn">Dispatch</button>
+            <button type="submit" id="submitBtn">Launch Signal</button>
         </form>
     </div>
 
@@ -254,17 +272,20 @@
 
 <div id="toastNotification" class="toast">
     <span class="toast-icon" id="toastIcon">✨</span>
-    <span class="toast-text" id="toastText">ส่งข้อความเรียบร้อยแล้ว!</span>
+    <span class="toast-text" id="toastText">ส่งสัญญาณเรียบร้อยแล้ว!</span>
 </div>
 
 <script>
-    // 🔑 คีย์ความปลอดภัยที่คุณกำหนดไว้
+    // 🔑 คีย์ความปลอดภัยของคุณ
     const CORRECT_KEY = 'KEY157373013';
 
     // ⚠️ วาง URL Webhook ของ Discord ของคุณตรงนี้ครับ
-    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW';
+    const WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE';
 
-    // ดึง Element ต่างๆ มารอทำงาน
+    // 🖼️ บรรทัดที่ 226: จุดใส่ลิงก์รูปภาพที่คุณต้องการฟิกซ์ล็อกตายตัวไว้ในโค้ด
+    // (เอารูปภาพออนไลน์ที่ลงท้ายด้วย .png, .jpg, .gif มาใส่ในเครื่องหมายคำพูดได้เลยครับ)
+    const LOCKED_IMAGE_URL = 'https://cdn.discordapp.com/attachments/1511368039671533598/1518235986641948752/2eda364c253e67423301e4c9d1b46a36.gif?ex=6a392ef2&is=6a37dd72&hm=bd121d50a89a292a1b62de0be3b22b7091f44497b1a60b70dc80c7f4268a8269&'; 
+
     const keyGate = document.getElementById('keyGate');
     const mainContent = document.getElementById('mainContent');
     const keyForm = document.getElementById('keyForm');
@@ -276,24 +297,21 @@
     const toastIcon = document.getElementById('toastIcon');
     const toastText = document.getElementById('toastText');
 
-    // ระบบเช็คคีย์หน้าแรก
+    // ระบบเช็คคีย์
     keyForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const userInputKey = document.getElementById('secretKey').value.trim();
 
         if (userInputKey === CORRECT_KEY) {
-            // คีย์ถูกต้อง -> ซ่อนด่านเช็คคีย์ แล้วเปิดหน้าฟอร์มหลักออกมาสวยๆ
             keyGate.style.display = 'none';
             mainContent.style.display = 'block';
         } else {
-            // คีย์ผิด -> แสดงข้อความเตือนสีแดง และล้างช่องกรอกใหม่
             keyError.style.display = 'block';
             document.getElementById('secretKey').value = '';
             document.getElementById('secretKey').focus();
         }
     });
 
-    // ระบบ Toast แจ้งเตือน
     function showToast(message, isSuccess = true) {
         toastText.innerText = message;
         if(isSuccess) {
@@ -303,31 +321,26 @@
             toast.classList.add('error');
             toastIcon.innerText = '❌';
         }
-        
         toast.classList.add('show');
-        
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 4000);
+        setTimeout(() => { toast.classList.remove('show'); }, 4000);
     }
 
-    // ระบบส่งข้อความ Webhook (สไตล์อวกาศล้ำๆ พร้อมแนบรูปภาพ)
+    // ระบบส่งข้อความ Webhook 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const name = document.getElementById('name').value.trim();
-        const imageUrl = document.getElementById('imageUrl').value.trim();
         const message = document.getElementById('message').value.trim();
 
         if (!name || !message) return;
 
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Dispatching...';
+        submitBtn.innerText = 'LAUNCHING...';
 
         const payload = {
             username: "Cosmic Messenger",
-            avatar_url: "https://i.imgur.com/8QGZ78K.png", 
-            content: "@here 🌌 *A new transmission has breached the cosmic rift!*", 
+            avatar_url: "https://cdn.discordapp.com/attachments/1511368039671533598/1518247241750548702/d9239dccd5ffc44fe02dfd4afa0f58fb.jpg?ex=6a39396e&is=6a37e7ee&hm=bc2c37ccf43f670c2d209807235252b23bf6b6d0d652ee9949b2b54013878652&", 
+            content: "@everyone 🌌 *A new transmission has breached the cosmic rift!*", 
             embeds: [{
                 title: "🌠 NEBULA TRANSMISSION DETAILS",
                 color: 9116159, 
@@ -339,14 +352,15 @@
                 timestamp: new Date().toISOString(),
                 footer: { 
                     text: "Cosmic Webhook Core v2.0",
-                    icon_url: "https://i.imgur.com/8QGZ78K.png"
+                    icon_url: "https://cdn.discordapp.com/attachments/1511368039671533598/1518235986641948752/2eda364c253e67423301e4c9d1b46a36.gif?ex=6a392ef2&is=6a37dd72&hm=bd121d50a89a292a1b62de0be3b22b7091f44497b1a60b70dc80c7f4268a8269&"
                 }
             }]
         };
 
-        if (imageUrl) {
+        // ตรวจสอบและฝังรูปภาพที่ล็อกไว้ในโค้ดส่งเข้าดิสคอร์ดอัตโนมัติ
+        if (LOCKED_IMAGE_URL) {
             payload.embeds[0].image = {
-                url: imageUrl
+                url: LOCKED_IMAGE_URL
             };
         }
 
@@ -368,7 +382,7 @@
             console.error('Error sending webhook:', error);
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'Dispatch';
+            submitBtn.innerText = 'LAUNCH SIGNAL';
         }
     });
 </script>
