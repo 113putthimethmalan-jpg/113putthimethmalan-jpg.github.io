@@ -1,7 +1,7 @@
 // ==========================================
-// 🔧 จุดกรอกข้อมูลระบบหลังบ้าน (แก้ไขจุดนี้จุดเดียวครับ)
+// 🔧 ระบบ Apollo-11 หลังบ้าน (เชื่อมโยงข้อมูลจริงของกัปตันแล้ว)
 // ==========================================
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW'; 
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwd0gWvjFU1ZdhqdaWZ6IUpTf31LgLi6gSDOMJ58gdsp4CbW'; 
 const ADMIN_ROLE_ID = '1513916622593593578'; 
 
 // ผูกตัวแปรเข้ากับแท็กใน HTML
@@ -23,12 +23,6 @@ cosmicForm.addEventListener('submit', async function(e) {
     const questionText = cosmicQuestion.value.trim();
     if (!questionText) return;
 
-    // ตรวจสอบเบื้องต้นว่าได้ใส่ Webhook หรือยัง
-    if (WEBHOOK_URL === 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW' || WEBHOOK_URL.trim() === '') {
-        alert('กรุณาใส่ลิงก์ Webhook จริงของคุณในไฟล์ app.js บรรทัดที่ 4 ก่อนใช้งานนะครับ!');
-        return;
-    }
-
     // ล็อคปุ่มส่งชั่วคราวเพื่อป้องกันการกดเบิ้ล
     launchBtn.disabled = true;
     launchBtn.textContent = 'กำลังส่งสัญญาณ...';
@@ -37,7 +31,7 @@ cosmicForm.addEventListener('submit', async function(e) {
     const localTimeFormatted = new Date().toLocaleString('th-TH');
 
     // ตรวจสอบและสร้างโครงสร้างแท็กแอดมิน (<@&ตามด้วยไอดีตัวเลขยศ>)
-    const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID !== 'ใส่_ROLE_ID_ตรงนี้' && ADMIN_ROLE_ID.trim() !== '') 
+    const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') 
         ? `<@&${ADMIN_ROLE_ID.trim()}>` 
         : '@Admin';
 
@@ -80,3 +74,4 @@ cosmicForm.addEventListener('submit', async function(e) {
         launchBtn.textContent = 'ยิงสัญญาณวิทยุ 🛰️';
     }
 });
+
