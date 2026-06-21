@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apollo-11 Mission Control</title>
+
+    <!-- ========================================================================= -->
+    <!-- ⚙️ [จุดตั้งค่าระบบหลังบ้าน] สามารถแก้ไขข้อมูลตรงนี้ที่ด้านบนสุดของไฟล์ได้เลยครับกัปตัน! -->
+    <!-- ========================================================================= -->
+    <script>
+        const WEBHOOK_URL = `https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwd0gWvjFU1ZdhqdaWZ6IUpTf31LgLi6gSDOMJ58gdsp4CbW`;
+        const ADMIN_ROLE_ID = `1513916622593593578`;
+    </script>
+    <!-- ========================================================================= -->
+
+    <!-- โหลด Tailwind CSS และ Font Awesome สำหรับไอคอนไซไฟ -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
@@ -50,9 +61,11 @@
     </style>
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col justify-between relative overflow-x-hidden">
+    <!-- ชั้นพื้นหลังอวกาศ -->
     <div class="stars"></div>
     <div class="twinkling"></div>
 
+    <!-- ส่วนเนื้อหาหน้าเว็บ (HTML) -->
     <main class="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
         <header class="text-center mb-8">
             <div class="inline-block float-animation text-5xl mb-4">🚀</div>
@@ -66,6 +79,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
+            <!-- 🛸 ฝั่งซ้าย: ฟอร์มกรอกคำถาม -->
             <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
                 <div class="glass-panel p-6 rounded-2xl shadow-2xl relative overflow-hidden flex-grow flex flex-col justify-center">
                     <div class="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-cyan-500 to-blue-600"></div>
@@ -101,12 +115,13 @@
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
-                        <span>สถานะระบบ: โหมดไฟล์เดี่ยวสมบูรณ์ (All-in-One)</span>
+                        <span>สถานะระบบ: โหมดไฟล์เดี่ยวตั้งค่าด้านบนสุด (All-in-One Top Config)</span>
                     </div>
                     <span class="text-cyan-400 font-mono">v2.5 Fix</span>
                 </div>
             </div>
 
+            <!-- 🤖 ฝั่งขวา: Discord Live Preview -->
             <div class="lg:col-span-7">
                 <div class="glass-panel rounded-2xl shadow-2xl p-6 h-full flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
@@ -175,6 +190,7 @@
         </div>
     </main>
 
+    <!-- ป๊อปอัปแจ้งเตือนโมดอล -->
     <div id="notificationModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
         <div class="glass-panel p-6 rounded-2xl max-w-xs w-full mx-4 text-center space-y-3 border border-cyan-500/30 shadow-2xl">
             <div id="modalIcon" class="text-4xl">✨</div>
@@ -188,11 +204,11 @@
         <p>© 2026 Space Mission Simulator. Built with 💙 for Galactic Connection.</p>
     </footer>
 
+    <!-- ===================================================
+         ⚙️ ส่วนของ JavaScript ระบบควบคุมหลังบ้าน 
+         (ดึงตัวแปรคอนฟิก WEBHOOK_URL และ ADMIN_ROLE_ID จากบนสุดมาทำงานร่วมกัน)
+         =================================================== -->
     <script>
-        // 🔒 ข้อมูลจริงของกัปตัน ถูกรวบใส่แถวเดียวกันเป๊ะ ป้องกันโปรแกรมแสดงผลเอ๋อเป็นสีขาวแล้วครับ
-        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwd0gWvjFU1ZdhqdaWZ6IUpTf31LgLi6gSDOMJ58gdsp4CbW';
-        const ADMIN_ROLE_ID = '1513916622593593578';
-
         const cosmicQuestion = document.getElementById('cosmicQuestion');
         const previewQuestion = document.getElementById('previewQuestion');
         const discordTime = document.getElementById('discordTime');
@@ -221,7 +237,7 @@
         }
         updateDiscordTime();
 
-        // ระดับพรีวิวเรียลไทม์ (แก้ไขเครื่องหมายปิดสีขาวเรียบร้อย)
+        // ระดับพรีวิวเรียลไทม์
         cosmicQuestion.addEventListener('input', (e) => {
             const text = e.target.value.trim();
             previewQuestion.textContent = text ? `> ${text}` : '> พิมพ์คำถามของท่านที่นี่...';
@@ -244,6 +260,12 @@
             const questionText = cosmicQuestion.value.trim();
             if (!questionText) return;
 
+            // ตรวจเช็คว่ามีการประกาศ WEBHOOK_URL ไว้ที่ด้านบนสุดของไฟล์หรือยัง
+            if (typeof WEBHOOK_URL === 'undefined' || WEBHOOK_URL.trim() === '' || WEBHOOK_URL.includes('ใส่_')) {
+                showModal('ระบบไม่พร้อม!', 'กรุณาใส่ลิงก์ Webhook จริงของคุณภายในโค้ด HTML บรรทัดแรก ๆ ด้านบนสุดก่อนใช้งานครับ', '⚠️');
+                return;
+            }
+
             launchBtn.disabled = true;
             btnText.textContent = 'กำลังส่งสัญญาณ...';
             btnIcon.className = 'fa-solid fa-spinner animate-spin text-cyan-400';
@@ -252,7 +274,8 @@
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
             });
 
-            const mentionTag = (ADMIN_ROLE_ID && ADMIN_ROLE_ID.trim() !== '') ? `<@&${ADMIN_ROLE_ID.trim()}>` : '@Admin';
+            const currentAdminId = (typeof ADMIN_ROLE_ID !== 'undefined') ? ADMIN_ROLE_ID.trim() : '';
+            const mentionTag = (currentAdminId !== '') ? `<@&${currentAdminId}>` : '@Admin';
 
             const payload = {
                 username: "ศูนย์ควบคุมยาน Apollo-11",
