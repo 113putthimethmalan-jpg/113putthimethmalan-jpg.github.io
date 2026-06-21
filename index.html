@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ส่งข้อความหาเรา — Webhook Form</title>
+    <title>Send Webhook — Medieval Space Gate</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Sarabun:wght@400;500;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Sarabun', sans-serif;
         }
 
         body {
@@ -24,6 +25,7 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+            font-family: 'Sarabun', sans-serif;
         }
 
         body::before {
@@ -51,6 +53,7 @@
             box-shadow: 0 15px 35px rgba(255, 77, 77, 0.05), 0 5px 15px rgba(0, 0, 0, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
         }
 
         .card-header {
@@ -59,16 +62,17 @@
         }
 
         .card-header .icon {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 8px;
             display: inline-block;
         }
 
         h2 {
-            color: #2d3748;
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+            font-family: 'UnifrakturMaguntia', serif;
+            color: #1a202c;
+            font-size: 36px;
+            font-weight: 400;
+            letter-spacing: 1px;
         }
 
         .form-group {
@@ -79,9 +83,11 @@
             display: block;
             margin-bottom: 8px;
             color: #4a5568;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             padding-left: 4px;
+            font-family: 'MedievalSharp', cursive;
+            letter-spacing: 0.5px;
         }
 
         input, textarea {
@@ -94,10 +100,12 @@
             color: #2d3748;
             transition: all 0.25s ease;
             outline: none;
+            font-family: 'Sarabun', sans-serif;
         }
 
         input::placeholder, textarea::placeholder {
-            color: #a0aec0;
+            color: #cbd5e0;
+            font-family: 'MedievalSharp', cursive;
         }
 
         input:focus, textarea:focus {
@@ -108,7 +116,7 @@
 
         textarea {
             resize: none;
-            min-height: 130px;
+            min-height: 110px;
             line-height: 1.6;
         }
 
@@ -119,12 +127,14 @@
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(255, 82, 82, 0.3);
             transition: all 0.25s ease;
             margin-top: 10px;
+            font-family: 'MedievalSharp', cursive;
+            letter-spacing: 1px;
         }
 
         button:hover {
@@ -132,15 +142,26 @@
             box-shadow: 0 10px 25px rgba(255, 82, 82, 0.4);
         }
 
-        button:active {
-            transform: translateY(0);
-        }
-
         button:disabled {
             background: #cbd5e0;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
+        }
+
+        /* ซ่อนส่วนของฟอร์มส่งข้อความไว้ตอนแรก */
+        #mainContent {
+            display: none;
+        }
+
+        /* สไตล์สำหรับข้อความเตือนคีย์ผิด */
+        .error-text {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
         }
 
         .toast {
@@ -190,24 +211,45 @@
 <body>
 
 <div class="container">
-    <div class="card">
+    
+    <div class="card" id="keyGate">
         <div class="card-header">
-            <span class="icon">📩</span>
-            <h2>ส่งข้อความหาเรา</h2>
+            <span class="icon">🔒</span>
+            <h2>Enter Secret Key</h2>
+        </div>
+        <form id="keyForm">
+            <div class="form-group">
+                <label for="secretKey">Thy Access Passcode</label>
+                <input type="password" id="secretKey" required placeholder="Enter thy secret key...">
+                <div id="keyError" class="error-text">❌ คีย์ไม่ถูกต้อง กรุณากรอกใหม่อีกครั้ง</div>
+            </div>
+            <button type="submit">Unlock Gate</button>
+        </form>
+    </div>
+
+    <div class="card" id="mainContent">
+        <div class="card-header">
+            <span class="icon">📜</span>
+            <h2>Send Message</h2>
         </div>
         
         <form id="webhookForm">
             <div class="form-group">
-                <label for="name">ชื่อของคุณ</label>
-                <input type="text" id="name" required placeholder="เช่น สมชาย ใจดี">
+                <label for="name">Thy Name</label>
+                <input type="text" id="name" required placeholder="Enter thy name...">
             </div>
             <div class="form-group">
-                <label for="message">ข้อความ</label>
-                <textarea id="message" required placeholder="พิมพ์ข้อความที่นี่..."></textarea>
+                <label for="imageUrl">Image Link (Optional)</label>
+                <input type="url" id="imageUrl" placeholder="https://example.com/image.png">
             </div>
-            <button type="submit" id="submitBtn">ส่งข้อความ</button>
+            <div class="form-group">
+                <label for="message">Thy Message</label>
+                <textarea id="message" required placeholder="Write thy parchment here..."></textarea>
+            </div>
+            <button type="submit" id="submitBtn">Dispatch</button>
         </form>
     </div>
+
 </div>
 
 <div id="toastNotification" class="toast">
@@ -216,8 +258,17 @@
 </div>
 
 <script>
-    // ⚠️ อย่าลืมเปลี่ยนตรงนี้เป็น URL Webhook ของคุณเองนะครับ
+    // 🔑 คีย์ความปลอดภัยที่คุณกำหนดไว้
+    const CORRECT_KEY = 'KEY157373013';
+
+    // ⚠️ วาง URL Webhook ของ Discord ของคุณตรงนี้ครับ
     const WEBHOOK_URL = 'https://discord.com/api/webhooks/1516806138388025535/5eWRG1I22cAz_PpPhTyQQwdOgWvjFUlZdhqdaWZ6IUpTf3lLgLi6gSDOMJ58gdsp4CbW';
+
+    // ดึง Element ต่างๆ มารอทำงาน
+    const keyGate = document.getElementById('keyGate');
+    const mainContent = document.getElementById('mainContent');
+    const keyForm = document.getElementById('keyForm');
+    const keyError = document.getElementById('keyError');
 
     const form = document.getElementById('webhookForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -225,6 +276,24 @@
     const toastIcon = document.getElementById('toastIcon');
     const toastText = document.getElementById('toastText');
 
+    // ระบบเช็คคีย์หน้าแรก
+    keyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const userInputKey = document.getElementById('secretKey').value.trim();
+
+        if (userInputKey === CORRECT_KEY) {
+            // คีย์ถูกต้อง -> ซ่อนด่านเช็คคีย์ แล้วเปิดหน้าฟอร์มหลักออกมาสวยๆ
+            keyGate.style.display = 'none';
+            mainContent.style.display = 'block';
+        } else {
+            // คีย์ผิด -> แสดงข้อความเตือนสีแดง และล้างช่องกรอกใหม่
+            keyError.style.display = 'block';
+            document.getElementById('secretKey').value = '';
+            document.getElementById('secretKey').focus();
+        }
+    });
+
+    // ระบบ Toast แจ้งเตือน
     function showToast(message, isSuccess = true) {
         toastText.innerText = message;
         if(isSuccess) {
@@ -242,32 +311,44 @@
         }, 4000);
     }
 
+    // ระบบส่งข้อความ Webhook (สไตล์อวกาศล้ำๆ พร้อมแนบรูปภาพ)
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const name = document.getElementById('name').value.trim();
+        const imageUrl = document.getElementById('imageUrl').value.trim();
         const message = document.getElementById('message').value.trim();
 
         if (!name || !message) return;
 
         submitBtn.disabled = true;
-        submitBtn.innerText = 'กำลังส่ง...';
+        submitBtn.innerText = 'Dispatching...';
 
-        // โครงสร้าง Webhook ที่เพิ่ม content พ่วงคำว่า @here สำหรับแท็กแจ้งเตือน
         const payload = {
-            username: "Web Message Bot",
-            content: "@here 🔔 มีข้อความใหม่ส่งเข้ามาจากหน้าเว็บครับ!", 
+            username: "Cosmic Messenger",
+            avatar_url: "https://i.imgur.com/8QGZ78K.png", 
+            content: "@here 🌌 *A new transmission has breached the cosmic rift!*", 
             embeds: [{
-                title: "💌 รายละเอียดข้อความ",
-                color: 16742005, 
+                title: "🌠 NEBULA TRANSMISSION DETAILS",
+                color: 9116159, 
                 fields: [
-                    { name: "👤 ผู้ส่ง", value: name, inline: false },
-                    { name: "💬 ข้อความ", value: message, inline: false }
+                    { name: "👨‍🚀 Explorer", value: `\`\`\`css\n[ ${name} ]\n\`\`\``, inline: true },
+                    { name: "📡 Frequency Status", value: "🟢 Stable connection", inline: true },
+                    { name: "💬 Deep Space Message", value: message, inline: false }
                 ],
                 timestamp: new Date().toISOString(),
-                footer: { text: "ระบบ Webhook Form Elegant" }
+                footer: { 
+                    text: "Cosmic Webhook Core v2.0",
+                    icon_url: "https://i.imgur.com/8QGZ78K.png"
+                }
             }]
         };
+
+        if (imageUrl) {
+            payload.embeds[0].image = {
+                url: imageUrl
+            };
+        }
 
         try {
             const response = await fetch(WEBHOOK_URL, {
@@ -287,7 +368,7 @@
             console.error('Error sending webhook:', error);
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'ส่งข้อความ';
+            submitBtn.innerText = 'Dispatch';
         }
     });
 </script>
