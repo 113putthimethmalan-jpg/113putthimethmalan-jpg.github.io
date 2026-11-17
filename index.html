@@ -94,6 +94,8 @@ main{padding:24px 28px;display:grid;gap:20px;align-content:start;min-width:0}
 .gcard{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);cursor:pointer;text-align:left;font:inherit}
 .gcard[aria-pressed="true"]{border-color:var(--lime);background:var(--panel2)}
 .gcard .gimg{width:48px;height:48px}.gcard small{display:block;color:var(--mute)}
+.iconpick{display:flex;gap:14px;align-items:center}
+.iconpick .gimg{width:64px;height:64px}
 .menu-btn{display:none}
 @media(max-width:900px){
  .auth{grid-template-columns:1fr}.auth-art{display:none}.auth-form{padding:32px 22px}
@@ -226,7 +228,13 @@ const sbHdr=()=>{const h={apikey:SB.key,'Content-Type':'application/json'};if(SB
 const sbUrl=()=>SB.url.replace(/\/+$/,'')+'/rest/v1/teams';
 const teamsDB={
  async list(){
-  if(sbOn()){const r=await fetch(sbUrl()+'?select=name,game,created_at&order=created_at.asc',{headers:sbHdr()});if(!r.ok)throw new Error(r.status);return r.json()}
+  if(sbOn()){
+   const q=c=>fetch(sbUrl()+'?select='+c+'&order=created_at.asc',{headers:sbHdr()});
+   let r=await q('name,game,icon,created_at');
+   if(!r.ok)r=await q('name,game,created_at');
+   if(!r.ok)throw new Error(r.status);
+   return r.json();
+  }
   return store.get('teams',[]);
  },
  async add(t){
@@ -234,8 +242,10 @@ const teamsDB={
   const a=store.get('teams',[]);a.push({...t,created_at:new Date().toISOString()});store.set('teams',a);
  }
 };
+const okIcon=u=>typeof u==='string'&&u.length<60000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u);
+const teamAv=(t,g)=>okIcon(t.icon)?`<img class="av gimg" src="${t.icon}" alt="" width="44" height="44">`:gameAv(g.label);
 const he=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let tg='rov';
+let tg='val';
 
 function teamsPage(){return `<div class="app">${nav('teams')}<main>
  ${head('ทีม','เลือกเกมเพื่อดูทีมที่สมัครแล้ว')}
@@ -254,7 +264,7 @@ async function renderTeams(){
   Object.keys(GAMES).forEach(x=>{const c=document.querySelector(`[data-c="${x}"]`);if(c)c.textContent='ทีมที่สมัคร '+all.filter(t=>t.game===x).length+' ทีม'});
   if(k!==tg)return;
   const l=all.filter(t=>t.game===k);
-  $('#teamlist').innerHTML=l.length?l.map((t,i)=>`<div class="row" style="grid-template-columns:44px 1fr">${gameAv(g.label)}<div><b>${he(t.name)}</b><small>ทีมที่ ${i+1}</small></div></div>`).join(''):'<p class="hint">ยังไม่มีทีมสมัครในเกมนี้</p>';
+  $('#teamlist').innerHTML=l.length?l.map((t,i)=>`<div class="row" style="grid-template-columns:44px 1fr">${teamAv(t,g)}<div><b>${he(t.name)}</b><small>ทีมที่ ${i+1}</small></div></div>`).join(''):'<p class="hint">ยังไม่มีทีมสมัครในเกมนี้</p>';
  }catch(_){if($('#teamlist'))$('#teamlist').innerHTML='<p class="hint">โหลดรายชื่อทีมไม่สำเร็จ ลองใหม่อีกครั้ง</p>'}
 }
 
@@ -279,15 +289,46 @@ function tournament(){return `<div class="app">${nav('home')}<main>
 /* ===== สมัครทีม + Discord Webhook ===== */
 const WEBHOOK_URL='https://discord.com/api/webhooks/1572172800213389454/xSrnyhRe_T3OfpFPMNP8KXAUL7Zoc_ygW0b9SGQ9bk6XAjAUP2okGHwrzzwP8U6W8ECM'; // <- วาง URL เว็บฮุกตรงนี้
 const GAMES={
+ val:{label:'Valorant',icon:'🎯',color:0xff4655,main:5,sub:1},
  rov:{label:'ROV',icon:'⚔️',color:0x3b82f6,main:5,sub:2},
  ff:{label:'Free Fire',icon:'🔥',color:0xf97316,main:4,sub:1},
  efb:{label:'E-football',icon:'⚽',color:0x22c55e,main:1,sub:0}
 };
 const esc=v=>String(v).trim().slice(0,100).replace(/[*_`~|>\\]/g,'\\$&');
 const hookReady=()=>!WEBHOOK_URL.startsWith('PASTE');
-async function sendHook(body){
- const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+async function sendHook(body,blob){
+ let opt;
+ if(blob){const fd=new FormData();fd.append('payload_json',JSON.stringify(body));fd.append('files[0]',blob,'icon.jpg');opt={method:'POST',body:fd}}
+ else opt={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
+ const res=await fetch(WEBHOOK_URL,opt);
  if(!res.ok)throw new Error(res.status);
+}
+
+let teamIcon=null; // {blob,dataUrl}
+const PH="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%231e2126'/%3E%3C/svg%3E";
+function resizeIcon(file){return new Promise((res,rej)=>{
+ const url=URL.createObjectURL(file),img=new Image();
+ img.onload=()=>{
+  const S=128,c=document.createElement('canvas');c.width=c.height=S;
+  const x=c.getContext('2d'),m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;
+  x.fillStyle='#1e2126';x.fillRect(0,0,S,S);x.drawImage(img,sx,sy,m,m,0,0,S,S);
+  URL.revokeObjectURL(url);
+  c.toBlob(b=>b?res({blob:b,dataUrl:c.toDataURL('image/jpeg',0.82)}):rej(new Error('blob')),'image/jpeg',0.82);
+ };
+ img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'))};
+ img.src=url;
+})}
+function updIcon(){
+ const g=GAMES[$('#game').value];
+ $('#iconprev').src=teamIcon?teamIcon.dataUrl:(g?GIMG[g.label]:PH);
+ $('#iconclear').style.display=teamIcon?'':'none';
+}
+async function onIcon(e){
+ const f=e.target.files[0];
+ if(!f){teamIcon=null;updIcon();return}
+ if(!/^image\/(png|jpeg|webp|gif)$/.test(f.type)||f.size>5*1024*1024){e.target.value='';teamIcon=null;updIcon();return toast('ใช้ไฟล์ภาพ PNG/JPG/WEBP/GIF ขนาดไม่เกิน 5MB')}
+ try{teamIcon=await resizeIcon(f)}catch(_){teamIcon=null;e.target.value='';toast('อ่านรูปไม่สำเร็จ ลองรูปอื่น')}
+ updIcon();
 }
 
 function registerPage(){return `<div class="app">${nav('reg')}<main>
@@ -295,6 +336,10 @@ function registerPage(){return `<div class="app">${nav('reg')}<main>
  <form class="form card" id="regform">
   <p class="hint">สมัครในชื่อบัญชี: <b style="color:var(--text)">${user.name}</b></p>
   <label>ชื่อทีม<input name="team" required maxlength="40" placeholder="เช่น Hardcore Legends"></label>
+  <div class="iconpick"><img id="iconprev" class="gimg" width="64" height="64" alt="ไอคอนทีม" src="${PH}">
+   <div style="display:grid;gap:6px;min-width:0"><label>ไอคอนทีม (ไม่ใส่ก็ได้)<input type="file" id="iconfile" accept="image/png,image/jpeg,image/webp,image/gif"></label>
+   <span class="hint">ถ้าไม่ใส่ จะใช้รูปเกมที่เลือกเป็นไอคอนแทน</span>
+   <button type="button" class="btn ghost sm" id="iconclear" style="display:none;width:max-content">ลบรูป</button></div></div>
   <label>ชื่อจริง<input name="real" required maxlength="60" placeholder="ชื่อ-นามสกุล"></label>
   <label>เลือกเกม<select name="game" id="game" required>
    <option value="">-- เลือกเกม --</option>
@@ -324,7 +369,7 @@ async function submitReg(e){
  if(!hookReady())return toast('ยังไม่ได้ตั้งค่า Webhook ในไฟล์ index.html');
  const last=+store.get('lastReg',0);
  if(Date.now()-last<30000)return toast('ส่งบ่อยเกินไป รอสักครู่แล้วลองใหม่');
- const teamName=f.team.value.trim().slice(0,40),gkey=f.game.value;
+ const teamName=f.team.value.trim().slice(0,40),gkey=f.game.value,icon=teamIcon;
  try{const all=await teamsDB.list();if(all.some(t=>t.game===gkey&&t.name.toLowerCase()===teamName.toLowerCase()))return toast('ชื่อทีมนี้ถูกใช้แล้วในเกมนี้')}catch(_){}
  const val=k=>[...document.querySelectorAll(`#players [data-k="${k}"]`)].map(i=>esc(i.value)).filter(x=>x);
  const main=val('main'),sub=val('sub');
@@ -337,6 +382,7 @@ async function submitReg(e){
    title:`${g.icon}  ${esc(f.team.value)}`,
    description:`**${g.label}** • มีทีมใหม่ส่งใบสมัครเข้ามา`,
    color:g.color,
+   ...(icon?{thumbnail:{url:'attachment://icon.jpg'}}:{}),
    fields:[
     {name:'👤 ผู้สมัคร',value:`${esc(f.real.value)}\nบัญชี: \`${user.name}\``,inline:true},
     {name:'🎮 เกม',value:g.label,inline:true},
@@ -350,11 +396,11 @@ async function submitReg(e){
  };
  const btn=$('#regbtn');btn.disabled=true;btn.textContent='กำลังส่ง...';
  try{
-  await sendHook(body);
+  await sendHook(body,icon&&icon.blob);
   store.set('lastReg',Date.now());
-  let saved=true;try{await teamsDB.add({game:gkey,name:teamName})}catch(_){saved=false}
+  let saved=true;try{await teamsDB.add(icon?{game:gkey,name:teamName,icon:icon.dataUrl}:{game:gkey,name:teamName})}catch(_){saved=false}
   toast(saved?'สมัครสำเร็จ! ส่งข้อมูลให้ผู้จัดแล้ว':'ส่งใบสมัครแล้ว แต่บันทึกรายชื่อทีมไม่สำเร็จ');
-  f.reset();renderPlayers('');
+  f.reset();renderPlayers('');teamIcon=null;updIcon();
  }catch(err){
   toast('ส่งไม่สำเร็จ ตรวจสอบ Webhook แล้วลองใหม่');
  }finally{btn.disabled=false;btn.textContent='สมัคร'}
@@ -411,7 +457,7 @@ function route(){
  else if(h==='#/login'){r.innerHTML=loginPage()}
  else if(h==='#/teams'){r.innerHTML=teamsPage();$('#gpicker').onclick=e=>{const b=e.target.closest('.gcard');if(!b)return;tg=b.dataset.g;renderTeams()};renderTeams()}
  else if(h==='#/tournament'){r.innerHTML=tournament()}
- else if(h==='#/register'){r.innerHTML=registerPage();$('#game').onchange=e=>renderPlayers(e.target.value);$('#regform').onsubmit=submitReg}
+ else if(h==='#/register'){teamIcon=null;r.innerHTML=registerPage();$('#game').onchange=e=>{renderPlayers(e.target.value);updIcon()};$('#iconfile').onchange=onIcon;$('#iconclear').onclick=()=>{teamIcon=null;$('#iconfile').value='';updIcon()};$('#regform').onsubmit=submitReg}
  else if(h==='#/admin'){r.innerHTML=adminPage();$('#cfgform').onsubmit=saveCfg}
  else{r.innerHTML=home();renderList('ทั้งหมด');
   $('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
