@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rankline – แพลตฟอร์มแข่งอีสปอร์ต</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0f11;--panel:#17191d;--panel2:#1e2126;--line:#2a2e35;--text:#eef0f2;--mute:#8b929c;--lime:#c6f432;--lime-ink:#10150a;--red:#ff4d5a}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--text);font-family:"Kanit",system-ui,sans-serif;font-size:15px}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;background:var(--lime);color:var(--lime-ink)}
+.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn.white{background:#fff;color:#111}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:hover{filter:brightness(1.08)}
+.logo{font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
+.logo i{width:22px;height:22px;background:var(--lime);transform:skewX(-18deg);border-radius:3px;display:block}
+
+/* signup */
+.auth{min-height:100vh;display:grid;grid-template-columns:minmax(320px,480px) 1fr}
+.auth-form{padding:40px 48px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.auth-form h1{font-size:30px;margin-top:28px}
+.auth-form p{color:var(--mute)}
+.bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden}.bar b{display:block;width:35%;height:100%;background:var(--lime)}
+label{font-size:13px;color:var(--mute);display:grid;gap:6px}
+input{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:var(--text);width:100%}
+.auth-art{background:#0a0b0c;border-left:1px solid var(--line);overflow:hidden}
+.auth-art svg{width:100%;height:100%;display:block}
+
+/* app shell */
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+.side .logo{padding:0 8px 18px}
+.side a{padding:10px 12px;border-radius:8px;color:var(--mute);display:flex;gap:10px;align-items:center}
+.side a:hover{background:var(--panel2);color:var(--text)}
+.side a.on{background:var(--panel2);color:var(--lime)}
+.game{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-weight:600}
+.wallet{margin-top:auto;background:var(--panel2);border-radius:10px;padding:14px;border:1px solid var(--line)}
+.wallet small{color:var(--mute)}.wallet b{display:block;font-size:26px;margin:2px 0 10px}
+main{padding:24px 28px;display:grid;gap:20px;align-content:start;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top h2{font-size:24px}.top p{color:var(--mute)}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:600}
+.chip em{font-style:normal;color:var(--lime)}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.g-main{grid-template-columns:minmax(0,1fr) 280px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{font-size:16px;margin-bottom:12px}
+.stat small{color:var(--mute)}.stat b{display:block;font-size:34px;line-height:1.1;margin-top:4px}
+.up{color:var(--lime)}.down{color:var(--red)}
+.row{display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.av{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-weight:700;color:#111}
+.row small{color:var(--mute);display:block}
+.tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tabs button{background:none;border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:5px 14px;cursor:pointer}
+.tabs button.on{background:var(--lime);color:var(--lime-ink);border-color:var(--lime);font-weight:600}
+.rank{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line)}
+.rank:first-of-type{border-top:0}.rank span:first-child{color:var(--mute);margin-right:10px}
+
+/* hero / banners */
+.hero{border-radius:12px;border:1px solid var(--line);padding:44px 20px;text-align:center;background:
+ repeating-linear-gradient(135deg,transparent 0 22px,rgba(198,244,50,.07) 22px 24px),var(--panel)}
+.hero h2{font-size:34px;margin-bottom:14px}
+.banner{height:170px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:flex-end;padding:18px;
+ background:linear-gradient(180deg,transparent 30%,rgba(14,15,17,.9)),radial-gradient(circle at 70% 30%,#3c4a7a,#161a26 70%)}
+.banner b{font-size:26px}.banner span{color:var(--mute);margin-left:12px}
+.live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.live b{font-size:30px}.live small{color:var(--mute)}
+.pt{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
+.pt:first-of-type{border-top:0}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.toolbar input{max-width:260px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl td,.tbl th{padding:10px 6px;border-top:1px solid var(--line);text-align:left}
+.tbl th{color:var(--mute);font-weight:400;border-top:0;font-size:13px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--lime-ink);padding:10px 18px;border-radius:8px;font-weight:600;display:none}
+.form{max-width:640px;display:grid;gap:14px}
+.form select{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:var(--text);width:100%;font:inherit}
+.form fieldset{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px}
+.form legend{color:var(--mute);font-size:13px;padding:0 6px}
+.hint{color:var(--mute);font-size:13px}
+.menu-btn{display:none}
+@media(max-width:900px){
+ .auth{grid-template-columns:1fr}.auth-art{display:none}.auth-form{padding:32px 22px}
+ .app{grid-template-columns:1fr}
+ .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px}
+ .side .logo{padding:0 8px 0 0}.game,.wallet{display:none}
+ .g-main{grid-template-columns:1fr}main{padding:18px 14px}
+ .row{grid-template-columns:44px 1fr auto}.row .hide-s{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)};
+const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2});
+
+const user={name:'ApexLegend2599',balance:1250};
+const tournaments=[
+ {id:1,name:'Weekly Legends Bowl',game:'Valorant',date:'20 พ.ย.',prize:5000,slots:'48/64',fee:10,color:'#c6f432'},
+ {id:2,name:'Asia Championship 01',game:'ROV',date:'22 พ.ย.',prize:12000,slots:'30/32',fee:25,color:'#7cc4ff'},
+ {id:3,name:'Free Fire Night Cup',game:'Free Fire',date:'24 พ.ย.',prize:2500,slots:'80/100',fee:5,color:'#ffb35c'},
+ {id:4,name:'E-Football Open',game:'E-football',date:'27 พ.ย.',prize:1800,slots:'12/32',fee:8,color:'#d79bff'},
+ {id:5,name:'Duo Rush Series',game:'Valorant',date:'30 พ.ย.',prize:3200,slots:'20/32',fee:12,color:'#ff7a85'},
+ {id:6,name:'Midweek Clash',game:'ROV',date:'2 ธ.ค.',prize:900,slots:'6/16',fee:3,color:'#5cf0c0'}
+];
+const teams=[
+ {n:'Hardcore Legends',loc:'Bangkok',w:2620,r:'84%',c:'#c6f432'},
+ {n:'Legends of the Ult',loc:'Chiang Mai',w:2105,r:'79%',c:'#7cc4ff'},
+ {n:'GamerzV254',loc:'Phuket',w:1730,r:'71%',c:'#ffb35c'},
+ {n:'LOL-Kings',loc:'Khon Kaen',w:1490,r:'66%',c:'#d79bff'},
+ {n:'Hawk Busters',loc:'Bangkok',w:1210,r:'61%',c:'#ff7a85'}
+];
+const ranks=[['Bluepanda',2840],['Prime_Storm',2615],['NightOwl',2402],['ZeroCool',2290],['KaiRyu',2104],['Mochi',1988],['Vortex',1850]];
+const prizes=[['อันดับ 1',2500],['อันดับ 2',1250],['อันดับ 3',750],['อันดับ 4-8',100]];
+
+const nav=(on)=>`<aside class="side">
+ <a class="logo" href="#/"><i></i>Rankline</a>
+ <div class="game">Valorant ▾</div>
+ <a href="#/" class="${on==='home'?'on':''}">▶ ลงแข่ง</a>
+ <a href="#/teams" class="${on==='teams'?'on':''}">◆ ทีม</a>
+ <a href="#/register" class="${on==='reg'?'on':''}">✚ สมัครทีม</a>
+ <a href="#/signup">☰ สมัคร / เข้าสู่ระบบ</a>
+ <div class="wallet"><small>ยอดเงินคงเหลือ</small><b>${fmt(user.balance)}</b><button class="btn ghost sm" style="width:100%" onclick="toast('เติมเงิน: เชื่อมระบบชำระเงินที่นี่')">เติมเงิน</button></div>
+</aside>`;
+const head=(t,s)=>`<div class="top"><div><h2>${t}</h2><p>${s}</p></div><div class="chip">กระเป๋า <em>${fmt(user.balance)}</em></div></div>`;
+const av=(t,c)=>`<div class="av" style="background:${c}">${t.slice(0,2).toUpperCase()}</div>`;
+
+function signup(){return `<div class="auth">
+ <form class="auth-form" onsubmit="event.preventDefault();toast('สมัครสำเร็จ (ตัวอย่าง)');location.hash='#/'">
+  <a class="logo" href="#/"><i></i>Rankline</a>
+  <h1>สมัครสมาชิก</h1><p>สร้างบัญชีเพื่อเริ่มลงแข่งและสร้างทีมของคุณ</p>
+  <div class="bar"><b></b></div>
+  <label>อีเมล<input type="email" required placeholder="you@email.com"></label>
+  <label>รหัสผ่าน<input type="password" required minlength="8" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
+  <label>ยืนยันรหัสผ่าน<input type="password" required minlength="8"></label>
+  <button class="btn" type="submit">สร้างบัญชี</button>
+  <button class="btn white" type="button" onclick="toast('เชื่อม Google Login ที่นี่')">สมัครด้วย Google</button>
+  <p>มีบัญชีอยู่แล้ว? <a href="#/" style="color:var(--lime)">เข้าสู่ระบบ</a></p>
+ </form>
+ <div class="auth-art" aria-hidden="true"><svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+  <defs><pattern id="p" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M0 40 L40 0 L80 40 L40 80Z M0 0 L40 40 L80 0" fill="none" stroke="#c6f432" stroke-opacity=".55" stroke-width="1.2"/></pattern></defs>
+  <rect width="400" height="400" fill="url(#p)"/></svg></div></div>`}
+
+function home(){return `<div class="app">${nav('home')}<main>
+ ${head('สวัสดี, '+user.name,'ยินดีต้อนรับกลับมา พร้อมลงแข่งหรือยัง')}
+ <div class="grid g3">
+  <div class="card stat"><small>แมตช์ที่รอแข่ง</small><b>3</b><small class="up">+1 สัปดาห์นี้</small></div>
+  <div class="card stat"><small>ชนะทั้งหมด</small><b>31</b><small class="up">อัตราชนะ 64%</small></div>
+  <div class="card stat"><small>เงินรางวัลสะสม</small><b>${fmt(1840)}</b><small class="up">+$250 เดือนนี้</small></div>
+ </div>
+ <div class="grid g-main">
+  <section class="card"><h3>รายการแข่งที่เปิดรับ</h3>
+   <div class="tabs" id="tabs">${['ทั้งหมด','Valorant','ROV','Free Fire','E-football'].map((t,i)=>`<button class="${i?'':'on'}" data-g="${t}">${t}</button>`).join('')}</div>
+   <div id="tlist"></div></section>
+  <section class="card"><h3>อันดับผู้เล่น</h3>${ranks.map((r,i)=>`<div class="rank"><span>${i+1}</span><b style="flex:1;font-weight:500">${r[0]}</b><span class="up">${r[1].toLocaleString()}</span></div>`).join('')}</section>
+ </div></main></div>`}
+
+function renderList(g){
+ const l=tournaments.filter(t=>g==='ทั้งหมด'||t.game===g);
+ $('#tlist').innerHTML=l.length?l.map(t=>`<div class="row">${av(t.game,t.color)}
+  <div><a href="#/tournament"><b>${t.name}</b></a><small>${t.game} · ${t.date}</small></div>
+  <div class="hide-s"><small>เงินรางวัล</small><b class="up">${fmt(t.prize)}</b></div>
+  <button class="btn sm" onclick="toast('ลงทะเบียน ${t.name} แล้ว (ตัวอย่าง)')">ลงแข่ง ${fmt(t.fee)}</button></div>`).join(''):'<p style="color:var(--mute)">ยังไม่มีรายการของเกมนี้ ลองเลือกเกมอื่น</p>';
+}
+
+function teamsPage(){return `<div class="app">${nav('teams')}<main>
+ ${head('ทีม','ค้นหาและเข้าร่วมทีมที่ใช่')}
+ <div class="hero"><h2>เข้าร่วมทีม</h2><button class="btn" onclick="location.hash='#/register'">สมัครทีมแข่ง</button></div>
+ <section class="card"><div class="toolbar"><h3 style="margin:0">ทีมแนะนำ</h3><input id="q" placeholder="ค้นหาทีม" aria-label="ค้นหาทีม"></div>
+  <div id="teamlist" style="margin-top:10px"></div></section></main></div>`}
+
+function renderTeams(q=''){
+ const l=teams.filter(t=>t.n.toLowerCase().includes(q.toLowerCase()));
+ $('#teamlist').innerHTML=l.length?l.map(t=>`<div class="row">${av(t.n,t.c)}
+  <div><b>${t.n}</b><small>${t.loc}</small></div>
+  <div class="hide-s"><small>ชนะ ${t.r}</small><b class="up">${fmt(t.w)}</b></div>
+  <button class="btn ghost sm" onclick="toast('ส่งคำขอเข้าร่วม ${t.n} แล้ว')">ขอเข้าร่วม</button></div>`).join(''):'<p style="color:var(--mute)">ไม่พบทีมที่ค้นหา ลองคำอื่นหรือสร้างทีมใหม่</p>';
+}
+
+function tournament(){return `<div class="app">${nav('home')}<main>
+ ${head('Weekly Legends Bowl','Valorant · 20-21 พ.ย. · ทีมเดี่ยว')}
+ <div class="banner"><div><b>Weekly Legends Bowl</b><span>เหลือเวลาลงทะเบียน 7 วัน</span></div></div>
+ <div class="grid g-main">
+  <div style="display:grid;gap:16px;align-content:start">
+   <section class="card"><h3>สถิติสด</h3><div class="live">
+    <div><small>เงินรางวัลปัจจุบัน</small><br><b>${fmt(236.90)}</b></div>
+    <div><small>ผู้เข้าร่วม</small><br><b>48/64</b></div>
+    <div><small>อันดับของคุณ</small><br><b>11th</b></div></div></section>
+   <section class="card"><h3>ตารางผู้เข้าแข่ง</h3><table class="tbl"><tr><th>#</th><th>ผู้เล่น</th><th>แต้ม</th><th>ชนะ</th></tr>
+    ${ranks.slice(0,5).map((r,i)=>`<tr><td>${i+1}</td><td>${r[0]}</td><td class="up">${r[1]}</td><td>${12-i}</td></tr>`).join('')}</table></section>
+   <section class="card"><h3>รายละเอียด</h3><p style="color:var(--mute);line-height:1.6">แข่งแบบเดี่ยว ระบบ Bo3 ผู้ชนะแต่ละคู่ได้ไปต่อ รอบชิงชนะเลิศแข่งวันที่ 21 พ.ย. เวลา 20:00 น. ผู้เล่นต้องเข้าห้องก่อนเริ่ม 15 นาที</p></section>
+  </div>
+  <aside class="card" style="align-self:start"><h3>เงินรางวัล</h3>${prizes.map(p=>`<div class="pt"><span>${p[0]}</span><b class="up">${fmt(p[1])}</b></div>`).join('')}
+   <h3 style="margin-top:18px">ลงทะเบียน</h3><div class="pt"><span>ค่าสมัคร</span><b>${fmt(10)}</b></div>
+   <button class="btn" style="width:100%;margin-top:12px" onclick="toast('สมัครเข้าร่วมแล้ว (ตัวอย่าง)')">เข้าร่วม</button></aside>
+ </div></main></div>`}
+
+/* ===== สมัครทีม + Discord Webhook ===== */
+const WEBHOOK_URL='https://discord.com/api/webhooks/1572172800213389454/xSrnyhRe_T3OfpFPMNP8KXAUL7Zoc_ygW0b9SGQ9bk6XAjAUP2okGHwrzzwP8U6W8ECM'; // <- วาง URL เว็บฮุกตรงนี้
+const GAMES={
+ rov:{label:'ROV',main:5,sub:2},
+ ff:{label:'Free Fire',main:4,sub:1},
+ efb:{label:'E-football',main:1,sub:0}
+};
+const esc=v=>String(v).trim().slice(0,100);
+
+function registerPage(){return `<div class="app">${nav('reg')}<main>
+ ${head('สมัครทีม','กรอกข้อมูลทีม แล้วระบบจะส่งใบสมัครให้ผู้จัดทาง Discord')}
+ <form class="form card" id="regform">
+  <label>ชื่อทีม<input name="team" required maxlength="40" placeholder="เช่น Hardcore Legends"></label>
+  <label>ชื่อจริง (ผู้สมัคร)<input name="real" required maxlength="60" placeholder="ชื่อ-นามสกุล"></label>
+  <label>เลือกเกม<select name="game" id="game" required>
+   <option value="">-- เลือกเกม --</option>
+   ${Object.entries(GAMES).map(([k,g])=>`<option value="${k}">${g.label}</option>`).join('')}
+  </select></label>
+  <div id="players"><p class="hint">เลือกเกมเพื่อกรอกรายชื่อผู้เล่น</p></div>
+  <button class="btn" type="submit" id="regbtn">สมัคร</button>
+ </form></main></div>`}
+
+function renderPlayers(k){
+ const g=GAMES[k],box=$('#players');
+ if(!g){box.innerHTML='<p class="hint">เลือกเกมเพื่อกรอกรายชื่อผู้เล่น</p>';return}
+ let h=`<fieldset><legend>ผู้เล่นหลัก ${g.main} คน</legend>`;
+ for(let i=1;i<=g.main;i++)h+=`<input data-k="main" required maxlength="40" placeholder="ชื่อผู้เล่นคนที่ ${i}" aria-label="ผู้เล่นคนที่ ${i}">`;
+ h+='</fieldset>';
+ if(g.sub){h+=`<fieldset><legend>ตัวสำรอง ${g.sub} คน (ไม่ใส่ก็ได้)</legend>`;
+  for(let i=1;i<=g.sub;i++)h+=`<input data-k="sub" maxlength="40" placeholder="ชื่อตัวสำรองคนที่ ${i}" aria-label="ตัวสำรองคนที่ ${i}">`;
+  h+='</fieldset>'}
+ box.innerHTML=h;
+}
+
+async function submitReg(e){
+ e.preventDefault();
+ const f=e.target,g=GAMES[f.game.value];
+ if(!g)return toast('กรุณาเลือกเกม');
+ if(WEBHOOK_URL.startsWith('PASTE'))return toast('ยังไม่ได้ตั้งค่า Webhook ในไฟล์ index.html');
+ let last=0;try{last=+localStorage.getItem('lastReg')||0}catch(_){}
+ if(Date.now()-last<30000)return toast('ส่งบ่อยเกินไป รอสักครู่แล้วลองใหม่');
+ const val=k=>[...document.querySelectorAll(`#players [data-k="${k}"]`)].map(i=>esc(i.value)).filter(Boolean);
+ const main=val('main'),sub=val('sub');
+ const list=a=>a.map((n,i)=>(i+1)+'. '+n).join('\n')||'-';
+ const body={
+  username:'Rankline สมัครทีม',
+  allowed_mentions:{parse:[]},
+  embeds:[{
+   title:'📝 สมัครทีมใหม่ – '+g.label,
+   color:0xc6f432,
+   fields:[
+    {name:'ชื่อทีม',value:esc(f.team.value),inline:true},
+    {name:'ชื่อจริง',value:esc(f.real.value),inline:true},
+    {name:'เกม',value:g.label,inline:true},
+    {name:'ผู้เล่นหลัก ('+main.length+')',value:list(main)},
+    ...(g.sub?[{name:'ตัวสำรอง ('+sub.length+')',value:list(sub)}]:[])
+   ],
+   timestamp:new Date().toISOString()
+  }]
+ };
+ const btn=$('#regbtn');btn.disabled=true;btn.textContent='กำลังส่ง...';
+ try{
+  const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!res.ok)throw new Error(res.status);
+  try{localStorage.setItem('lastReg',String(Date.now()))}catch(_){}
+  toast('สมัครสำเร็จ! ส่งข้อมูลให้ผู้จัดแล้ว');
+  f.reset();renderPlayers('');
+ }catch(err){
+  toast('ส่งไม่สำเร็จ ตรวจสอบ Webhook แล้วลองใหม่');
+ }finally{btn.disabled=false;btn.textContent='สมัคร'}
+}
+
+function route(){
+ const h=location.hash||'#/';const r=$('#root');
+ if(h==='#/signup'){r.innerHTML=signup()}
+ else if(h==='#/teams'){r.innerHTML=teamsPage();renderTeams();$('#q').oninput=e=>renderTeams(e.target.value)}
+ else if(h==='#/tournament'){r.innerHTML=tournament()}
+ else if(h==='#/register'){r.innerHTML=registerPage();$('#game').onchange=e=>renderPlayers(e.target.value);$('#regform').onsubmit=submitReg}
+ else{r.innerHTML=home();renderList('ทั้งหมด');
+  $('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));renderList(b.dataset.g)}}
+ scrollTo(0,0);
+}
+addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
