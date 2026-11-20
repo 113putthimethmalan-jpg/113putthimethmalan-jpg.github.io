@@ -1,554 +1,206 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rankline – แพลตฟอร์มแข่งอีสปอร์ต</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>บ้านสุข · Baan Suk Farm (Xmas)</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&family=Pixelify+Sans:wght@500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0e0f11;--panel:#17191d;--panel2:#1e2126;--line:#2a2e35;--text:#eef0f2;--mute:#8b929c;--lime:#c6f432;--lime-ink:#10150a;--red:#ff4d5a}
-*{box-sizing:border-box;margin:0}
-html,body{background:var(--bg);color:var(--text);font-family:"Kanit",system-ui,sans-serif;font-size:15px}
-a{color:inherit;text-decoration:none}
-button,input{font:inherit}
-:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;background:var(--lime);color:var(--lime-ink)}
-.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-.btn.white{background:#fff;color:#111}
-.btn.sm{padding:6px 12px;font-size:13px}
-.btn:hover{filter:brightness(1.08)}
-.logo{font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
-.logo i{width:22px;height:22px;background:var(--lime);transform:skewX(-18deg);border-radius:3px;display:block}
-
-/* signup */
-.auth{min-height:100vh;display:grid;grid-template-columns:minmax(320px,480px) 1fr}
-.auth-form{padding:40px 48px;display:flex;flex-direction:column;justify-content:center;gap:14px}
-.auth-form h1{font-size:30px;margin-top:28px}
-.auth-form p{color:var(--mute)}
-.bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden}.bar b{display:block;width:35%;height:100%;background:var(--lime)}
-label{font-size:13px;color:var(--mute);display:grid;gap:6px}
-input{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:var(--text);width:100%}
-.auth-art{background:#0a0b0c;border-left:1px solid var(--line);overflow:hidden}
-.auth-art svg{width:100%;height:100%;display:block}
-
-/* app shell */
-.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-.side{background:var(--panel);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
-.side .logo{padding:0 8px 18px}
-.side a{padding:10px 12px;border-radius:8px;color:var(--mute);display:flex;gap:10px;align-items:center}
-.side a:hover{background:var(--panel2);color:var(--text)}
-.side a.on{background:var(--panel2);color:var(--lime)}
-.game{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:8px}
-.wallet{margin-top:auto;background:var(--panel2);border-radius:10px;padding:14px;border:1px solid var(--line)}
-.wallet small{color:var(--mute)}.wallet b{display:block;font-size:26px;margin:2px 0 10px}
-main{padding:24px 28px;display:grid;gap:20px;align-content:start;min-width:0}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.top h2{font-size:24px}.top p{color:var(--mute)}
-.chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:600}
-.chip em{font-style:normal;color:var(--lime)}
-.grid{display:grid;gap:16px}
-.g3{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-.g-main{grid-template-columns:minmax(0,1fr) 280px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
-.card h3{font-size:16px;margin-bottom:12px}
-.stat small{color:var(--mute)}.stat b{display:block;font-size:34px;line-height:1.1;margin-top:4px}
-.up{color:var(--lime)}.down{color:var(--red)}
-.row{display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
-.row:first-of-type{border-top:0}
-.av{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-weight:700;color:#111}
-.row small{color:var(--mute);display:block}
-.tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.tabs button{background:none;border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:5px 14px;cursor:pointer}
-.tabs button.on{background:var(--lime);color:var(--lime-ink);border-color:var(--lime);font-weight:600}
-.rank{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line)}
-.rank:first-of-type{border-top:0}.rank span:first-child{color:var(--mute);margin-right:10px}
-
-/* hero / banners */
-.hero{border-radius:12px;border:1px solid var(--line);padding:44px 20px;text-align:center;background:
- repeating-linear-gradient(135deg,transparent 0 22px,rgba(198,244,50,.07) 22px 24px),var(--panel)}
-.hero h2{font-size:34px;margin-bottom:14px}
-.banner{height:170px;border-radius:12px;border:1px solid var(--line);display:flex;align-items:flex-end;padding:18px;
- background:linear-gradient(180deg,transparent 30%,rgba(14,15,17,.9)),radial-gradient(circle at 70% 30%,#3c4a7a,#161a26 70%)}
-.banner b{font-size:26px}.banner span{color:var(--mute);margin-left:12px}
-.live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
-.live b{font-size:30px}.live small{color:var(--mute)}
-.pt{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
-.pt:first-of-type{border-top:0}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-.toolbar input{max-width:260px}
-.tbl{width:100%;border-collapse:collapse}
-.tbl td,.tbl th{padding:10px 6px;border-top:1px solid var(--line);text-align:left}
-.tbl th{color:var(--mute);font-weight:400;border-top:0;font-size:13px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--lime-ink);padding:10px 18px;border-radius:8px;font-weight:600;display:none}
-.form{max-width:640px;display:grid;gap:14px}
-.form select{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 12px;color:var(--text);width:100%;font:inherit}
-.form fieldset{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px}
-.form legend{color:var(--mute);font-size:13px;padding:0 6px}
-.hint{color:var(--mute);font-size:13px}
-.gimg{object-fit:cover;border-radius:10px;background:var(--panel2);flex:none}
-.game .gimg{width:24px;height:24px;border-radius:6px}
-.gpick{display:flex;align-items:center;gap:12px;font-size:18px}
-.gpick .gimg{width:48px;height:48px}
-.gcard{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);cursor:pointer;text-align:left;font:inherit}
-.gcard[aria-pressed="true"]{border-color:var(--lime);background:var(--panel2)}
-.gcard .gimg{width:48px;height:48px}.gcard small{display:block;color:var(--mute)}
-.iconpick{display:flex;gap:14px;align-items:center}
-.iconpick .gimg{width:64px;height:64px}
-.xmas-only{display:none}
-[data-theme="xmas"] .xmas-only{display:inline-flex}
-[data-theme="xmas"]{--bg:#0a1511;--panel:#10201a;--panel2:#183027;--line:#2a4a3a;--lime:#ffd166;--lime-ink:#2b1a00;--red:#ff6b6b;--mute:#a3bfae}
-[data-theme="xmas"] body::before{content:"";position:fixed;top:0;left:0;right:0;height:5px;z-index:60;background:repeating-linear-gradient(90deg,#e5383b 0 24px,#2a9d4f 24px 48px,#ffd166 48px 72px)}
-[data-theme="xmas"] body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.75;background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 90px 110px,#fff,transparent),radial-gradient(3px 3px at 160px 60px,rgba(255,255,255,.8),transparent),radial-gradient(2px 2px at 60px 170px,#fff,transparent),radial-gradient(2px 2px at 130px 150px,rgba(255,255,255,.9),transparent);background-size:200px 200px;animation:snow 14s linear infinite}
-@keyframes snow{to{background-position:0 200px}}
-[data-theme="xmas"] .logo i{background:#e5383b}
-[data-theme="xmas"] .logo::after{content:"🎄"}
-[data-theme="xmas"] .hero{background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(229,56,59,.12) 22px 24px),var(--panel)}
-[data-theme="xmas"] .auth-art path{stroke:#ffd166}
-@media(prefers-reduced-motion:reduce){[data-theme="xmas"] body::after{animation:none}}
-.menu-btn{display:none}
-@media(max-width:900px){
- .auth{grid-template-columns:1fr}.auth-art{display:none}.auth-form{padding:32px 22px}
- .app{grid-template-columns:1fr}
- .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px}
- .side .logo{padding:0 8px 0 0}.game,.wallet{display:none}
- .g-main{grid-template-columns:1fr}main{padding:18px 14px}
- .row{grid-template-columns:44px 1fr auto}.row .hide-s{display:none}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-</head>
-<body>
-<div id="root"></div>
-<div class="toast" id="toast" role="status"></div>
-
+:root{--bg:#10261a;--pn:#1d4029;--rd:#c8322f;--gd:#f2c14e;--tx:#f4f8f4}
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font:15px 'Pixelify Sans',Kanit,sans-serif}
+body{display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top) 6px env(safe-area-inset-bottom)}
+#lt{position:fixed;top:0;left:0;right:0;height:5px;z-index:5;background:repeating-linear-gradient(90deg,#c8322f 0 8px,#2f8f4a 8px 16px,#f2c14e 16px 24px,#3b8fd0 24px 32px);animation:bk 1.4s steps(2) infinite}
+@keyframes bk{50%{filter:brightness(.55)}}
+@media(prefers-reduced-motion:reduce){#lt{animation:none}}
+#hud{width:100%;max-width:820px;display:flex;gap:6px;align-items:center;padding:10px 0 6px;flex-wrap:wrap}
+#hud span{background:var(--pn);padding:4px 8px;border:2px solid #0a170f}
+#hud i{flex:1}
+button{font:inherit;color:var(--tx);background:var(--rd);border:2px solid #0a170f;padding:6px 10px;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gd)}
+#fr{position:relative;width:100%;max-width:820px}
+canvas#c{width:100%;display:block;image-rendering:pixelated;border:3px solid #0a170f;background:#4f9a4a}
+#ts{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);background:#000c;padding:4px 10px;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;max-width:92%}
+#dl{position:absolute;left:0;right:0;bottom:0;background:#10261af5;border-top:3px solid var(--gd);padding:8px 10px}
+#dl p{margin:4px 0 8px;line-height:1.45}
+#dl button{margin:2px 4px 2px 0;background:var(--pn)}
+#ct{width:100%;max-width:820px;display:flex;justify-content:space-between;align-items:center;padding:10px 4px}
+.dp{display:grid;grid-template:repeat(3,50px)/repeat(3,50px);gap:2px}
+.dp button{padding:0;font-size:18px;background:var(--pn);touch-action:none}
+#a{width:88px;height:88px;border-radius:50%;font-size:24px;touch-action:none}
+#hn{font-size:12px;opacity:.7;text-align:center}
+#mn{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:10px;z-index:9}
+#mn>div{background:var(--bg);border:3px solid var(--gd);width:100%;max-width:520px;max-height:90vh;overflow:auto;padding:8px}
+.tb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.tb .on,.r.on,.o.on{background:var(--gd);color:#10261a}
+.r{display:block;width:100%;text-align:left;margin:3px 0;background:var(--pn)}
+.o{display:inline-block;margin:2px;background:var(--pn)}
+#mn p{margin:8px 0 2px;color:var(--gd)}
+</style></head><body>
+<div id="lt"></div>
+<div id="hud"><span id="hm"></span><span id="hp"></span><span id="hd"></span><i></i><button onclick="M()">☰</button><button onclick="Lg()">TH/EN</button></div>
+<div id="fr"><canvas id="c" width="320" height="192"></canvas><div id="ts"></div><div id="dl" hidden></div></div>
+<div id="ct">
+<div class="dp"><i></i><button data-k="u">▲</button><i></i><button data-k="l">◀</button><i></i><button data-k="r">▶</button><i></i><button data-k="d">▼</button><i></i></div>
+<button id="a" onclick="act()">A</button></div>
+<div id="hn"></div>
+<div id="mn" hidden><div id="mb"></div></div>
 <script>
-const $=s=>document.querySelector(s);
-const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)};
-const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2});
-
-let user={name:'ผู้เยี่ยมชม',balance:0,role:'guest'};
-const tournaments=[
- {id:1,name:'Weekly Legends Bowl',game:'Valorant',date:'20 พ.ย.',prize:0,slots:'0/64',fee:0,color:'#c6f432'},
- {id:2,name:'Asia Championship 01',game:'ROV',date:'22 พ.ย.',prize:0,slots:'0/32',fee:0,color:'#7cc4ff'},
- {id:3,name:'Free Fire Night Cup',game:'Free Fire',date:'24 พ.ย.',prize:0,slots:'0/100',fee:0,color:'#ffb35c'},
- {id:4,name:'E-Football Open',game:'E-football',date:'27 พ.ย.',prize:0,slots:'0/32',fee:0,color:'#d79bff'},
- {id:5,name:'Duo Rush Series',game:'Valorant',date:'30 พ.ย.',prize:0,slots:'0/32',fee:0,color:'#ff7a85'},
- {id:6,name:'Midweek Clash',game:'ROV',date:'2 ธ.ค.',prize:0,slots:'0/16',fee:0,color:'#5cf0c0'}
-];
-const ranks=[['Bluepanda',0],['Prime_Storm',0],['NightOwl',0],['ZeroCool',0],['KaiRyu',0],['Mochi',0],['Vortex',0]];
-const prizes=[['อันดับ 1',0],['อันดับ 2',0],['อันดับ 3',0],['อันดับ 4-8',0]];
-const CFG={t:{},pz:[0,0,0,0]}; // วางค่าที่คัดลอกจากหน้าแอดมินทับบรรทัดนี้ เพื่อให้ผู้เข้าชมทุกคนเห็น
-function applyCfg(){
- const c=store.get('cfg',null)||CFG;
- tournaments.forEach(t=>{const o=(c.t||{})[t.id];if(o){t.prize=+o.prize||0}});
- (c.pz||[]).forEach((v,i)=>{if(prizes[i])prizes[i][1]=+v||0});
-}
-
-const nav=(on)=>`<aside class="side">
- <a class="logo" href="#/"><i></i>Rankline</a>
- <div class="game"><img class="gimg" src="${GIMG['Valorant']}" alt="" width="24" height="24">Valorant ▾</div>
- <a href="#/" class="${on==='home'?'on':''}">▶ ลงแข่ง</a>
- <a href="#/teams" class="${on==='teams'?'on':''}">◆ ทีม</a>
- <a href="#/register" class="${on==='reg'?'on':''}">✚ สมัครทีม</a>
- ${user.role==='admin'?`<a href="#/admin" class="${on==='admin'?'on':''}">★ แอดมิน</a>`:''}
- ${user.role==='guest'?`<a href="#/login">☰ เข้าสู่ระบบ / สมัครสมาชิก</a>`:`<a href="#/logout">⏻ ออกจากระบบ (${user.name})</a>`}
- 
-</aside>`;
-const head=(t,s)=>`<div class="top"><div><h2>${t}</h2><p>${s}</p></div><div class="chip xmas-only">🎄 Merry Christmas</div></div>`;
-const av=(t,c)=>`<div class="av" style="background:${c}">${t.slice(0,2).toUpperCase()}</div>`;
-const GIMG={"Valorant": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCACAAIADASIAAhEBAxEB/8QAHAABAAEFAQEAAAAAAAAAAAAAAAcCBAUGCAMB/8QAPBAAAQMCAwQECQ0BAQAAAAAAAAECAwQFBhFBEiExUSJhkbIHExUyNUJxcnQUFhcjJFNVgZKT0dLwM1T/xAAbAQEAAgMBAQAAAAAAAAAAAAAABAUBBgcCA//EADIRAAIBAgMFBQYHAAAAAAAAAAABAgMEBRExBhIhUXETQWGhwRQiMjOR0RUWI2KBseH/2gAMAwEAAhEDEQA/AOcwASSOAAAAAAAAAAAAAAAAAAAAAAAAAVRxvmkZHG1XPe5GtanFVVckQSRvhkdHIxzHsVWua5MlaqcUUGcnlmUgAGAAAAAAAAAACqON80jY42ue96o1rWpmrlXgiCSN8Mj4pGqx7HK1zV4oqLkqAzk8sykAAwAAAXdo9LUXxEXfQkHwjYQ+UsfeqCP65iZ1MbU89qeunWmvNPYR9aPS1D8RF30J/XfmV17VlSqRlE3fZjD6V9aV6FXvayfJ5Pic6g3HH+EPI1Stxoo8qGd3SaiboXrp7q6dnI04nUqkakVKJqd9ZVbOtKhVXFefigAD2RAAAAAbhgDCHlqpS4Vsf2GB3Raqf9npp7qa9nM8VakacXKRLsbKreVo0KK4vy8WZzwc4Q+TMZeq+P616Z00bk8xq+uvWunJPaR/ePS9d8RL31J+TdkQDePS9d8RL31INlVlVqSlI2zafD6VjZ0KFLubzfN5LiWYALE0gAAAu7R6WofiIu+h0BzOf7SuV1olX/0Rd9DoDmVOJaxOi7DfLrdV6njV0sNdTSU1RG2WGVqtex3BUUhTFeGp8NXJYHbT6aTN0Eq+s3kvWmvbqTiY2/2OmxDbZKKpTLPpRyIm+N2jk/29CNa3DpS46MvdoMFjiNHOPCpHR+j6+TIGBd3S2VNnrpaKrZsSxLkuXByaKnUpaF+mms0cfnCUJOE1k0AC6tdsqbxXRUVIzbllXJOTU1VepA2ks2IQlOShBZtmQwrhqfEtySBu0ynjydPKnqt5J1rp26E10lJDQ00VNTRtihiajWMbwRELPD9ipsPW2Oipkzy6Ukipvkfq5f8AbkMkUF1cOrLhojr+z+Cxw6jnP5ktX6Lp5v8AgciALx6XrviJe+pP/I5/vC53auVN/wBol76knDfikUm3Py6PV+haAAtjnIAAAJY8H+L/ACxTpba2TOthb0HuXfMxNfeTXnx5kTnrTVM1HUR1NPI6KaJyOY9vFFQ+FxQVWO69S2wfFamHV1Vjxi9VzX35HQwMHhPE0OJbakybLKmLJs8Seq7mnUunZoZw1+cHBuMtTsttcU7ilGtSecXoa1jbCbMR0PjIEa2vgRVicu7bTVi9S6cl/MhuSN8Ujo5GuY9iq1zXJkrVTiinRJoHhGwh8pY+9UEf1zEzqY2p57U9dOtNeaewsLG53X2ctO407avAu2i7ygveXxLmufVf10I1jjfK9scbXPe5Ua1rUzVVXgiEyYJwmzDlD4ydGur50RZXcdhNGJ7Nea/kRNZrtNZK9ldTxQSSsRUZ45u0jVXVN6b/AOTY/pTv33VB+07+xLu6dWot2Ghrezt7YWU3cXObn3cNPHqS2CJPpTv33VB+07+wXwp35UVPF0Kdfil/sV/4fV8Dcfzjh/7vp/ptHhAxf5Hp1ttFJlXTN6TmrvhYuvvLp28iJz3lrZqirkq6hyTzSOVz1kTPaVTxe7acrskbmueSJuQtbegqUd1HP8YxWeI13VlwS4Jcl933nwAH3KgAAAAAAyFivdTh+5R1tMuat3PYq7pG6tX/AG5Sb7TdKa80EVbSP2opEz38Wrqi9aEAGx4LxW/DdfszK51DOqJM1N+wuj06015p+RCvLbtFvR1RtOzWO+w1exrP9OXk+fTn9SaD4u8pjlZNG2SN7XseiOa5q5o5F4KhVmhRnWE01miJsf4Q8jVK3Gij+wzu6TUTdC9dPdXTs5GnHQtXSwV1NJTVEbZYZWq17HcFRSFMV4amw1clgdtPppM3QSr6zeS9aa9updWVzvrclqcu2owL2WftVBe5LVcn9n5acjCgAnmngAAAAAAAAAAAAAAGTo8S3mgp209Lc6qGFnmsa7c32Ht88sQ/jFZ+pP4MMDw6cHxaRKjfXMUoxqSSXizM/PLEP4xWfqT+C1uF+ul1ibDXV89TG120jZFRUReGZYAKnBcUkYne3E4uM6kmvFsAA9kYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//2Q==", "E-football": "data:image/jpeg;base64,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", "Free Fire": "data:image/jpeg;base64,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", "ROV": "data:image/jpeg;base64,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"};
-const gameAv=(g,c)=>GIMG[g]?`<img class="av gimg" src="${GIMG[g]}" alt="${g}" width="44" height="44">`:av(g,c);
-
-const ART=`<div class="auth-art" aria-hidden="true"><svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
- <defs><pattern id="p" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M0 40 L40 0 L80 40 L40 80Z M0 0 L40 40 L80 0" fill="none" stroke="#c6f432" stroke-opacity=".55" stroke-width="1.2"/></pattern></defs>
- <rect width="400" height="400" fill="url(#p)"/></svg></div>`;
-const authPage=(title,sub,body,foot,fn)=>`<div class="auth"><form class="auth-form" onsubmit="${fn}(event)">
- <a class="logo" href="#/"><i></i>Rankline</a><h1>${title}</h1><p>${sub}</p>${body}${foot}</form>${ART}</div>`;
-const signup=()=>authPage('สมัครสมาชิก','สร้างบัญชีก่อน เพื่อสมัครทีมและลงแข่ง',`
- <div class="bar"><b></b></div>
- <label>ชื่อผู้ใช้<input name="username" required minlength="3" maxlength="20" autocomplete="username"></label>
- <label>อีเมล<input type="email" name="email" required autocomplete="email"></label>
- <label>รหัสผ่าน<input type="password" name="pw" required minlength="8" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></label>
- <label>ยืนยันรหัสผ่าน<input type="password" name="pw2" required minlength="8" autocomplete="new-password"></label>
- <button class="btn" type="submit">สร้างบัญชี</button>`,
- `<p>มีบัญชีอยู่แล้ว? <a href="#/login" style="color:var(--lime)">เข้าสู่ระบบ</a></p>`,'doSignup');
-const loginPage=()=>authPage('เข้าสู่ระบบ','เข้าสู่ระบบเพื่อสมัครทีมและลงแข่ง',`
- <label>ชื่อผู้ใช้ หรือ อีเมล<input name="uid" required autocomplete="username"></label>
- <label>รหัสผ่าน<input type="password" name="pw" required autocomplete="current-password"></label>
- <button class="btn" type="submit">เข้าสู่ระบบ</button>`,
- `<p>ยังไม่มีบัญชี? <a href="#/signup" style="color:var(--lime)">สมัครสมาชิก</a></p>`,'doLogin');
-
-/* ===== ระบบสมาชิก (เก็บในเบราว์เซอร์) ===== */
-const ADMIN={u:'Adminsetup',h:'92cb6e11a0758ba778b7cac6432950addfec431e915ac7ec7d1642ee79334890'}; // เก็บเป็นค่าแฮช SHA-256 ไม่ใช่รหัสผ่านตรง ๆ
-const sha=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
-const store={
- get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(_){return d}},
- set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(_){}}
-};
-function loadUser(){
- const s=store.get('session',null);
- user=s?{name:s.name,balance:0,role:s.role}:{name:'ผู้เยี่ยมชม',balance:0,role:'guest'};
-}
-async function doSignup(e){
- e.preventDefault();const f=e.target;
- const name=f.username.value.trim(),email=f.email.value.trim().toLowerCase();
- if(f.pw.value!==f.pw2.value)return toast('รหัสผ่านไม่ตรงกัน');
- if(name.toLowerCase()===ADMIN.u.toLowerCase())return toast('ชื่อผู้ใช้นี้ถูกใช้แล้ว');
- const users=store.get('users',[]);
- if(users.some(u=>u.name.toLowerCase()===name.toLowerCase()||u.email===email))return toast('ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้แล้ว');
- users.push({name,email,h:await sha(f.pw.value)});store.set('users',users);
- store.set('session',{name,role:'user'});toast('สมัครสมาชิกสำเร็จ');location.hash='#/';
-}
-async function doLogin(e){
- e.preventDefault();const f=e.target;
- const id=f.uid.value.trim().toLowerCase(),h=await sha(f.pw.value);
- if(id===ADMIN.u.toLowerCase()&&h===ADMIN.h){store.set('session',{name:ADMIN.u,role:'admin'});toast('เข้าสู่ระบบแอดมินแล้ว');location.hash='#/admin';return}
- const u=store.get('users',[]).find(x=>(x.name.toLowerCase()===id||x.email===id)&&x.h===h);
- if(!u)return toast('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
- store.set('session',{name:u.name,role:'user'});location.hash='#/';
-}
-
-function home(){return `<div class="app">${nav('home')}<main>
- ${head('สวัสดี, '+user.name,'ยินดีต้อนรับกลับมา พร้อมลงแข่งหรือยัง')}
- <div class="grid g3">
-  <div class="card stat"><small>แมตช์ที่รอแข่ง</small><b>0</b><small>ยังไม่มีแมตช์</small></div>
-  <div class="card stat"><small>ชนะทั้งหมด</small><b>0</b><small>อัตราชนะ 0%</small></div>
-  <div class="card stat"><small>เงินรางวัลสะสม</small><b>${fmt(0)}</b><small>ยังไม่มีรางวัล</small></div>
- </div>
- <div class="grid g-main">
-  <section class="card"><h3>รายการแข่งที่เปิดรับ</h3>
-   <div class="tabs" id="tabs">${['ทั้งหมด','Valorant','ROV','Free Fire','E-football'].map((t,i)=>`<button class="${i?'':'on'}" data-g="${t}">${t}</button>`).join('')}</div>
-   <div id="tlist"></div></section>
-  <section class="card"><h3>อันดับผู้เล่น</h3>${ranks.map((r,i)=>`<div class="rank"><span>${i+1}</span><b style="flex:1;font-weight:500">${r[0]}</b><span class="up">${r[1].toLocaleString()}</span></div>`).join('')}</section>
- </div></main></div>`}
-
-function renderList(g){
- const l=tournaments.filter(t=>g==='ทั้งหมด'||t.game===g);
- $('#tlist').innerHTML=l.length?l.map(t=>`<div class="row">${gameAv(t.game,t.color)}
-  <div><a href="#/tournament"><b>${t.name}</b></a><small>${t.game} · ${t.date}</small></div>
-  <div class="hide-s"><small>เงินรางวัล</small><b class="up">${fmt(t.prize)}</b></div>
-  <button class="btn sm" onclick="location.hash='#/register'">สมัครฟรี</button></div>`).join(''):'<p style="color:var(--mute)">ยังไม่มีรายการของเกมนี้ ลองเลือกเกมอื่น</p>';
-}
-
-/* ===== ระบบทีม ===== */
-const SB={url:'https://fxztmjwvhnhpnkfohyaf.supabase.co',key:'sb_publishable_07d3-ihvK5XTZe99p7mzHg_jewfSiiW'}; // ใส่ Supabase Project URL และ anon key เพื่อให้ทุกคนเห็นรายชื่อทีมเดียวกัน (ถ้าเว้นว่าง จะเก็บในเบราว์เซอร์นี้เท่านั้น)
-const sbOn=()=>!!(SB.url&&SB.key);
-const sbHdr=()=>{const h={apikey:SB.key,'Content-Type':'application/json'};if(SB.key.startsWith('eyJ'))h.Authorization='Bearer '+SB.key;return h};
-const sbUrl=()=>SB.url.replace(/\/+$/,'')+'/rest/v1/teams';
-const teamsDB={
- async list(){
-  if(sbOn()){
-   const q=c=>fetch(sbUrl()+'?select='+c+'&order=created_at.asc',{headers:sbHdr()});
-   let r=await q('id,name,game,icon,created_at');
-   if(!r.ok)r=await q('id,name,game,created_at');
-   if(!r.ok)throw new Error(r.status);
-   return r.json();
-  }
-  return store.get('teams',[]);
- },
- async add(t){
-  if(sbOn()){const r=await fetch(sbUrl(),{method:'POST',headers:{...sbHdr(),Prefer:'return=minimal'},body:JSON.stringify(t)});if(!r.ok)throw new Error(r.status);return}
-  const a=store.get('teams',[]);a.push({...t,id:Date.now()+Math.random(),created_at:new Date().toISOString()});store.set('teams',a);
- },
- async remove(id){
-  if(sbOn()){
-   const h=admHdr();if(!h)throw new Error('noauth');
-   const r=await fetch(sbUrl()+'?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{...h,Prefer:'return=representation'}});
-   if(r.status===401)throw new Error('expired');
-   if(!r.ok)throw new Error(r.status);
-   const d=await r.json();if(!d.length)throw new Error('denied');
-   return;
-  }
-  store.set('teams',store.get('teams',[]).filter(t=>t.id!==id));
- }
-};
-const okIcon=u=>typeof u==='string'&&u.length<60000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(u);
-const teamAv=(t,g)=>okIcon(t.icon)?`<img class="av gimg" src="${t.icon}" alt="" width="44" height="44">`:gameAv(g.label);
-const he=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let tg='val';
-
-function teamsPage(){return `<div class="app">${nav('teams')}<main>
- ${head('ทีม','เลือกเกมเพื่อดูทีมที่สมัครแล้ว')}
- <div class="grid g3" id="gpicker">${Object.entries(GAMES).map(([k,g])=>`<button class="gcard" data-g="${k}" aria-pressed="${k===tg}"><img class="gimg" src="${GIMG[g.label]}" alt="" width="48" height="48"><span><b>${g.label}</b><small data-c="${k}">&nbsp;</small></span></button>`).join('')}</div>
- <section class="card"><div class="toolbar"><h3 id="tt" style="margin:0"></h3><a class="btn sm" href="#/register">สมัครทีมแข่ง (ฟรี)</a></div>
-  <div id="teamlist" style="margin-top:10px"></div></section></main></div>`}
-
-async function renderTeams(){
- const k=tg,g=GAMES[k];
- document.querySelectorAll('#gpicker .gcard').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.g===k)));
- $('#tt').textContent='ทีมที่สมัคร – '+g.label;
- $('#teamlist').innerHTML='<p class="hint">กำลังโหลด...</p>';
- try{
-  const all=await teamsDB.list();
-  if(!$('#teamlist'))return;
-  Object.keys(GAMES).forEach(x=>{const c=document.querySelector(`[data-c="${x}"]`);if(c)c.textContent='ทีมที่สมัคร '+all.filter(t=>t.game===x).length+' ทีม'});
-  if(k!==tg)return;
-  const l=all.filter(t=>t.game===k);
-  const isA=user.role==='admin',note=isA&&sbOn()&&!adm.get()?'<p class="hint" style="margin-bottom:8px">ต้องเข้าสู่ระบบ Supabase ที่หน้าแอดมินก่อน จึงจะลบทีมได้</p>':'';
-  $('#teamlist').innerHTML=l.length?note+l.map((t,i)=>{const d=isA&&t.id!=null;return `<div class="row" style="grid-template-columns:44px 1fr${d?' auto':''}">${teamAv(t,g)}<div><b>${he(t.name)}</b><small>ทีมที่ ${i+1}</small></div>${d?`<button class="btn ghost sm" data-del="${t.id}" aria-label="ลบทีม ${he(t.name)}">ลบ</button>`:''}</div>`}).join(''):'<p class="hint">ยังไม่มีทีมสมัครในเกมนี้</p>';
- }catch(_){if($('#teamlist'))$('#teamlist').innerHTML='<p class="hint">โหลดรายชื่อทีมไม่สำเร็จ ลองใหม่อีกครั้ง</p>'}
-}
-
-function tournament(){return `<div class="app">${nav('home')}<main>
- ${head('Weekly Legends Bowl','Valorant · 20-21 พ.ย. · ทีมเดี่ยว')}
- <div class="banner"><img class="gimg" src="${GIMG['Valorant']}" alt="Valorant" width="64" height="64" style="margin-right:14px;width:64px;height:64px"><div><b>Weekly Legends Bowl</b><span>เปิดรับสมัคร</span></div></div>
- <div class="grid g-main">
-  <div style="display:grid;gap:16px;align-content:start">
-   <section class="card"><h3>สถิติสด</h3><div class="live">
-    <div><small>เงินรางวัลปัจจุบัน</small><br><b>${fmt(tournaments[0].prize)}</b></div>
-    <div><small>ผู้เข้าร่วม</small><br><b>0/64</b></div>
-    <div><small>อันดับของคุณ</small><br><b>-</b></div></div></section>
-   <section class="card"><h3>ตารางผู้เข้าแข่ง</h3><table class="tbl"><tr><th>#</th><th>ผู้เล่น</th><th>แต้ม</th><th>ชนะ</th></tr>
-    ${ranks.slice(0,5).map((r,i)=>`<tr><td>${i+1}</td><td>${r[0]}</td><td class="up">${r[1]}</td><td>0</td></tr>`).join('')}</table></section>
-   <section class="card"><h3>รายละเอียด</h3><p style="color:var(--mute);line-height:1.6">แข่งแบบเดี่ยว ระบบ Bo3 ผู้ชนะแต่ละคู่ได้ไปต่อ รอบชิงชนะเลิศแข่งวันที่ 21 พ.ย. เวลา 20:00 น. ผู้เล่นต้องเข้าห้องก่อนเริ่ม 15 นาที</p></section>
-  </div>
-  <aside class="card" style="align-self:start"><h3>เงินรางวัล</h3>${prizes.map(p=>`<div class="pt"><span>${p[0]}</span><b class="up">${fmt(p[1])}</b></div>`).join('')}
-   <h3 style="margin-top:18px">ลงทะเบียน</h3><div class="pt"><span>ค่าสมัคร</span><b class="up">ฟรี</b></div>
-   <button class="btn" style="width:100%;margin-top:12px" onclick="location.hash='#/register'">สมัครฟรี</button></aside>
- </div></main></div>`}
-
-/* ===== สมัครทีม + Discord Webhook ===== */
-const WEBHOOK_URL='https://discord.com/api/webhooks/1572172800213389454/xSrnyhRe_T3OfpFPMNP8KXAUL7Zoc_ygW0b9SGQ9bk6XAjAUP2okGHwrzzwP8U6W8ECM'; // <- วาง URL เว็บฮุกตรงนี้
-const GAMES={
- val:{label:'Valorant',icon:'🎯',color:0xff4655,main:5,sub:1},
- rov:{label:'ROV',icon:'⚔️',color:0x3b82f6,main:5,sub:2},
- ff:{label:'Free Fire',icon:'🔥',color:0xf97316,main:4,sub:1},
- efb:{label:'E-football',icon:'⚽',color:0x22c55e,main:1,sub:0}
-};
-const esc=v=>String(v).trim().slice(0,100).replace(/[*_`~|>\\]/g,'\\$&');
-const hookReady=()=>!WEBHOOK_URL.startsWith('PASTE');
-async function sendHook(body,blob){
- let opt;
- if(blob){const fd=new FormData();fd.append('payload_json',JSON.stringify(body));fd.append('files[0]',blob,'icon.jpg');opt={method:'POST',body:fd}}
- else opt={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
- const res=await fetch(WEBHOOK_URL,opt);
- if(!res.ok)throw new Error(res.status);
-}
-
-let teamIcon=null; // {blob,dataUrl}
-const PH="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%231e2126'/%3E%3C/svg%3E";
-function resizeIcon(file){return new Promise((res,rej)=>{
- const url=URL.createObjectURL(file),img=new Image();
- img.onload=()=>{
-  const S=128,c=document.createElement('canvas');c.width=c.height=S;
-  const x=c.getContext('2d'),m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=(img.height-m)/2;
-  x.fillStyle='#1e2126';x.fillRect(0,0,S,S);x.drawImage(img,sx,sy,m,m,0,0,S,S);
-  URL.revokeObjectURL(url);
-  c.toBlob(b=>b?res({blob:b,dataUrl:c.toDataURL('image/jpeg',0.82)}):rej(new Error('blob')),'image/jpeg',0.82);
- };
- img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('img'))};
- img.src=url;
-})}
-function updIcon(){
- const g=GAMES[$('#game').value];
- $('#iconprev').src=teamIcon?teamIcon.dataUrl:(g?GIMG[g.label]:PH);
- $('#iconclear').style.display=teamIcon?'':'none';
-}
-async function onIcon(e){
- const f=e.target.files[0];
- if(!f){teamIcon=null;updIcon();return}
- if(!/^image\/(png|jpeg|webp|gif)$/.test(f.type)||f.size>5*1024*1024){e.target.value='';teamIcon=null;updIcon();return toast('ใช้ไฟล์ภาพ PNG/JPG/WEBP/GIF ขนาดไม่เกิน 5MB')}
- try{teamIcon=await resizeIcon(f)}catch(_){teamIcon=null;e.target.value='';toast('อ่านรูปไม่สำเร็จ ลองรูปอื่น')}
- updIcon();
-}
-
-function registerPage(){return `<div class="app">${nav('reg')}<main>
- ${head('สมัครทีม','กรอกข้อมูลทีม แล้วระบบจะส่งใบสมัครให้ผู้จัดทาง Discord')}
- <form class="form card" id="regform">
-  <p class="hint">สมัครในชื่อบัญชี: <b style="color:var(--text)">${user.name}</b></p>
-  <label>ชื่อทีม<input name="team" required maxlength="40" placeholder="เช่น Hardcore Legends"></label>
-  <div class="iconpick"><img id="iconprev" class="gimg" width="64" height="64" alt="ไอคอนทีม" src="${PH}">
-   <div style="display:grid;gap:6px;min-width:0"><label>ไอคอนทีม (ไม่ใส่ก็ได้)<input type="file" id="iconfile" accept="image/png,image/jpeg,image/webp,image/gif"></label>
-   <span class="hint">ถ้าไม่ใส่ จะใช้รูปเกมที่เลือกเป็นไอคอนแทน</span>
-   <button type="button" class="btn ghost sm" id="iconclear" style="display:none;width:max-content">ลบรูป</button></div></div>
-  <label>ชื่อจริง<input name="real" required maxlength="60" placeholder="ชื่อ-นามสกุล"></label>
-  <label>เลือกเกม<select name="game" id="game" required>
-   <option value="">-- เลือกเกม --</option>
-   ${Object.entries(GAMES).map(([k,g])=>`<option value="${k}">${g.label}</option>`).join('')}
-  </select></label>
-  <div id="players"><p class="hint">เลือกเกมเพื่อกรอกรายชื่อผู้เล่น</p></div>
-  <button class="btn" type="submit" id="regbtn">สมัคร</button>
- </form></main></div>`}
-
-function renderPlayers(k){
- const g=GAMES[k],box=$('#players');
- if(!g){box.innerHTML='<p class="hint">เลือกเกมเพื่อกรอกรายชื่อผู้เล่น</p>';return}
- let h=`<div class="gpick"><img class="gimg" src="${GIMG[g.label]}" alt="" width="48" height="48"><b>${g.label}</b></div><fieldset><legend>ผู้เล่นหลัก ${g.main} คน</legend>`;
- for(let i=1;i<=g.main;i++)h+=`<input data-k="main" required maxlength="40" placeholder="ชื่อผู้เล่นคนที่ ${i}" aria-label="ผู้เล่นคนที่ ${i}">`;
- h+='</fieldset>';
- if(g.sub){h+=`<fieldset><legend>ตัวสำรอง ${g.sub} คน (ไม่ใส่ก็ได้)</legend>`;
-  for(let i=1;i<=g.sub;i++)h+=`<input data-k="sub" maxlength="40" placeholder="ชื่อตัวสำรองคนที่ ${i}" aria-label="ตัวสำรองคนที่ ${i}">`;
-  h+='</fieldset>'}
- box.innerHTML=h;
-}
-
-async function submitReg(e){
- e.preventDefault();
- if(user.role==='guest'){toast('กรุณาเข้าสู่ระบบก่อนสมัครทีม');location.hash='#/login';return}
- const f=e.target,g=GAMES[f.game.value];
- if(!g)return toast('กรุณาเลือกเกม');
- if(!hookReady())return toast('ยังไม่ได้ตั้งค่า Webhook ในไฟล์ index.html');
- const last=+store.get('lastReg',0);
- if(Date.now()-last<30000)return toast('ส่งบ่อยเกินไป รอสักครู่แล้วลองใหม่');
- const teamName=f.team.value.trim().slice(0,40),gkey=f.game.value,icon=teamIcon;
- try{const all=await teamsDB.list();if(all.some(t=>t.game===gkey&&t.name.toLowerCase()===teamName.toLowerCase()))return toast('ชื่อทีมนี้ถูกใช้แล้วในเกมนี้')}catch(_){}
- const val=k=>[...document.querySelectorAll(`#players [data-k="${k}"]`)].map(i=>esc(i.value)).filter(x=>x);
- const main=val('main'),sub=val('sub');
- const list=(a,ic)=>a.length?a.map((n,i)=>`${ic} \`${i+1}\`  **${n}**`).join('\n'):'—';
- const body={
-  username:'Rankline • ระบบสมัครทีม',
-  allowed_mentions:{parse:[]},
-  embeds:[{
-   author:{name:'ใบสมัครทีมใหม่'},
-   title:`${g.icon}  ${esc(f.team.value)}`,
-   description:`**${g.label}** • มีทีมใหม่ส่งใบสมัครเข้ามา`,
-   color:g.color,
-   ...(icon?{thumbnail:{url:'attachment://icon.jpg'}}:{}),
-   fields:[
-    {name:'👤 ผู้สมัคร',value:`${esc(f.real.value)}\nบัญชี: \`${user.name}\``,inline:true},
-    {name:'🎮 เกม',value:g.label,inline:true},
-    {name:'👥 จำนวน',value:`${main.length} คน`+(g.sub?` + สำรอง ${sub.length}`:''),inline:true},
-    {name:'⭐ ผู้เล่นหลัก',value:list(main,'🔹')},
-    ...(g.sub?[{name:'🔄 ตัวสำรอง',value:list(sub,'▫️')}]:[])
-   ],
-   footer:{text:'Rankline • ระบบสมัครทีม'},
-   timestamp:new Date().toISOString()
-  }]
- };
- const btn=$('#regbtn');btn.disabled=true;btn.textContent='กำลังส่ง...';
- try{
-  await sendHook(body,icon&&icon.blob);
-  store.set('lastReg',Date.now());
-  let saved=true;try{await teamsDB.add(icon?{game:gkey,name:teamName,icon:icon.dataUrl}:{game:gkey,name:teamName})}catch(_){saved=false}
-  toast(saved?'สมัครสำเร็จ! ส่งข้อมูลให้ผู้จัดแล้ว':'ส่งใบสมัครแล้ว แต่บันทึกรายชื่อทีมไม่สำเร็จ');
-  f.reset();renderPlayers('');teamIcon=null;updIcon();
- }catch(err){
-  toast('ส่งไม่สำเร็จ ตรวจสอบ Webhook แล้วลองใหม่');
- }finally{btn.disabled=false;btn.textContent='สมัคร'}
-}
-
-/* ===== แอดมิน ===== */
-function adminPage(){const ok=hookReady(),a=adm.get(),th=document.documentElement.dataset.theme||'default';return `<div class="app">${nav('admin')}<main>
- ${head('แอดมิน','เข้าสู่ระบบเป็น '+user.name)}
- <section class="card" style="display:grid;gap:12px"><h3>เข้าสู่ระบบจัดการฐานข้อมูล (Supabase)</h3>
- ${a?`<p class="hint">สถานะ: <b class="up">เข้าสู่ระบบแล้ว</b> ลบทีมได้ที่หน้า <a href="#/teams" style="color:var(--lime)">ทีม</a> และเปลี่ยนธีมให้ทุกคนเห็นได้</p><button class="btn ghost sm" style="width:max-content" onclick="sbLogout()">ออกจากระบบ Supabase</button>`:`<form id="sbform" style="display:grid;gap:10px"><label>อีเมลแอดมิน Supabase<input type="email" name="sbemail" required autocomplete="off"></label><label>รหัสผ่าน Supabase<input type="password" name="sbpw" required autocomplete="off"></label><button class="btn" type="submit">เข้าสู่ระบบ</button></form><p class="hint">ใช้บัญชีที่สร้างใน Supabase (Authentication → Users) ไม่ใช่รหัสแอดมินของเว็บ</p>`}
- </section>
- <section class="card"><h3>ธีมเว็บไซต์</h3>
-  <div class="tabs"><button data-themebtn="default" class="${th==='default'?'on':''}" onclick="setTheme('default')">ปกติ</button><button data-themebtn="xmas" class="${th==='xmas'?'on':''}" onclick="setTheme('xmas')">🎄 คริสต์มาส</button></div>
-  <p class="hint">กดแล้วเปลี่ยนทันที และบันทึกให้ผู้เข้าชมทุกคนเห็น (ต้องเข้าสู่ระบบ Supabase ด้านบนก่อน) กดกลับเป็น "ปกติ" ได้ทุกเมื่อ</p></section>
- <form class="card" id="cfgform" style="display:grid;gap:14px">
-  <h3>เงินรางวัล</h3>
-  <div style="overflow-x:auto"><table class="tbl"><tr><th>ทัวร์นาเมนต์</th><th>เงินรางวัล ($)</th></tr>
-  ${tournaments.map(t=>`<tr><td>${t.name}</td>
-   <td><input style="min-width:110px" type="number" min="0" step="0.01" name="prize${t.id}" value="${t.prize}" aria-label="เงินรางวัล ${t.name}"></td></tr>`).join('')}</table></div>
-  <h3>เงินรางวัลแต่ละอันดับ (Weekly Legends Bowl)</h3>
-  <div class="grid g3">${prizes.map((p,i)=>`<label>${p[0]}<input type="number" min="0" step="0.01" name="pz${i}" value="${p[1]}"></label>`).join('')}</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-   <button class="btn" type="submit">บันทึก</button>
-   <button class="btn ghost" type="button" onclick="copyCfg()">คัดลอกค่าสำหรับวางในไฟล์</button></div>
-  <p class="hint">บันทึกแล้วจะเห็นผลในเบราว์เซอร์นี้ทันที ผู้เข้าชมคนอื่นจะเห็นเมื่อนำค่าที่คัดลอกไปวางแทนบรรทัด <b>const CFG</b> ในไฟล์ index.html แล้วอัปโหลดขึ้น GitHub</p>
- </form>
- <section class="card"><h3>เว็บฮุก Discord</h3>
-  <p class="hint" style="margin-bottom:12px">สถานะ: <b class="${ok?'up':'down'}">${ok?'ตั้งค่าแล้ว':'ยังไม่ได้ตั้งค่า'}</b></p>
-  <button class="btn" onclick="testHook()">ส่งข้อความทดสอบ</button></section></main></div>`}
-function readCfg(){
- const f=$('#cfgform'),c={t:{},pz:[]};
- tournaments.forEach(t=>{c.t[t.id]={prize:Math.max(0,+f['prize'+t.id].value||0)}});
- prizes.forEach((_,i)=>c.pz.push(Math.max(0,+f['pz'+i].value||0)));
- return c;
-}
-function saveCfg(e){
- e.preventDefault();
- if(user.role!=='admin')return toast('เฉพาะแอดมินเท่านั้น');
- store.set('cfg',readCfg());applyCfg();toast('บันทึกแล้ว');
-}
-async function copyCfg(){
- if(user.role!=='admin')return toast('เฉพาะแอดมินเท่านั้น');
- const txt='const CFG='+JSON.stringify(readCfg())+';';
- try{await navigator.clipboard.writeText(txt);toast('คัดลอกแล้ว นำไปวางแทนบรรทัด const CFG ในไฟล์')}
- catch(_){prompt('คัดลอกข้อความนี้',txt)}
-}
-async function testHook(){
- if(!hookReady())return toast('ยังไม่ได้ตั้งค่า Webhook ในไฟล์ index.html');
- try{await sendHook({username:'Rankline • ระบบสมัครทีม',allowed_mentions:{parse:[]},embeds:[{title:'✅ เชื่อมต่อ Webhook สำเร็จ',description:'ข้อความทดสอบจากหน้าแอดมิน',color:0xc6f432,footer:{text:'Rankline • ระบบสมัครทีม'},timestamp:new Date().toISOString()}]});toast('ส่งข้อความทดสอบแล้ว')}
- catch(_){toast('ส่งไม่สำเร็จ ตรวจสอบ Webhook')}
-}
-
-/* ===== แอดมิน: ล็อกอิน Supabase / ธีม / ลบทีม ===== */
-const adm={
- get(){try{const v=JSON.parse(sessionStorage.getItem('sbadm')||'null');return v&&v.exp>Date.now()?v:null}catch(_){return null}},
- set(v){try{v?sessionStorage.setItem('sbadm',JSON.stringify(v)):sessionStorage.removeItem('sbadm')}catch(_){}}
-};
-const admHdr=()=>{const a=adm.get();return a?{apikey:SB.key,Authorization:'Bearer '+a.token,'Content-Type':'application/json'}:null};
-const sbBase=()=>SB.url.replace(/\/+$/,'');
-async function sbLogin(e){
- e.preventDefault();const f=e.target;
- if(!sbOn())return toast('ยังไม่ได้ตั้งค่า Supabase ในไฟล์');
- try{
-  const r=await fetch(sbBase()+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json'},body:JSON.stringify({email:f.sbemail.value.trim(),password:f.sbpw.value})});
-  const d=await r.json();
-  if(!r.ok||!d.access_token)throw new Error('login');
-  adm.set({token:d.access_token,exp:Date.now()+(d.expires_in||3600)*1000-30000});
-  toast('เข้าสู่ระบบ Supabase แล้ว');route();
- }catch(_){toast('อีเมลหรือรหัสผ่าน Supabase ไม่ถูกต้อง')}
-}
-function sbLogout(){adm.set(null);toast('ออกจากระบบ Supabase แล้ว');route()}
-async function delTeam(id){
- if(user.role!=='admin')return toast('เฉพาะแอดมินเท่านั้น');
- try{await teamsDB.remove(id);toast('ลบทีมแล้ว');renderTeams()}
- catch(err){
-  const m=String(err&&err.message);
-  toast(m==='noauth'||m==='expired'?'ต้องเข้าสู่ระบบ Supabase (หน้าแอดมิน) ก่อนลบทีม':m==='denied'?'ลบไม่สำเร็จ: บัญชีนี้ไม่มีสิทธิ์ลบ ตรวจสอบนโยบายใน Supabase':'ลบไม่สำเร็จ ลองใหม่อีกครั้ง');
- }
-}
-function applyTheme(n){
- const t=n==='xmas'?'xmas':'default';
- document.documentElement.dataset.theme=t;
- store.set('theme',t);
- document.querySelectorAll('[data-themebtn]').forEach(b=>b.classList.toggle('on',b.dataset.themebtn===t));
-}
-async function loadTheme(){
- if(!sbOn())return;
- try{
-  const r=await fetch(sbBase()+'/rest/v1/settings?select=value&key=eq.theme',{headers:sbHdr()});
-  if(!r.ok)return;
-  const d=await r.json();applyTheme(d.length?d[0].value:'default');
- }catch(_){}
-}
-async function setTheme(name){
- if(user.role!=='admin')return toast('เฉพาะแอดมินเท่านั้น');
- applyTheme(name);
- if(!sbOn())return toast('เปลี่ยนธีมในเบราว์เซอร์นี้แล้ว (ยังไม่ได้ตั้งค่า Supabase)');
- const h=admHdr();
- if(!h)return toast('ดูตัวอย่างในเครื่องนี้เท่านั้น เข้าสู่ระบบ Supabase ก่อนเพื่อให้ทุกคนเห็น');
- try{
-  const r=await fetch(sbBase()+'/rest/v1/settings?on_conflict=key',{method:'POST',headers:{...h,Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify({key:'theme',value:name})});
-  if(!r.ok)throw new Error(r.status);
-  const d=await r.json();if(!d.length)throw new Error('denied');
-  toast(name==='xmas'?'เปิดธีมคริสต์มาสให้ทุกคนแล้ว':'กลับเป็นธีมปกติให้ทุกคนแล้ว');
- }catch(_){toast('บันทึกธีมไม่สำเร็จ ตรวจสอบตาราง settings และนโยบายใน Supabase')}
-}
-
-function route(){
- loadUser();applyCfg();
- const h=location.hash||'#/';const r=$('#root');
- if(h==='#/logout'){store.set('session',null);toast('ออกจากระบบแล้ว');location.hash='#/login';return}
- if((h==='#/register'||h==='#/admin')&&user.role==='guest'){toast('กรุณาเข้าสู่ระบบหรือสมัครสมาชิกก่อน');location.hash='#/login';return}
- if(h==='#/admin'&&user.role!=='admin'){toast('เฉพาะแอดมินเท่านั้น');location.hash='#/';return}
- if(h==='#/signup'){r.innerHTML=signup()}
- else if(h==='#/login'){r.innerHTML=loginPage()}
- else if(h==='#/teams'){r.innerHTML=teamsPage();$('#gpicker').onclick=e=>{const b=e.target.closest('.gcard');if(!b)return;tg=b.dataset.g;renderTeams()};$('#teamlist').onclick=e=>{const b=e.target.closest('[data-del]');if(b)delTeam(Number(b.dataset.del))};renderTeams()}
- else if(h==='#/tournament'){r.innerHTML=tournament()}
- else if(h==='#/register'){teamIcon=null;r.innerHTML=registerPage();$('#game').onchange=e=>{renderPlayers(e.target.value);updIcon()};$('#iconfile').onchange=onIcon;$('#iconclear').onclick=()=>{teamIcon=null;$('#iconfile').value='';updIcon()};$('#regform').onsubmit=submitReg}
- else if(h==='#/admin'){r.innerHTML=adminPage();$('#cfgform').onsubmit=saveCfg;if($('#sbform'))$('#sbform').onsubmit=sbLogin}
- else{r.innerHTML=home();renderList('ทั้งหมด');
-  $('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
-   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));renderList(b.dataset.g)}}
- scrollTo(0,0);
-}
-applyTheme(store.get('theme','default'));addEventListener('hashchange',route);route();loadTheme();
-</script>
-</body>
-</html>
+const $=q=>document.querySelector(q),c=$('#c'),mn=$('#mn'),dl=$('#dl'),ts=$('#ts');
+let g=c.getContext('2d'),fr=0,lt=0,cx=0,cy=0,CH=[],S,tmo,K={l:0,r:0,u:0,d:0},sn=[];
+const W=32,H=24,T=16,VW=20,VH=12,SK='bsf1',DX=[0,-1,1,0],DY=[1,0,0,-1];
+const t=a=>a[S.lg],pick=a=>a[Math.random()*a.length|0];
+const R=(x,y,w,h,f)=>{g.fillStyle=f;g.fillRect(Math.round(x),Math.round(y),w,h)};
+// ---- data ----  [th,en,...]
+const CR=[['ผักบุ้ง','Morning glory',5,12,15,'#3fbf5a'],['พริก','Chili',10,28,30,'#e0282e'],['กะเพรา','Holy basil',15,42,45,'#2f7d3a'],['ฟักทอง','Pumpkin',30,95,80,'#f08a24'],['พอยน์เซเทีย','Poinsettia',25,70,60,'#d1121f']];
+const BD=[['เพิงขายของ','Market stall',150,20,1,2],['บ้านไม้','Wood house',400,0,3,2],['เรือนไทย','Thai house',1500,40,12,2],['ต้นคริสต์มาส','Xmas tree',80,0,2,1]];
+const VE=[['ตุ๊กตุ๊ก','Tuk-tuk',600,1.4,'#f2c14e'],['กระบะ','Pickup',2500,1.8,'#c8322f'],['เลื่อนซานต้า','Sleigh',5000,2.3,'#8b2a2a']];
+const HT=[['ไม่ใส่','None',0],['หมวกซานต้า','Santa hat',120],['งอบ','Straw hat',60],['เขากวาง','Antlers',150],['หมวกไหมพรม','Beanie',80],['มงกุฎ','Crown',500]];
+const SH=[['เสื้อขาว','White',0,'#e8ece8'],['เสื้อแดงคริสต์มาส','Xmas red',40,'#c8322f'],['เสื้อเขียว','Green',40,'#2f8f4a'],['ม่อฮ่อม','Indigo',50,'#2b3f7a'],['ชุดไทยทอง','Gold',200,'#e0a82e'],['เสื้อสก็อต','Tartan',70,'#8b2a2a']];
+const AC=[['ไม่ใส่','None',0],['ผ้าพันคอ','Scarf',50],['แว่นตา','Glasses',40],['สายไฟกระพริบ','Lights',90]];
+const HC=['#2a1c14','#6b3b1c','#e0b040','#c8322f','#e8e8e8'],SKN=['#f1c9a0','#d9a577','#a9744a','#6e4529'];
+const TN={s:['เมล็ด','Seeds'],b:['สร้าง','Build'],w:['แต่งตัว','Wear'],v:['รถ','Cars'],i:['กระเป๋า','Bag'],o:['ตั้งค่า','Settings']};
+const NP=[
+{id:0,n:['ป้าแมว','Aunt Maew'],x:11,y:8,o:{k:'#d9a577',hs:2,hc:'#e8e8e8',s:'#e0589a',h:0,a:0}},
+{id:1,n:['ผู้ใหญ่สมชาย','Headman Somchai'],x:20,y:8,o:{k:'#a9744a',hs:3,hc:'#2a1c14',s:'#2b3f7a',h:0,a:2}},
+{id:2,n:['ท่าน สส.ชูชาติ','MP Chuchart'],x:19,y:12,o:{k:'#d9a577',hs:0,hc:'#2a1c14',s:'#e8ece8',h:0,a:2}},
+{id:3,n:['ลุงตุ๊ก','Uncle Tuk'],x:8,y:13,o:{k:'#6e4529',hs:3,hc:'#e8e8e8',s:'#f2c14e',h:2,a:0}},
+{id:4,n:['ซานตี้','Santy'],x:17,y:8,o:{k:'#f1c9a0',hs:1,hc:'#e8e8e8',s:'#c8322f',h:1,a:0}}];
+const GS=[['ได้ยินว่าผู้ใหญ่สั่งป้ายไวนิลใหม่ ทั้งที่ถนนยังเป็นหลุม','Heard the headman ordered a new banner while the road is still full of potholes.'],['สส.มาทีไร แจกถุงยังชีพทุกที แต่ก่อนเลือกตั้งนะ','Our MP only shows up with gift bags right before elections.'],['ตลาดคึกคักเพราะลูกสาวป้าไลฟ์ขายของ','The market is busy since my daughter started livestream sales.']];
+const NW=[['สส.บอกจะมีรถไฟฟ้ามาถึงหน้าหมู่บ้าน ลุงรอมาสามสมัยแล้ว','MP says a metro line is coming to our village. I have waited three terms.'],['นโยบายใหม่ แจกเงินคนละพัน แต่ต้องไปรับที่อำเภอ ไกลกว่าเงินที่ได้อีก','New policy: 1,000 baht each, but collecting it costs more in fuel.'],['ถ้าฝนตกน้ำท่วม ผู้ใหญ่จะมาถ่ายรูปกับกระสอบทราย ทุกปีเลย','When it floods, the headman shows up for a sandbag photo. Every year.']];
+// ---- state ----
+function newS(){let r=7;const rn=()=>(r=r*16807%2147483647)/2147483647,mp=[];
+for(let y=0;y<H;y++)for(let x=0;x<W;x++){let v=0;if(x<1||y<1||x>W-2||y>H-2||(rn()<.07&&Math.hypot(x-15,y-12)>5))v=4;
+if((y==9&&x>2&&x<29)||(x==15&&y>5&&y<19))v=1;if(x>=23&&x<=27&&y>=14&&y<=17)v=2;mp.push(v)}
+mp[6*W+17]=5;
+return{m:200,p:0,t:0,day:0,g:-1,hd:0,lg:/^th/.test(navigator.language)?0:1,sel:0,bd:-1,tab:'s',x:14,y:12,dr:0,ve:-1,ov:[],c:{},i:{},b:[[3,17,6]],mp,o:{h:[0],s:[0],a:[0]},w:{h:0,s:0,a:0,hs:0,hc:0,k:0}}}
+try{S=Object.assign(newS(),JSON.parse(localStorage.getItem(SK)))}catch(e){S=newS()}
+const sav=()=>{try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}};
+NP.forEach(n=>{n.hx=n.x;n.hy=n.y;n.dr=0;n.tm=0;n.vx=n.vy=0});
+// ---- ui helpers ----
+function tst(a){ts.textContent=t(a);ts.style.opacity=1;clearTimeout(tmo);tmo=setTimeout(()=>ts.style.opacity=0,2600);hud()}
+function hud(){const d=20+S.day;$('#hm').textContent='฿'+S.m;$('#hp').textContent='★'+S.p+(S.hd?' '+t(['ผู้ใหญ่บ้าน','Headman']):'');$('#hd').textContent=d<32?t(['ธ.ค. ','Dec '])+d:t(['ม.ค. ','Jan '])+(d-31);
+$('#hn').textContent=t(['WASD/ลูกศร เดิน · E/Space ทำงาน · M เมนู','WASD/Arrows move · E/Space act · M menu'])}
+const P=()=>!mn.hidden||!dl.hidden;
+function Cm(){mn.hidden=1}function cl(){dl.hidden=1}
+function Lg(){S.lg^=1;document.documentElement.lang=S.lg?'en':'th';hud();if(!mn.hidden)M();sav()}
+function show(nm,tx,ch){dl.hidden=0;CH=ch.map(x=>x[1]);dl.innerHTML='<b>'+t(nm)+'</b><p>'+t(tx)+'</p>'+ch.map((x,i)=>'<button onclick="CH['+i+']()">'+t(x[0])+'</button>').join('')+'<button onclick="cl()">✕</button>'}
+function sell(){let a=0;for(const k in S.i)a+=S.i[k]*CR[k][3];S.i={};S.m+=a;sav();return a?['ขายได้ ฿'+a,'Sold for ฿'+a]:['ไม่มีผักให้ขาย','Nothing to sell']}
+function spend(n,p,m){if(S.m<n)return['เงินไม่พอ','Not enough money'];S.m-=n;S.p+=p;return m}
+function dlg(id,msg){const n=NP[id];let tx=msg,ch=[];const A=(l,f)=>ch.push([l,()=>{const r=f();dlg(id,r);hud();sav()}]);
+if(id==0){tx=tx||['ผักสดๆ ป้ารับซื้อหมดจ้ะ! หน้าคริสต์มาสคนซื้อเยอะ','Fresh veg? I buy it all, dear! Xmas shoppers are everywhere.'];
+A(['ฟังซุบซิบ (+1★)','Hear gossip (+1★)'],()=>{S.p++;return pick(GS)});A(['ขายผักทั้งหมด','Sell all veg'],sell)}
+if(id==1){if(S.hd){tx=tx||['ท่านผู้ใหญ่! งบหมู่บ้านเข้า ฿30 ทุกวัน','Headman! The village budget pays you ฿30 a day.'];
+A(['จัดประชุมหมู่บ้าน (฿50 +3★)','Hold a meeting (฿50 +3★)'],()=>spend(50,3,['ประชุมเสร็จ มีขนมแจกด้วย','Meeting done, snacks served.']))}
+else{tx=tx||['อยากเป็นผู้ใหญ่บ้านเหรอ? ต้องมีฐานเสียง 60★ ขึ้นไป','Want my job? You need at least 60★ first.'];
+if(S.p>=60)A(['สมัครผู้ใหญ่บ้าน (฿500)','Run for headman (฿500)'],()=>{if(S.m<500)return['เงินไม่พอค่าป้ายหาเสียง','Not enough for campaign signs'];S.m-=500;
+if(S.p+Math.random()*40>=80){S.hd=1;S.p+=10;return['ชนะเลือกตั้ง! เป็นผู้ใหญ่บ้านแล้ว 🎉','You won! New headman 🎉']}S.p=Math.max(0,S.p-10);return['แพ้ไปนิดเดียว ชาวบ้านเงียบๆ...','Lost narrowly. Villagers are quiet...']});
+A(['ช่วยซ่อมถนน (฿100 +5★)','Fix the road (฿100 +5★)'],()=>spend(100,5,['ถนนเรียบขึ้นแล้ว ชาวบ้านชื่นชม','Smoother road. Villagers approve.']))}}
+if(id==2){tx=tx||['พี่น้องครับ ผมสัญญาว่าจะ... (ลืมไปแล้ว) รับซองขาวไหม?','Friends! I promise to... (forgot) — care for a white envelope?'];
+A(['รับซอง ฿300 (-8★)','Take envelope ฿300 (-8★)'],()=>{S.m+=300;S.p=Math.max(0,S.p-8);return['ขอบคุณครับ เงียบๆ นะ... ชาวบ้านเริ่มซุบซิบ','Thanks, keep it quiet... villagers are whispering.']});
+A(['ปฏิเสธ (+5★)','Decline (+5★)'],()=>{S.p+=5;return['ท่านเป็นคนมีหลักการ... น่าเสียดายจริงๆ','A man of principle... what a shame.']});
+A(['ขอจัดตลาดนัดคริสต์มาส (฿200 +6★)','Request Xmas market (฿200 +6★)'],()=>spend(200,6,['ได้เลยครับ ผมจะไปตัดริบบิ้นเปิดงาน','Certainly! I will come cut the ribbon.']))}
+if(id==3){tx=tx||pick(NW);A(['ฟังข่าวเมือง','Hear the news'],()=>pick(NW));A(['ดูรถ','See vehicles'],()=>{cl();M('v');return tx})}
+if(id==4){tx=tx||['โฮ่ โฮ่ โฮ่! สุขสันต์วันคริสต์มาส','Ho ho ho! Merry Christmas!'];
+if(S.g!==S.day)A(['รับของขวัญ','Take gift'],()=>{S.g=S.day;const a=S.day==5?500:50;S.m+=a;return['รับไปเลย ฿'+a+'!','Here, ฿'+a+'!']});else tx=['วันนี้รับไปแล้ว พรุ่งนี้มาใหม่นะ','Already got today’s gift. Come back tomorrow!']}
+show(n.n,tx||'',ch)}
+// ---- menu ----
+function M(k){S.tab=k||S.tab;mn.hidden=0;K.l=K.r=K.u=K.d=0;let h='<div class="tb">'+Object.keys(TN).map(x=>'<button class="'+(x==S.tab?'on':'')+'" onclick="M(\''+x+'\')">'+t(TN[x])+'</button>').join('')+'<button onclick="Cm()">✕</button></div>',T_=S.tab;
+if(T_=='s')h+=CR.map((r,i)=>`<button class="r ${S.sel==i?'on':''}" onclick="S.sel=${i};M()">${t(r)} · ฿${r[2]}→฿${r[3]} · ${r[4]}s</button>`).join('')+`<p>${t(['เลือกเมล็ด แล้วไถดิน (A) ที่หญ้า → ปลูก → เก็บเกี่ยว','Pick a seed. Face grass + A to till, A to plant, A to harvest.'])}</p>`;
+if(T_=='b')h+=BD.map((b,i)=>`<button class="r" onclick="Bp(${i})">${t(b)} · ฿${b[2]}${b[3]?' · +฿'+b[3]+t(['/วัน','/day']):''} · ★${b[4]}</button>`).join('');
+if(T_=='w'){h+=`<div style="display:flex;gap:10px;align-items:flex-start"><canvas id="pv" width="30" height="26" style="width:120px;height:104px;image-rendering:pixelated;background:#2b5a3a"></canvas><div><button class="o" onclick="Cy('hs',4)">${t(['ทรงผม','Hair'])}</button><button class="o" onclick="Cy('hc',5)">${t(['สีผม','Hair color'])}</button><button class="o" onclick="Cy('k',4)">${t(['สีผิว','Skin'])}</button></div></div>`;
+[['h',HT,['หมวก','Hat']],['s',SH,['เสื้อผ้า','Clothes']],['a',AC,['เครื่องประดับ','Extras']]].forEach(([s,L,n])=>{h+='<p>'+t(n)+'</p>'+L.map((it,i)=>`<button class="o ${S.w[s]==i?'on':''}" onclick="Wb('${s}',${i})">${t(it)} ${S.o[s].includes(i)?'✓':'฿'+it[2]}</button>`).join('')})}
+if(T_=='v')h+=VE.map((v,i)=>`<button class="r ${S.ve==i?'on':''}" onclick="Vb(${i})">${t(v)} · ${S.ov.includes(i)?'✓':'฿'+v[2]} · ×${v[3]}</button>`).join('')+`<button class="r" onclick="S.ve=-1;M()">${t(['เดินเท้า','On foot'])}</button>`;
+if(T_=='i'){const ks=Object.keys(S.i).filter(k=>S.i[k]>0);h+=ks.length?ks.map(k=>`<div>${t(CR[k])} ×${S.i[k]} (฿${CR[k][3]})</div>`).join('')+`<button class="r" onclick="tst(sell());M()">${t(['ขายทั้งหมด','Sell all'])}</button>`:`<p>${t(['ยังไม่มีผักในกระเป๋า','Your bag is empty'])}</p>`}
+if(T_=='o')h+=`<button class="r" onclick="Lg()">${t(['ภาษา: ไทย → English','Language: English → ไทย'])}</button><button class="r" onclick="sav();tst(['บันทึกแล้ว','Saved'])">${t(['บันทึกเกม','Save game'])}</button><button class="r" onclick="if(confirm('Reset?')){localStorage.removeItem(SK);location.reload()}">${t(['เริ่มใหม่','New game'])}</button><p>${t(['เกมบันทึกอัตโนมัติในเบราว์เซอร์นี้ · โหมดออนไลน์กับเพื่อนจะมาทีหลัง','Autosaves in this browser · co-op with friends comes later'])}</p>`;
+$('#mb').innerHTML=h;if(T_=='w')pv()}
+function pv(){const q=$('#pv').getContext('2d'),o=g;g=q;q.imageSmoothingEnabled=false;q.clearRect(0,0,30,26);ch(9,6,po(),0,0);g=o}
+function po(){const w=S.w;return{k:SKN[w.k],hs:w.hs,hc:HC[w.hc],s:SH[w.s][3],h:w.h,a:w.a}}
+function Cy(k,n){S.w[k]=(S.w[k]+1)%n;M()}
+function Wb(s,i){const L={h:HT,s:SH,a:AC}[s];if(!S.o[s].includes(i)){if(S.m<L[i][2])return tst(['เงินไม่พอ','Not enough money']);S.m-=L[i][2];S.o[s].push(i)}S.w[s]=i;hud();sav();M()}
+function Vb(i){if(!S.ov.includes(i)){if(S.m<VE[i][2])return tst(['เงินไม่พอ','Not enough money']);S.m-=VE[i][2];S.ov.push(i);S.p+=3}S.ve=i;hud();sav();M()}
+function Bp(i){S.bd=i;Cm();tst(['หันหน้าไปที่หญ้าว่าง แล้วกด A เพื่อวาง','Face empty grass and press A to place'])}
+function place(tx,ty){const b=BD[S.bd],z=b[5];
+for(let a=0;a<z;a++)for(let d=0;d<z;d++){const x=tx+a,y=ty+d;if(x<0||y<0||x>=W||y>=H||S.mp[y*W+x]!=0)return tst(['วางตรงนี้ไม่ได้','Cannot build here'])}
+const px=Math.floor(S.x+.5),py=Math.floor(S.y+.65);if(px>=tx&&px<tx+z&&py>=ty&&py<ty+z)return tst(['ถอยหลังก่อน','Step back first']);
+if(S.m<b[2])return tst(['เงินไม่พอ','Not enough money']);
+S.m-=b[2];S.p+=b[4];S.b.push([S.bd,tx,ty]);for(let a=0;a<z;a++)for(let d=0;d<z;d++)S.mp[(ty+d)*W+tx+a]=5;S.bd=-1;tst(['สร้างเสร็จ!','Built!']);sav()}
+// ---- actions ----
+const tgt=()=>[Math.floor(S.x+.5)+DX[S.dr],Math.floor(S.y+.65)+DY[S.dr]];
+function act(){if(P())return;
+const n=NP.find(n=>Math.hypot(n.x-S.x,n.y-S.y)<1.5);if(n){dlg(n.id);return}
+const[tx,ty]=tgt();if(tx<0||ty<0||tx>=W||ty>=H)return;
+if(S.bd>=0)return place(tx,ty);
+const i=ty*W+tx,v=S.mp[i],k=tx+','+ty;
+if(v==0){S.mp[i]=3;return}
+if(v==3){const cr=S.c[k];
+if(!cr){const p=CR[S.sel][2];if(S.m<p)return tst(['เงินไม่พอซื้อเมล็ด','Not enough money for seeds']);S.m-=p;S.c[k]={i:S.sel,t:S.t};hud();return}
+const d=CR[cr.i];if(S.t-cr.t>=d[4]){S.i[cr.i]=(S.i[cr.i]||0)+1;delete S.c[k];tst(['เก็บเกี่ยว '+d[0]+'!','Harvested '+d[1]+'!'])}else tst(['ยังไม่โต','Not ready yet'])}}
+function daily(){let a=S.hd?30:0;S.b.forEach(b=>a+=BD[b[0]][3]);S.m+=a;
+if(S.day==5)tst(['🎄 สุขสันต์วันคริสต์มาส! ไปรับของขวัญจากซานตี้','🎄 Merry Christmas! Visit Santy for a gift']);else if(a)tst(['รายได้วันนี้ ฿'+a,'Daily income ฿'+a]);sav()}
+// ---- world ----
+const solid=(x,y)=>{const a=Math.floor(x),b=Math.floor(y);if(a<0||b<0||a>=W||b>=H)return 1;const v=S.mp[b*W+a];return v==2||v==4||v==5};
+const blk=(x,y)=>solid(x+.2,y+.6)||solid(x+.8,y+.6)||solid(x+.2,y+.95)||solid(x+.8,y+.95);
+function up(dt){S.t+=dt;const nd=Math.floor(S.t/60);while(S.day<nd){S.day++;daily()}
+let dx=K.r-K.l,dy=K.d-K.u;
+if(dx||dy){const l=Math.hypot(dx,dy),sp=3*(S.ve>=0?VE[S.ve][3]:1)*dt;dx=dx/l*sp;dy=dy/l*sp;
+S.dr=Math.abs(dx)>Math.abs(dy)?(dx>0?2:1):(dy>0?0:3);
+if(!blk(S.x+dx,S.y))S.x+=dx;if(!blk(S.x,S.y+dy))S.y+=dy}
+S.mv=!!(dx||dy);
+NP.forEach(n=>{n.tm-=dt;if(n.tm<=0){n.tm=1+Math.random()*2;const d=pick([[0,0],[1,0],[-1,0],[0,1],[0,-1]]);n.vx=d[0];n.vy=d[1];if(d[0]||d[1])n.dr=d[1]>0?0:d[1]<0?3:d[0]<0?1:2}
+const nx=n.x+n.vx*dt,ny=n.y+n.vy*dt;if(!blk(nx,ny)&&Math.hypot(nx-n.hx,ny-n.hy)<3){n.x=nx;n.y=ny}else{n.vx=n.vy=0}});
+sn.forEach(f=>{f.y+=f.s*dt*18;f.x+=Math.sin(S.t+f.s*9)*dt*6;if(f.y>192){f.y=-2;f.x=Math.random()*320}});
+if(fr%15==0)hud()}
+// ---- drawing ----
+function tree(p,q,d){R(p+7,q+11,2,5,'#5a3a1e');R(p+2,q+8,12,4,'#1f6b34');R(p+4,q+4,8,5,'#25803d');R(p+6,q+1,4,4,'#1f6b34');R(p+5,q+4,3,1,'#fff');R(p+3,q+8,2,1,'#fff');
+if(d){R(p+7,q-2,2,2,'#f2c14e');R(p+5,q+6,1,1,'#f33');R(p+10,q+9,1,1,'#fd0');R(p+4,q+10,1,1,'#39f');R(p+8,q+4,1,1,'#f33')}}
+function rf(p,q,col,n,dw,w0){for(let k=0;k<n;k++){const w=w0+k*dw;R(p+16-w/2,q+2+k*2,w,2,col)}}
+function bld(b){const p=b[1]*T-cx,q=b[2]*T-cy,i=b[0],bl=fr>>5&1;
+if(i==3)return tree(p,q,1);
+if(i==0){R(p+1,q+14,30,16,'#b9824a');for(let k=0;k<5;k++)R(p+k*6+1,q+8,6,6,k%2?'#fff':'#c8322f');R(p+3,q+14,26,2,'#8f5e30');R(p+6,q+20,6,5,'#f08a24');R(p+14,q+20,6,5,'#e0282e');R(p+22,q+20,5,5,'#3fbf5a');return}
+if(i==1){rf(p,q,'#9b2f2a',7,4,4);R(p+14,q+2,4,2,'#fff');R(p+12,q+4,8,1,'#fff');R(p+4,q+14,24,16,'#d9a066');R(p+13,q+21,6,9,'#5a3a1e');R(p+6,q+19,5,5,'#ffe9a8');R(p+21,q+19,5,5,'#ffe9a8');for(let k=0;k<6;k++)R(p+3+k*5,q+13,2,2,(k+bl)%2?'#f2c14e':'#f33');return}
+rf(p,q,'#7a3b1e',7,4,2);R(p+15,q,2,3,'#f2c14e');R(p+5,q+13,22,1,'#f2c14e');R(p+6,q+14,20,9,'#b27a3c');R(p+8,q+16,4,4,'#ffe9a8');R(p+20,q+16,4,4,'#ffe9a8');R(p+7,q+23,2,7,'#5a3a1e');R(p+23,q+23,2,7,'#5a3a1e');R(p+14,q+23,4,2,'#8f5e30');R(p+14,q+13,4,1,'#fff')}
+function ch(x,y,o,dr,mv){const b=mv&&(fr>>3&1)?1:0;y-=b;
+R(x+3,y+11,2,4,'#2a2018');R(x+7,y+11,2,4,'#2a2018');R(x+2,y+6,8,6,o.s);R(x+1,y+7,1,4,o.k);R(x+10,y+7,1,4,o.k);R(x+3,y+1,6,6,o.k);
+R(x+3,y,6,o.hs==3?1:2,o.hc);if(o.hs==1){R(x+2,y,1,8,o.hc);R(x+9,y,1,8,o.hc)}if(o.hs==2)R(x+5,y-2,2,2,o.hc);
+if(dr==3)R(x+3,y,6,5,o.hc);else{const e=[4,3,6][dr==0?0:dr],f=dr==0?7:dr==1?5:8;R(x+e,y+3,1,1,'#222');R(x+f,y+3,1,1,'#222')}
+const h=o.h;
+if(h==1){R(x+2,y-2,8,3,'#c8322f');R(x+2,y+1,8,1,'#fff');R(x+9,y-3,2,2,'#fff')}
+if(h==2){R(x,y,12,1,'#d8b45a');R(x+2,y-2,8,2,'#e6c673');R(x+5,y-3,2,1,'#e6c673')}
+if(h==3){R(x+1,y-3,1,4,'#7a4a24');R(x+10,y-3,1,4,'#7a4a24');R(x,y-3,1,1,'#7a4a24');R(x+11,y-3,1,1,'#7a4a24')}
+if(h==4){R(x+3,y-1,6,3,'#2f8f4a');R(x+5,y-2,2,1,'#fff')}
+if(h==5){R(x+3,y-1,6,2,'#f2c14e');R(x+3,y-2,1,1,'#f2c14e');R(x+5,y-2,2,1,'#f2c14e');R(x+8,y-2,1,1,'#f2c14e')}
+if(o.a==1){R(x+2,y+6,8,2,'#c8322f');R(x+8,y+8,2,3,'#c8322f')}
+if(o.a==2&&dr!=3)R(x+3,y+3,6,1,'#111');
+if(o.a==3){const z=fr>>4&1;R(x+2,y+8,1,1,z?'#ff0':'#f33');R(x+4,y+9,1,1,z?'#f33':'#3f3');R(x+6,y+9,1,1,z?'#3f3':'#39f');R(x+8,y+8,1,1,z?'#39f':'#ff0')}}
+function tile(x,y){const v=S.mp[y*W+x],p=x*T-cx,q=y*T-cy;
+if(v==2){R(p,q,T,T,'#3b7bbf');R(p+3+((fr>>4)+x)%3*3,q+5,5,1,'#8fc3ee');return}
+R(p,q,T,T,v==1?'#c9b48a':v==3?'#6b4528':'#4f9a4a');
+if(v==0||v==5){if((x*7+y*13)%5==0)R(p+3,q+4,2,1,'#62b05a');if((x*11+y*7)%9==0)R(p+9,q+10,3,2,'#f4f8f4')}
+if(v==1&&(x*5+y*3)%4==0)R(p+4,q+8,2,1,'#b39c70');
+if(v==3)for(let i=3;i<T;i+=5)R(p+1,q+i,14,1,'#55361f');
+if(v==4)tree(p,q)}
+function draw(){cx=Math.max(0,Math.min(W*T-VW*T,Math.round(S.x*T+8-VW*T/2)));cy=Math.max(0,Math.min(H*T-VH*T,Math.round(S.y*T+8-VH*T/2)));
+const x0=cx/T|0,y0=cy/T|0;
+for(let y=y0;y<=y0+VH&&y<H;y++)for(let x=x0;x<=x0+VW&&x<W;x++)if(S.mp[y*W+x]!=4)tile(x,y);
+for(const k in S.c){const[x,y]=k.split(',').map(Number),cr=S.c[k],d=CR[cr.i],p=x*T-cx,q=y*T-cy,r=(S.t-cr.t)/d[4];
+if(r<.34)R(p+7,q+10,2,3,'#3fbf5a');else if(r<1){R(p+6,q+7,4,6,'#3fbf5a');R(p+4,q+9,2,2,'#2f8f3a');R(p+10,q+9,2,2,'#2f8f3a')}
+else{R(p+4,q+6,8,7,'#2f8f3a');R(p+5,q+7,2,2,d[5]);R(p+9,q+9,2,2,d[5]);R(p+7,q+5,2,2,d[5])}}
+const sp=[];
+for(let y=y0;y<=y0+VH&&y<H;y++)for(let x=x0;x<=x0+VW&&x<W;x++)if(S.mp[y*W+x]==4)sp.push([(y+1)*T,()=>tile(x,y)]);
+S.b.forEach(b=>sp.push([(b[2]+BD[b[0]][5])*T,()=>bld(b)]));
+NP.forEach(n=>sp.push([(n.y+1)*T,()=>ch(n.x*T-cx+2,n.y*T-cy,n.o,n.dr,n.vx||n.vy)]));
+sp.push([(S.y+1)*T,()=>{const x=S.x*T-cx+2,y=S.y*T-cy;ch(x,y,po(),S.dr,S.mv);if(S.ve>=0){const v=VE[S.ve];R(x-2,y+10,16,4,v[4]);R(x-1,y+13,3,3,'#111');R(x+10,y+13,3,3,'#111')}}]);
+sp.sort((a,b)=>a[0]-b[0]).forEach(s=>s[1]());
+const[tx,ty]=tgt(),z=S.bd>=0?BD[S.bd][5]:1;g.strokeStyle='#f2c14e';g.lineWidth=1;g.strokeRect(tx*T-cx+.5,ty*T-cy+.5,z*T-1,z*T-1);
+sn.forEach(f=>R(f.x,f.y,f.s>1.3?2:1,f.s>1.3?2:1,'#fff'))}
+function loop(ms){const dt=Math.min(.1,(ms-(lt||ms))/1e3);lt=ms;fr++;if(!P())up(dt);draw();requestAnimationFrame(loop)}
+// ---- input ----
+const KM={KeyA:'l',ArrowLeft:'l',KeyD:'r',ArrowRight:'r',KeyW:'u',ArrowUp:'u',KeyS:'d',ArrowDown:'d'};
+onkeydown=e=>{if(KM[e.code]){K[KM[e.code]]=1;e.preventDefault()}else if(e.code=='KeyE'||e.code=='Space'){e.preventDefault();act()}else if(e.code=='KeyM')mn.hidden?M():Cm();else if(e.code=='Escape'){Cm();cl()}};
+onkeyup=e=>{if(KM[e.code])K[KM[e.code]]=0};
+document.querySelectorAll('.dp [data-k]').forEach(b=>{const k=b.dataset.k;b.onpointerdown=e=>{e.preventDefault();K[k]=1};b.onpointerup=b.onpointerleave=b.onpointercancel=()=>K[k]=0;b.oncontextmenu=e=>e.preventDefault()});
+for(let i=0;i<50;i++)sn.push({x:Math.random()*320,y:Math.random()*192,s:.6+Math.random()*1.2});
+document.documentElement.lang=S.lg?'en':'th';hud();
+tst(['🎄 เดินไปคุยกับชาวบ้าน · ไถดิน ปลูก เก็บผัก ด้วยปุ่ม A','🎄 Talk to villagers · till, plant, harvest with the A button']);
+setInterval(sav,8000);requestAnimationFrame(loop);
+</script></body></html>
